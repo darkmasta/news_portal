@@ -1,0 +1,83 @@
+<template>
+  <sidenav :orientation="orientation" :class="curClasses">
+    <div class="sidenav-inner mt-4" :class="{ 'py-1': orientation !== 'horizontal' }">
+      <sidenav-router-link icon="fas fa-tachometer-alt" :badge-class="isMenuActive('/')?'success badge-dot': null" to="/" :exact="true">Dashboard</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-list" :badge-class="isMenuActive('/quotes')?'success badge-dot': null" to="/quotes" :active="isMenuActive('/quotes')" :exact="true">Haber Yonetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-truck-moving" :badge-class="isMenuActive('/categories')?'success badge-dot': null" to="/category" :active="isMenuActive('/category')" :exact="true">Kategori Yonetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-shopping-basket" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/orders" :active="isMenuActive('/orders')" :exact="true">Etkinlik Listesi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-hands-helping" :badge-class="isMenuActive('/instant-help')?'success badge-dot': null" to="/instant-help" :active="isMenuActive('/instant-help')" :exact="true">Reklam Yonetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/customers')?'success badge-dot': null" to="/customers" :active="isMenuActive('/customers')" :exact="true">Kunye Duzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/invoicing')?'success badge-dot': null" to="/invoicing" :active="isMenuActive('/invoicing')" :exact="true">Iletisim Duzenle</sidenav-router-link>
+    </div>
+  </sidenav>
+</template>
+<script>
+import {
+  Sidenav,
+  SidenavBlock,
+  SidenavRouterLink,
+} from "@/vendor/libs/sidenav";
+
+export default {
+  name: "app-layout-sidenav",
+  components: {
+    Sidenav,
+    SidenavBlock,
+    SidenavRouterLink,
+  },
+
+  props: {
+    orientation: {
+      type: String,
+      default: "vertical",
+    },
+  },
+
+  computed: {
+    curClasses() {
+      let bg = this.layoutSidenavBg;
+
+      if (
+        this.orientation === "horizontal" &&
+        (bg.indexOf(" sidenav-dark") !== -1 ||
+          bg.indexOf(" sidenav-light") !== -1)
+      ) {
+        bg = bg
+          .replace(" sidenav-dark", "")
+          .replace(" sidenav-light", "")
+          .replace("-darker", "")
+          .replace("-dark", "");
+      }
+
+      return (
+        `bg-${bg} ` +
+        (this.orientation !== "horizontal"
+          ? "layout-sidenav"
+          : "layout-sidenav-horizontal container-p-x flex-grow-0")
+      );
+    },
+  },
+
+  methods: {
+    isMenuActive(url) {
+      if (url != '/') {
+        return this.$route.path.indexOf(url) === 0;
+      } else if (url == '/')  {
+        if(window.location.href.split("/#/")[1] == "")  {
+          return true
+        }
+      }
+    },
+
+    isMenuOpen(url) {
+      return (
+        this.$route.path.indexOf(url) === 0 && this.orientation !== "horizontal"
+      );
+    },
+
+    toggleSidenav() {
+      this.layoutHelpers.toggleCollapsed();
+    },
+  },
+};
+</script>

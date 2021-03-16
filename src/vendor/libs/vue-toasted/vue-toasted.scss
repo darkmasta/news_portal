@@ -1,0 +1,183 @@
+@import '~@/vendor/styles/_custom-variables/libs';
+
+.toasted-container {
+  .toasted {
+    min-height: 0 !important;
+    padding: 9px 20px !important;
+    font-weight: normal !important;
+
+    .action {
+      padding: 0 !important;
+      margin: 0 0 0 7px !important;
+    }
+  }
+
+  &.top-left,
+  &.bottom-left {
+    align-items: flex-start;
+
+    @include feature-rtl {
+      align-items: flex-end;
+    }
+  }
+
+  &.top-right,
+  &.bottom-right {
+    align-items: flex-end;
+
+    @include feature-rtl {
+      align-items: flex-start;
+    }
+  }
+
+  &.top-center,
+  &.bottom-center {
+    align-items: center;
+  }
+}
+
+@include feature-rtl(false) {
+  .toasted-container .toasted {
+    .material-icons {
+      margin-right: -.4rem;
+      margin-left: .5rem;
+
+      &.after {
+        margin-right: .5rem;
+        margin-left: -.4rem;
+      }
+    }
+
+    .action {
+      margin-right: 7px !important;
+      margin-left: 0 !important;
+
+      &.icon .material-icons {
+        margin-right: 4px;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+@if $enable-light-style {
+  .light-style {
+    @import "~@/vendor/styles/_appwork/include";
+
+    .toasted-container {
+      z-index: $zindex-notification;
+    }
+
+    .toasted-container .toasted {
+      line-height: $line-height-base !important;
+      font-size: $font-size-base !important;
+    }
+
+    .toasted-container .toasted .action {
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-sm;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble,
+    .toasted.outline {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+      box-shadow: none;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble {
+      font-weight: normal;
+    }
+
+    .toasted.toasted-primary {
+      border-radius: $border-radius;
+    }
+
+    .toasted.outline {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+@if $enable-material-style {
+  .material-style {
+    @import "~@/vendor/styles/_appwork/include-material";
+
+    .toasted-container {
+      z-index: $zindex-notification;
+    }
+
+    .toasted-container .toasted {
+      line-height: $line-height-base !important;
+      font-size: $font-size-base !important;
+    }
+
+    .toasted-container .toasted .action {
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-sm;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble,
+    .toasted.outline {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble {
+      font-weight: normal;
+    }
+
+    .toasted.toasted-primary {
+      border-radius: $border-radius;
+    }
+
+    .toasted.outline {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+@if $enable-dark-style {
+  .dark-style {
+    @import "~@/vendor/styles/_appwork/include-dark";
+
+    .toasted-container {
+      z-index: $zindex-notification;
+    }
+
+    .toasted-container .toasted {
+      line-height: $line-height-base !important;
+      font-size: $font-size-base !important;
+    }
+
+    .toasted-container .toasted .action {
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-sm;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble,
+    .toasted.outline {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+      box-shadow: none;
+    }
+
+    .toasted.toasted-primary,
+    .toasted.bubble {
+      font-weight: normal;
+    }
+
+    .toasted.toasted-primary {
+      border-radius: $border-radius;
+    }
+
+    .toasted.outline {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}

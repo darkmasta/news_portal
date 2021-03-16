@@ -1,0 +1,972 @@
+@import "~@/vendor/styles/_appwork/functions";
+@import "~@/vendor/styles/_custom-variables/features";
+
+$b-table-sort-icon: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 23'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath fill='_TOP_COLOR_' d='M14.8284271,12.3431458 L16.9497475,14.4644661 L10.6212525,20.7931458 L10.6568542,20.8284271 L8.53553391,22.9497475 L8.50025253,22.9141458 L8.46446609,22.9497475 L6.34314575,20.8284271 L6.37825253,20.7921458 L0.0502525317,14.4644661 L2.17157288,12.3431458 L8.49925253,18.6711458 L14.8284271,12.3431458 Z'%3E%3C/path%3E%3Cpath fill='_BOTTOM_COLOR_' d='M14.7781746,4.08562073e-14 L16.8994949,2.12132034 L10.571,8.45 L10.6066017,8.48528137 L8.48528137,10.6066017 L8.45,10.571 L8.41421356,10.6066017 L6.29289322,8.48528137 L6.328,8.449 L-4.4408921e-16,2.12132034 L2.12132034,1.46549439e-14 L8.449,6.328 L14.7781746,4.08562073e-14 Z' transform='translate(8.449747,5.303301) scale(1,-1) translate(-8.449747,-5.303301)'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";
+
+// Base
+//
+
+.dropdown-item,
+.page-link,
+.nav {
+  outline: 0;
+}
+
+// Page transition
+//
+
+.router-transitions {
+  opacity: 1;
+  transition: opacity .2s;
+
+  body.app-loading & {
+    opacity: .75;
+  }
+}
+
+// Checkbox/radio size
+//
+
+@mixin checkbox-radio-size($name, $is-material, $font-size, $line-height, $gutter, $indicator-size, $bg-size, $border-radius) {
+  .custom-checkbox.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-checkbox,
+  .custom-radio.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-radio {
+    font-size: $font-size;
+    line-height: $line-height;
+    padding-left: $gutter + $indicator-size;
+
+    .custom-control-label::before {
+      top: ($font-size * $line-height - $indicator-size) / 2;
+      width: round(rem-to-px($indicator-size));
+      height: round(rem-to-px($indicator-size));
+    }
+
+    @if $is-material {
+      .custom-control-label::after {
+        top: px-to-rem(floor(rem-to-px(((($line-height * $font-size) - $indicator-size) / 2))));
+        width: $indicator-size;
+        height: $indicator-size;
+      }
+    }
+  }
+  .custom-checkbox.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-checkbox {
+    .custom-control-label::before {
+      border-radius: $border-radius;
+    }
+  }
+  .custom-radio.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-radio {
+    .custom-control-input:checked~.custom-control-label::before {
+      @if $name=='lg' {
+        background-size: 11px;
+      } @else {
+        background-size: 8px;
+      }
+    }
+  }
+}
+@mixin checkbox-radio-size-rtl($name, $gutter, $indicator-size) {
+  .custom-checkbox.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-checkbox,
+  .custom-radio.b-custom-control-#{$name},
+  .input-group-#{$name} .custom-radio {
+    padding-left: 0;
+    padding-right: $gutter + $indicator-size;
+  }
+}
+
+// Table sorting icon
+//
+
+@function b-table-sort-icon-url($top-arrow, $bottom-arrow: $top-arrow) {
+  $result: str-replace($b-table-sort-icon, '_TOP_COLOR_', $top-arrow);
+  @return url("#{str-replace(str-replace($result, '_BOTTOM_COLOR_', $bottom-arrow), '#', '%23')}");
+}
+
+// Card table
+
+@mixin b-card-table($parent, $cell-padding, $sort-icon-bg-width, $card-spacer) {
+  // Card table
+  #{$parent} .table.b-table.card-table > thead > tr > [aria-sort],
+  #{$parent} .table.b-table.card-table > tfoot > tr > [aria-sort] {
+
+    // Right icon
+
+    &:not(.b-table-sort-icon-left):last-child {
+      padding-right: $card-spacer;
+      background-position: right calc(#{$card-spacer} / 2) center;
+    }
+
+    // Left icon
+
+    &.b-table-sort-icon-left:first-child {
+      background-position: left $card-spacer center;
+      padding-left: calc(#{$card-spacer + $cell-padding} + #{$sort-icon-bg-width});
+    }
+  }
+
+  @include feature-rtl-style {
+    // Card table [RTL]
+    #{$parent} .table.b-table.card-table > thead > tr > [aria-sort],
+    #{$parent} .table.b-table.card-table > tfoot > tr > [aria-sort] {
+
+      // Right icon
+
+      &:not(.b-table-sort-icon-left) {
+        &:last-child {
+          padding-left: $card-spacer;
+          background-position: left calc(#{$card-spacer} / 2) center;
+        }
+
+        &:first-child {
+          padding-right: $card-spacer;
+        }
+      }
+
+      // Left icon
+
+      &.b-table-sort-icon-left,
+      &.b-table-sort-icon-left {
+        padding-left: $cell-padding;
+        background-position: right $cell-padding center;
+        padding-right: calc(#{$cell-padding * 2} + #{$sort-icon-bg-width});
+
+        &:first-child {
+          padding-right: calc(#{$card-spacer + $cell-padding} + #{$sort-icon-bg-width});
+          padding-left: $cell-padding;
+          background-position: right $card-spacer center;
+        }
+
+        &:last-child {
+          padding-left: $card-spacer;
+        }
+      }
+    }
+  }
+}
+
+.b-form-spinbutton.form-control output {
+  flex-shrink: 1;
+}
+
+// Styles
+//
+
+@if $enable-light-style {
+  .light-style {
+    @import "~@/vendor/styles/_appwork/include";
+
+    $b-table-sort-icon-bg-not-sorted: b-table-sort-icon-url($text-lighter);
+    $b-table-sort-icon-bg-ascending: b-table-sort-icon-url($text-lighter, $body-color);
+    $b-table-sort-icon-bg-descending: b-table-sort-icon-url($body-color, $text-lighter);
+    $b-table-sort-icon-bg-dark-not-sorted: b-table-sort-icon-url(rgba(255, 255, 255, .3));
+    $b-table-sort-icon-bg-dark-ascending: b-table-sort-icon-url(rgba(255, 255, 255, .3), #ffffff);
+    $b-table-sort-icon-bg-dark-descending: b-table-sort-icon-url(#ffffff, rgba(255, 255, 255, .3));
+    $b-sidebar-zindex: $zindex-modal-top - 5;
+
+    // Bootstrap-vue styles
+    @import "~node_modules/bootstrap-vue/src/variables";
+    @import "~node_modules/bootstrap-vue/src/utilities";
+    @import "~node_modules/bootstrap-vue/src/components/dropdown/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-file/index";
+    @import "~node_modules/bootstrap-vue/src/components/modal/index";
+    @import "~node_modules/bootstrap-vue/src/components/table/index";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster-transition";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster";
+    @import "~node_modules/bootstrap-vue/src/components/pagination/pagination";
+    @import "~node_modules/bootstrap-vue/src/components/calendar/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-spinbutton/index";
+    @import "~node_modules/bootstrap-vue/src/components/time/index";
+    @import "~node_modules/bootstrap-vue/src/components/avatar/index";
+    @import "~node_modules/bootstrap-vue/src/components/sidebar/index";
+
+    //
+    // Custom checkbox/radio sizing
+    //
+
+    @include checkbox-radio-size('lg', false,
+      $font-size-lg,
+      $line-height-lg,
+      $b-custom-control-gutter-lg,
+      $b-custom-control-indicator-size-lg,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-lg);
+
+    @include checkbox-radio-size('sm', false,
+      $font-size-sm,
+      $line-height-sm,
+      $b-custom-control-gutter-sm,
+      $b-custom-control-indicator-size-sm,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-sm);
+
+    @include feature-rtl-style {
+      @include checkbox-radio-size-rtl('lg', $b-custom-control-gutter-lg, $b-custom-control-indicator-size-lg);
+      @include checkbox-radio-size-rtl('sm', $b-custom-control-gutter-sm, $b-custom-control-indicator-size-sm);
+    }
+
+    //
+    // Custom file
+    //
+
+    @include feature-rtl-style {
+      .b-custom-control-lg.b-form-file .custom-file-label::after,
+      .input-group-lg .b-form-file .custom-file-label::after {
+        @include border-radius($b-custom-file-border-radius-lg 0 0 $b-custom-file-border-radius-lg);
+      }
+
+      .b-custom-control-sm.b-form-file .custom-file-label::after,
+      .input-group-sm .b-form-file .custom-file-label::after {
+        @include border-radius($b-custom-file-border-radius-sm 0 0 $b-custom-file-border-radius-sm);
+      }
+    }
+
+    //
+    // Tooltip and popover
+    //
+
+    .tooltip.b-tooltip,
+    .popover.b-popover {
+      display: block;
+      opacity: $tooltip-opacity;
+      outline: 0;
+
+      &.fade:not(.show) {
+        opacity: 0;
+      }
+
+      &.show {
+        opacity: $tooltip-opacity;
+      }
+    }
+
+    .tooltip.b-tooltip.noninteractive {
+      pointer-events: none;
+    }
+
+    //
+    // Toast
+    //
+
+    .b-toast {
+      &:not(:last-child) {
+        margin-bottom: $toast-padding-x;
+      }
+
+      .toast {
+        opacity: 1;
+
+        &.fade:not(.show) {
+          opacity: 0;
+        }
+
+        .toast-body {
+          display: block;
+        }
+      }
+    }
+
+    //
+    // Table within card
+    //
+
+    // Left icon
+    .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+    .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+      background-position: left $table-cell-padding center;
+      padding-left: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+    }
+
+    @include feature-rtl-style {
+      // Right icon
+      .table.b-table > thead > tr > [aria-sort]:not(.b-table-sort-icon-left),
+      .table.b-table > tfoot > tr > [aria-sort]:not(.b-table-sort-icon-left) {
+        padding-right: $table-cell-padding;
+        padding-left: calc(#{$table-cell-padding} + #{$b-table-sort-icon-bg-width});
+        background-position: left calc(#{$table-cell-padding} / 2) center;
+      }
+
+      // Left icon
+      .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+      .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+        background-position: right $table-cell-padding center;
+        padding-left: $table-cell-padding;
+        padding-right: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+      }
+    }
+
+    @include b-card-table('', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x);
+    @include b-card-table('.card-condenced', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x-sm);
+
+    //
+    // Card image
+    //
+
+    .card-img-left {
+      @include border-left-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    .card-img-right {
+      @include border-right-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    @include feature-rtl-style {
+      .card-img-left {
+        @include border-left-radius(0);
+        @include border-right-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+      }
+
+      .card-img-right {
+        @include border-right-radius(0);
+        @include border-left-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+      }
+    }
+
+    //
+    // Form tags
+    //
+
+    .b-form-tags {
+      padding-left: $input-padding-y;
+      padding-right: $input-padding-y;
+      color: $input-color;
+
+      &.is-valid {
+        border-color: $form-feedback-valid-color;
+      }
+
+      &.is-invalid {
+        border-color: $form-feedback-invalid-color;
+      }
+
+      &.focus {
+        color: $input-focus-color;
+        background-color: $input-focus-bg;
+        outline: 0;
+      }
+
+      &.disabled {
+        background-color: $input-disabled-bg !important;
+        border-color: $input-border-color !important;
+      }
+
+      .b-form-tags-input {
+        color: inherit;
+      }
+
+      .b-form-tag {
+        line-height: $input-line-height;
+        font-size: $input-font-size;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-weight: normal;
+
+        &.disabled {
+          opacity: 0.75;
+        }
+
+        > button.b-form-tag-remove {
+          color: inherit;
+          font-size: 1em;
+        }
+      }
+
+      &.form-control-sm {
+        padding-left: $input-padding-y-sm;
+        padding-right: $input-padding-y-sm;
+
+        .b-form-tag {
+          line-height: $input-line-height-sm;
+          font-size: $input-font-size-sm;
+        }
+      }
+
+      &.form-control-lg {
+        padding-left: $input-padding-y-lg;
+        padding-right: $input-padding-y-lg;
+
+        .b-form-tag {
+          line-height: $input-line-height-lg;
+          font-size: $input-font-size-lg;
+        }
+      }
+    }
+
+    //
+    // Form pickers
+    //
+
+    .b-form-timepicker > button:focus ,
+    .b-form-datepicker > button:focus {
+      box-shadow: none !important;
+    }
+
+    .b-calendar-grid-body .text-dark.btn-outline-light.disabled,
+    .b-calendar-grid-body .text-dark.btn-outline-light:disabled {
+      color: $text-muted !important;
+    }
+
+    @include feature-rtl-style {
+      .b-form-timepicker {
+        direction: rtl;
+
+        .dropdown-menu {
+          direction: ltr;
+        }
+      }
+    }
+  }
+}
+
+@if $enable-material-style {
+  .material-style {
+    @import "~@/vendor/styles/_appwork/include-material";
+
+    $b-table-sort-icon-bg-not-sorted: b-table-sort-icon-url($text-lighter);
+    $b-table-sort-icon-bg-ascending: b-table-sort-icon-url($text-lighter, $body-color);
+    $b-table-sort-icon-bg-descending: b-table-sort-icon-url($body-color, $text-lighter);
+    $b-table-sort-icon-bg-dark-not-sorted: b-table-sort-icon-url(rgba(255, 255, 255, .3));
+    $b-table-sort-icon-bg-dark-ascending: b-table-sort-icon-url(rgba(255, 255, 255, .3), #ffffff);
+    $b-table-sort-icon-bg-dark-descending: b-table-sort-icon-url(#ffffff, rgba(255, 255, 255, .3));
+    $b-sidebar-zindex: $zindex-modal-top - 5;
+
+    // Bootstrap-vue styles
+    @import "~node_modules/bootstrap-vue/src/variables";
+    @import "~node_modules/bootstrap-vue/src/utilities";
+    @import "~node_modules/bootstrap-vue/src/components/dropdown/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-file/index";
+    @import "~node_modules/bootstrap-vue/src/components/modal/index";
+    @import "~node_modules/bootstrap-vue/src/components/table/index";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster-transition";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster";
+    @import "~node_modules/bootstrap-vue/src/components/pagination/pagination";
+    @import "~node_modules/bootstrap-vue/src/components/calendar/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-spinbutton/index";
+    @import "~node_modules/bootstrap-vue/src/components/time/index";
+    @import "~node_modules/bootstrap-vue/src/components/avatar/index";
+    @import "~node_modules/bootstrap-vue/src/components/sidebar/index";
+
+    //
+    // Custom checkbox/radio sizing
+    //
+
+    @include checkbox-radio-size('lg', true,
+      $font-size-lg,
+      $line-height-lg,
+      $b-custom-control-gutter-lg,
+      $b-custom-control-indicator-size-lg,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-lg);
+
+    @include checkbox-radio-size('sm', true,
+      $font-size-sm,
+      $line-height-sm,
+      $b-custom-control-gutter-sm,
+      $b-custom-control-indicator-size-sm,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-sm);
+
+    @include feature-rtl-style {
+      @include checkbox-radio-size-rtl('lg', $b-custom-control-gutter-lg, $b-custom-control-indicator-size-lg);
+      @include checkbox-radio-size-rtl('sm', $b-custom-control-gutter-sm, $b-custom-control-indicator-size-sm);
+    }
+
+    //
+    // Custom file
+    //
+
+    .custom-file.b-form-file .custom-file-label {
+      padding-left: 0;
+      padding-right: 0;
+
+      &::after {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    //
+    // Tooltip and popover
+    //
+
+    .tooltip.b-tooltip,
+    .popover.b-popover {
+      display: block;
+      opacity: $tooltip-opacity;
+      outline: 0;
+
+      &.fade:not(.show) {
+        opacity: 0;
+      }
+
+      &.show {
+        opacity: $tooltip-opacity;
+      }
+    }
+
+    .tooltip.b-tooltip.noninteractive {
+      pointer-events: none;
+    }
+
+    //
+    // Toast
+    //
+
+    .b-toast {
+      &:not(:last-child) {
+        margin-bottom: $toast-padding-x;
+      }
+
+      .toast {
+        opacity: 1;
+
+        &.fade:not(.show) {
+          opacity: 0;
+        }
+
+        .toast-body {
+          display: block;
+        }
+      }
+    }
+
+    //
+    // Table within card
+    //
+
+    // Left icon
+    .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+    .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+      background-position: left $table-cell-padding center;
+      padding-left: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+    }
+
+    @include feature-rtl-style {
+      // Right icon
+      .table.b-table > thead > tr > [aria-sort]:not(.b-table-sort-icon-left),
+      .table.b-table > tfoot > tr > [aria-sort]:not(.b-table-sort-icon-left) {
+        padding-right: $table-cell-padding;
+        padding-left: calc(#{$table-cell-padding} + #{$b-table-sort-icon-bg-width});
+        background-position: left calc(#{$table-cell-padding} / 2) center;
+      }
+
+      // Left icon
+      .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+      .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+        background-position: right $table-cell-padding center;
+        padding-left: $table-cell-padding;
+        padding-right: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+      }
+    }
+
+    @include b-card-table('', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x);
+    @include b-card-table('.card-condenced', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x-sm);
+
+    //
+    // Card image
+    //
+
+    .card-img-left {
+      @include border-left-radius(if($border-radius !=0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    .card-img-right {
+      @include border-right-radius(if($border-radius !=0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    @include feature-rtl-style {
+      .card-img-left {
+        @include border-left-radius(0);
+        @include border-right-radius(if($border-radius !=0px, calc(#{$border-radius} - 1px), 0));
+      }
+
+      .card-img-right {
+        @include border-right-radius(0);
+        @include border-left-radius(if($border-radius !=0px, calc(#{$border-radius} - 1px), 0));
+      }
+    }
+
+    //
+    // Form tags
+    //
+
+    .b-form-tags {
+      color: $input-color;
+
+      &.is-valid {
+        border-color: $form-feedback-valid-color;
+      }
+
+      &.is-invalid {
+        border-color: $form-feedback-invalid-color;
+      }
+
+      &.focus {
+        color: $input-focus-color;
+        background-color: $input-focus-bg;
+        outline: 0;
+      }
+
+      &.disabled {
+        background-color: $input-disabled-bg !important;
+        border-bottom-style: dotted !important;
+        border-bottom-color: $material-input-disabled-border-color !important;
+      }
+
+      .b-form-tags-input {
+        color: inherit;
+      }
+
+      .b-form-tag {
+        line-height: $input-line-height;
+        font-size: $input-font-size;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-weight: normal;
+
+        &.disabled {
+          opacity: 0.75;
+        }
+
+        > button.b-form-tag-remove {
+          color: inherit;
+          font-size: 1em;
+        }
+      }
+
+      &.form-control-sm .b-form-tag {
+        line-height: $input-line-height-sm;
+        font-size: $input-font-size-sm;
+      }
+
+      &.form-control-lg .b-form-tag {
+        line-height: $input-line-height-lg;
+        font-size: $input-font-size-lg;
+      }
+    }
+
+    //
+    // Form pickers
+    //
+
+    .b-form-timepicker > button:focus,
+    .b-form-datepicker > button:focus {
+      box-shadow: none !important;
+    }
+
+    .b-calendar-grid-body .text-dark.btn-outline-light.disabled,
+    .b-calendar-grid-body .text-dark.btn-outline-light:disabled {
+      color: $text-muted !important;
+    }
+
+    .b-calendar-inner > .form-control,
+    .b-time .b-form-spinbutton {
+      border-width: 1px;
+      box-shadow: none !important;
+
+      .btn {
+        box-shadow: none !important;
+      }
+    }
+
+    .b-form-datepicker > .btn .waves-ripple,
+    .b-form-timepicker > .btn .waves-ripple {
+      display: none !important;
+    }
+
+    @include feature-ltr-style {
+      .b-form-datepicker > .btn,
+      .b-form-timepicker > .btn {
+        padding-left: 0 !important;
+      }
+    }
+
+    @include feature-rtl-style {
+      .b-form-datepicker > .btn,
+      .b-form-timepicker > .btn {
+        padding-right: 0 !important;
+      }
+
+      .b-form-timepicker {
+        direction: rtl;
+
+        .dropdown-menu {
+          direction: ltr;
+        }
+      }
+    }
+  }
+}
+
+@if $enable-dark-style {
+  .dark-style {
+    @import "~@/vendor/styles/_appwork/include-dark";
+
+    $b-table-sort-icon-bg-not-sorted: b-table-sort-icon-url($text-lighter);
+    $b-table-sort-icon-bg-ascending: b-table-sort-icon-url($text-lighter, $body-color);
+    $b-table-sort-icon-bg-descending: b-table-sort-icon-url($body-color, $text-lighter);
+    $b-table-sort-icon-bg-dark-not-sorted: b-table-sort-icon-url(rgba(255, 255, 255, .3));
+    $b-table-sort-icon-bg-dark-ascending: b-table-sort-icon-url(rgba(255, 255, 255, .3), #ffffff);
+    $b-table-sort-icon-bg-dark-descending: b-table-sort-icon-url(#ffffff, rgba(255, 255, 255, .3));
+    $b-sidebar-zindex: $zindex-modal-top - 5;
+
+    // Bootstrap-vue styles
+    @import "~node_modules/bootstrap-vue/src/variables";
+    @import "~node_modules/bootstrap-vue/src/utilities";
+    @import "~node_modules/bootstrap-vue/src/components/dropdown/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-file/index";
+    @import "~node_modules/bootstrap-vue/src/components/modal/index";
+    @import "~node_modules/bootstrap-vue/src/components/table/index";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster-transition";
+    @import "~node_modules/bootstrap-vue/src/components/toast/toaster";
+    @import "~node_modules/bootstrap-vue/src/components/pagination/pagination";
+    @import "~node_modules/bootstrap-vue/src/components/calendar/index";
+    @import "~node_modules/bootstrap-vue/src/components/form-spinbutton/index";
+    @import "~node_modules/bootstrap-vue/src/components/time/index";
+    @import "~node_modules/bootstrap-vue/src/components/avatar/index";
+    @import "~node_modules/bootstrap-vue/src/components/sidebar/index";
+
+    //
+    // Custom checkbox/radio sizing
+    //
+
+    @include checkbox-radio-size('lg', false,
+      $font-size-lg,
+      $line-height-lg,
+      $b-custom-control-gutter-lg,
+      $b-custom-control-indicator-size-lg,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-lg);
+
+    @include checkbox-radio-size('sm', false,
+      $font-size-sm,
+      $line-height-sm,
+      $b-custom-control-gutter-sm,
+      $b-custom-control-indicator-size-sm,
+      $b-custom-control-indicator-bg-size-sm,
+      $b-custom-checkbox-indicator-border-radius-sm);
+
+    @include feature-rtl-style {
+      @include checkbox-radio-size-rtl('lg', $b-custom-control-gutter-lg, $b-custom-control-indicator-size-lg);
+      @include checkbox-radio-size-rtl('sm', $b-custom-control-gutter-sm, $b-custom-control-indicator-size-sm);
+    }
+
+    //
+    // Custom file
+    //
+
+    @include feature-rtl-style {
+      .b-custom-control-lg.b-form-file .custom-file-label::after,
+      .input-group-lg .b-form-file .custom-file-label::after {
+        @include border-radius($b-custom-file-border-radius-lg 0 0 $b-custom-file-border-radius-lg);
+      }
+
+      .b-custom-control-sm.b-form-file .custom-file-label::after,
+      .input-group-sm .b-form-file .custom-file-label::after {
+        @include border-radius($b-custom-file-border-radius-sm 0 0 $b-custom-file-border-radius-sm);
+      }
+    }
+
+    //
+    // Tooltip and popover
+    //
+
+    .tooltip.b-tooltip,
+    .popover.b-popover {
+      display: block;
+      opacity: $tooltip-opacity;
+      outline: 0;
+
+      &.fade:not(.show) {
+        opacity: 0;
+      }
+
+      &.show {
+        opacity: $tooltip-opacity;
+      }
+    }
+
+    .tooltip.b-tooltip.noninteractive {
+      pointer-events: none;
+    }
+
+    //
+    // Toast
+    //
+
+    .b-toast {
+      &:not(:last-child) {
+        margin-bottom: $toast-padding-x;
+      }
+
+      .toast {
+        opacity: 1;
+
+        &.fade:not(.show) {
+          opacity: 0;
+        }
+
+        .toast-body {
+          display: block;
+        }
+      }
+    }
+
+    //
+    // Table within card
+    //
+
+    // Left icon
+    .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+    .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+      background-position: left $table-cell-padding center;
+      padding-left: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+    }
+
+    @include feature-rtl-style {
+      // Right icon
+      .table.b-table > thead > tr > [aria-sort]:not(.b-table-sort-icon-left),
+      .table.b-table > tfoot > tr > [aria-sort]:not(.b-table-sort-icon-left) {
+        padding-right: $table-cell-padding;
+        padding-left: calc(#{$table-cell-padding} + #{$b-table-sort-icon-bg-width});
+        background-position: left calc(#{$table-cell-padding} / 2) center;
+      }
+
+      // Left icon
+      .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left,
+      .table.b-table > tfoot > tr > [aria-sort].b-table-sort-icon-left {
+        background-position: right $table-cell-padding center;
+        padding-left: $table-cell-padding;
+        padding-right: calc(#{$table-cell-padding * 2} + #{$b-table-sort-icon-bg-width});
+      }
+    }
+
+    @include b-card-table('', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x);
+    @include b-card-table('.card-condenced', $table-cell-padding, $b-table-sort-icon-bg-width, $card-spacer-x-sm);
+
+    //
+    // Card image
+    //
+
+    .card-img-left {
+      @include border-left-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    .card-img-right {
+      @include border-right-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+    }
+
+    @include feature-rtl-style {
+      .card-img-left {
+        @include border-left-radius(0);
+        @include border-right-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+      }
+
+      .card-img-right {
+        @include border-right-radius(0);
+        @include border-left-radius(if($border-radius != 0px, calc(#{$border-radius} - 1px), 0));
+      }
+    }
+
+    //
+    // Form tags
+    //
+
+    .b-form-tags {
+      padding-left: $input-padding-y;
+      padding-right: $input-padding-y;
+      color: $input-color;
+
+      &.is-valid {
+        border-color: $form-feedback-valid-color;
+      }
+
+      &.is-invalid {
+        border-color: $form-feedback-invalid-color;
+      }
+
+      &.focus {
+        color: $input-focus-color;
+        background-color: $input-focus-bg;
+        outline: 0;
+      }
+
+      &.disabled {
+        background-color: $input-disabled-bg !important;
+        border-color: $input-border-color !important;
+      }
+
+      .b-form-tags-input {
+        color: inherit;
+      }
+
+      .b-form-tag {
+        line-height: $input-line-height;
+        font-size: $input-font-size;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-weight: normal;
+
+        &.disabled {
+          opacity: 0.75;
+        }
+
+        >button.b-form-tag-remove {
+          color: inherit;
+          font-size: 1em;
+        }
+      }
+
+      &.form-control-sm {
+        padding-left: $input-padding-y-sm;
+        padding-right: $input-padding-y-sm;
+
+        .b-form-tag {
+          line-height: $input-line-height-sm;
+          font-size: $input-font-size-sm;
+        }
+      }
+
+      &.form-control-lg {
+        padding-left: $input-padding-y-lg;
+        padding-right: $input-padding-y-lg;
+
+        .b-form-tag {
+          line-height: $input-line-height-lg;
+          font-size: $input-font-size-lg;
+        }
+      }
+    }
+
+    //
+    // Form pickers
+    //
+
+    .b-form-timepicker>button:focus,
+    .b-form-datepicker>button:focus {
+      box-shadow: none !important;
+    }
+
+    .b-calendar-grid-body .btn-outline-light:not(.text-muted),
+    .b-calendar-grid-body .btn-light:not(.text-muted) {
+      color: $body-color !important;
+    }
+
+    .b-calendar-grid-body .btn-outline-light.disabled,
+    .b-calendar-grid-body .btn-outline-light:disabled {
+      color: $text-muted !important;
+    }
+
+    @include feature-rtl-style {
+      .b-form-timepicker {
+        direction: rtl;
+
+        .dropdown-menu {
+          direction: ltr;
+        }
+      }
+    }
+  }
+}

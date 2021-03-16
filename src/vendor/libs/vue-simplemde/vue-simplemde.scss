@@ -1,0 +1,253 @@
+@import '~@/vendor/styles/_custom-variables/libs';
+
+.editor-toolbar a {
+  vertical-align: middle;
+}
+
+.editor-toolbar.disabled-for-preview a:not(.no-disable) {
+  background: transparent;
+  opacity: .5;
+}
+
+@include feature-rtl(false) {
+  .editor-statusbar {
+    text-align: left;
+
+    span {
+      margin-right: 1rem;
+      margin-left: 0;
+    }
+  }
+
+  .CodeMirror-scroll {
+    margin-right: 0;
+    margin-left: -30px;
+  }
+
+  .CodeMirror-sizer {
+    border-right-width: 0 !important;
+    border-left-width: 1rem !important;
+  }
+
+  .editor-preview-side {
+    right: auto;
+    left: 0;
+  }
+}
+
+@if $enable-light-style {
+  .light-style {
+    @import "~@/vendor/styles/_appwork/include";
+
+    .editor-toolbar.fullscreen,
+    .CodeMirror-fullscreen {
+      z-index: $zindex-modal-top;
+    }
+
+    .vue-simplemde {
+      border: 1px solid $input-border-color;
+      background: #fff;
+    }
+
+    .CodeMirror {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
+      border-radius: 0;
+      color: $body-color;
+    }
+
+    .CodeMirror-lines {
+      font-family: $font-family-monospace;
+    }
+
+    .editor-toolbar {
+      border: 0;
+      border-radius: 0;
+      background: #fff;
+
+      a {
+        color: $body-color !important;
+
+        &.active,
+        &:hover {
+          border-color: $input-border-color;
+          background: none;
+        }
+      }
+
+      i.separator {
+        border-left-color: $input-border-color;
+      }
+    }
+
+    .editor-preview,
+    .editor-preview-side {
+      background: #fff;
+    }
+
+    .editor-preview-side {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    @include feature-rtl-style {
+      .editor-preview-side {
+        border-right: 1px solid $input-border-color;
+      }
+    }
+
+    .editor-statusbar {
+      border-top: 1px solid $input-border-color;
+    }
+  }
+}
+
+@if $enable-material-style {
+  .material-style {
+    @import "~@/vendor/styles/_appwork/include-material";
+
+    .editor-toolbar.fullscreen,
+    .CodeMirror-fullscreen {
+      z-index: $zindex-modal-top;
+    }
+
+    .vue-simplemde {
+      border: 1px solid $input-border-color;
+      background: #fff;
+    }
+
+    .CodeMirror {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
+      border-radius: 0;
+      color: $body-color;
+    }
+
+    .CodeMirror-lines {
+      font-family: $font-family-monospace;
+    }
+
+    .editor-toolbar {
+      border: 0;
+      border-radius: 0;
+      background: #fff;
+
+      a {
+        color: $body-color !important;
+
+        &.active,
+        &:hover {
+          border-color: $input-border-color;
+          background: none;
+        }
+      }
+
+      i.separator {
+        border-left-color: $input-border-color;
+      }
+    }
+
+    .editor-preview,
+    .editor-preview-side {
+      background: #fff;
+    }
+
+    .editor-preview-side {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    @include feature-rtl-style {
+      .editor-preview-side {
+        border-right: 1px solid $input-border-color;
+      }
+    }
+
+    .editor-statusbar {
+      border-top: 1px solid $input-border-color;
+    }
+  }
+}
+
+@if $enable-dark-style {
+  .dark-style {
+    @import "~@/vendor/styles/_appwork/include-dark";
+
+    .editor-toolbar.fullscreen,
+    .CodeMirror-fullscreen {
+      z-index: $zindex-modal-top;
+    }
+
+    .vue-simplemde {
+      border: 1px solid $input-border-color;
+      background: rgba-to-hex($input-bg, $rgba-to-hex-bg);
+    }
+
+    .CodeMirror {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
+      border-radius: 0;
+      color: $body-color;
+      background: rgba-to-hex($input-bg, $rgba-to-hex-bg);
+    }
+
+    .CodeMirror-lines {
+      font-family: $font-family-monospace;
+    }
+
+    .editor-toolbar {
+      border: 0;
+      border-radius: 0;
+      background: rgba-to-hex($input-bg, $rgba-to-hex-bg);
+
+      &::before,
+      &::after {
+        background: none;
+      }
+
+      a {
+        color: $body-color !important;
+
+        &.active,
+        &:hover {
+          border-color: $input-border-color;
+          background: none;
+        }
+      }
+
+      i.separator {
+        border-left-color: $input-border-color;
+        border-right: 0;
+      }
+    }
+
+    .editor-preview,
+    .editor-preview-side {
+      background: rgba-to-hex($input-bg, $rgba-to-hex-bg);
+    }
+
+    .editor-preview-side {
+      border-color: $input-border-color;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    @include feature-rtl-style {
+      .editor-preview-side {
+        border-right: 1px solid $input-border-color;
+      }
+    }
+
+    .editor-statusbar {
+      border-top: 1px solid $input-border-color;
+    }
+  }
+}

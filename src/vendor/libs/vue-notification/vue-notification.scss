@@ -1,0 +1,76 @@
+@import '~@/vendor/styles/_custom-variables/libs';
+
+.vue-notification-group {
+  margin: .375rem !important;
+}
+
+.vue-notification-group .vue-notification {
+  margin-right: 0;
+  margin-left: 0;
+  border-color: rgba(0, 0, 0, .15) !important;
+  border-left-width: 4px;
+
+  @include feature-rtl {
+    border-right-width: 4px;
+    border-right-style: solid;
+    border-left-width: 0;
+    text-align: right;
+  }
+}
+
+@if $enable-light-style {
+  .light-style {
+    @import "~@/vendor/styles/_appwork/include";
+
+    .vue-notification-group {
+      z-index: $zindex-notification;
+    }
+
+    .vue-notification {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+    }
+
+    .notification-title {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+@if $enable-material-style {
+  .material-style {
+    @import "~@/vendor/styles/_appwork/include-material";
+
+    .vue-notification-group {
+      z-index: $zindex-notification;
+    }
+
+    .vue-notification {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+    }
+
+    .notification-title {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+@if $enable-dark-style {
+  .dark-style {
+    @import "~@/vendor/styles/_appwork/include-dark";
+
+    .vue-notification-group {
+      z-index: $zindex-notification;
+    }
+
+    .vue-notification {
+      box-shadow: $floating-component-shadow;
+      font-size: $font-size-base;
+    }
+
+    .notification-title {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
