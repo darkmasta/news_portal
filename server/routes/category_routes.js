@@ -64,6 +64,44 @@ router.post("/add_bottom_category", jsonParser, function (req, res) {
   });
 });
 
+router.post("/delete_top_category", jsonParser, function (req, res) {
+  var data = req.body.data;
+  var topCategory = data.topCategory;
+
+  var promise = Categories.Category.update(
+    { "updatedCategories.topCategory": topCategory },
+    {
+      $pull: {
+        updatedCategories: {
+          topCategory: topCategory,
+        },
+      },
+    }
+  );
+  promise.then(function (doc) {
+    res.json(doc);
+  });
+});
+
+router.post("/delete_bottom_category", jsonParser, function (req, res) {
+  var data = req.body.data;
+  var bottomCategory = data.bottomCategory;
+
+  var promise = Categories.Category.update(
+    { "updatedCategories.bottomCategory": bottomCategory },
+    {
+      $pull: {
+        updatedCategories: {
+          bottomCategory: bottomCategory,
+        },
+      },
+    }
+  );
+  promise.then(function (doc) {
+    res.json(doc);
+  });
+});
+
 router.post("/upload_image", jsonParser, function (req, res) {
   var img = req.files.files;
   console.log(img.name);
