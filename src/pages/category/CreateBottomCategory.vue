@@ -55,10 +55,17 @@ export default {
   methods: {
     submitBottomCategory (topCategory, bottomCategory) {
         var data = {"topCategory": topCategory, "bottomCategory": bottomCategory}
+        var vm = this
         axios
             .post(process.env.VUE_APP_SERVER_URL + "/add_bottom_category/", {data})
             .then((response) => {
                 console.log(response.data);
+                if (response.data.nModified > 0) {
+                vm.$notify({
+                    type: 'success',
+                    text: 'Alt Kategori Basariyle Eklendi!'
+                })
+              }
             });
     }
   }

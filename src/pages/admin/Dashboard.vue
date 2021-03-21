@@ -1,40 +1,10 @@
 <template>
 <div>
           <b-row class="container2">
-              <b-col class="box" cols="4">
-                  <b-card class="mb-2">
-                      <b-card-title class="admin-card-title">
-                        Delayed Deliveries
-                        <i class="info-icon fa fa-info-circle" aria-hidden="true"></i>
-                      </b-card-title>
-                      <div class="admin-card-info">
-                          <span class="admin-info-number">
-                              <i class="admin-icon fa fa-arrow-circle-down" aria-hidden="true"></i>
-                                &nbsp;12 
-                              </span>
-                          <a class="admin-info-link" @click="goToOrders()"href="#">View Orders &nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                      </div>
-                  </b-card>
-              </b-col>
-              <b-col class="box" cols="4">
-                  <b-card class="mb-2">
-                      <b-card-title class="admin-card-title">
-                        Delayed Deliveries
-                        <i class="info-icon fa fa-info-circle" aria-hidden="true"></i>
-                      </b-card-title>
-                      <div class="admin-card-info">
-                          <span class="admin-info-number">
-                              <i class="admin-icon fa fa-arrow-circle-down" aria-hidden="true"></i>
-                                &nbsp;12 
-                              </span>
-                          <a class="admin-info-link" href="#">View Orders &nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                      </div>
-                  </b-card>
-              </b-col>
               <b-col id="sales-box" class="box" cols="4">
                   <b-card class="mb-2" id="sales">
                       <b-card-title class="admin-card-title">
-                          New Registrations 
+                          Kullanici Islemleri 
                         <i class="info-icon fa fa-info-circle" aria-hidden="true"></i>
                       </b-card-title>
                       <div class="admin-card-info">
@@ -42,7 +12,7 @@
                               <i class="admin-icon fa fa-arrow-circle-down" aria-hidden="true"></i>
                                 &nbsp;12 
                               </span>
-                          <a class="admin-info-link" id="sales-link" @click="goToSalesPersons()" href="#">View Registers&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                          <a class="admin-info-link" id="sales-link" @click="goToUsers()" href="#">Kullanicilari Goruntule&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
                       </div>
                   </b-card>
               </b-col>
@@ -83,8 +53,8 @@ export default {
     status: ''
   }),
   methods: {
-    goToSalesPersons () {
-      this.$router.push({ name: 'SalesPersons' })
+    goToUsers() {
+      this.$router.push({ name: 'AdminUsers' })
     },
     goToOrders() {
       this.$router.push({ name: 'AdminOrders' })
@@ -95,9 +65,7 @@ export default {
 </script>
 <style>
 
-.box {
 
-}
 
 .admin-card-title {
     font-size: 1.111em;
@@ -137,7 +105,6 @@ export default {
 }
 
 .container2 {
-    height: 18rem;
     display: flex;
     flex-direction: row;
 }

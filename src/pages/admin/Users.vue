@@ -6,6 +6,11 @@
       </b-col>
     </b-row>
     <b-row>
+      <b-col offset="10">
+        <b-btn variant="primary rounded-pill" class="align-self-start new-user-btn" @click="goToNewUser"><span class="fas fa-plus-circle"></span> Yeni Kullanici Ekle</b-btn>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <b-card class="mt-2" no-body>
           <b-card-body>
@@ -70,9 +75,9 @@ Vue.use(AxiosPlugin);
 
 
 export default {
-  name: "quotes",
+  name: "AdminUsers",
   metaInfo: {
-    title: "Quotes",
+    title: "Users",
   },
   props: {
       model: {
@@ -85,9 +90,8 @@ export default {
     data() {
       return {
         value: "",
-        fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} ,  { key: 'Full_Name', sortable: true} ,
-                 { key: 'ZipCode',sortable: true}, { key: 'City', sortable: true}, { key: 'Phone', sortable: true} ,
-                 { key: 'Password', sortable: true}, { key: 'Balance', sortable: true}, { key: 'Status', sortable: true}],
+        fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} ,  
+                 { key: 'Password', sortable: true}, { key: 'Status', sortable: true}],
         usersTableData: [], 
         originalUsersTableData: [], 
         loading: false,
@@ -141,12 +145,9 @@ export default {
               data.forEach((user) => {
                 var tmp_user = {
                   Id: user._id.slice(-4),
-                  Status: 'active',
+                  Status:  user.userRole,
                   Email: user.email,
                   Full_Name: user.firstName + ' ' + user.lastName,
-                  Phone: user.phone,
-                  User: user.city,
-                  ZipCode: user.zip,
                   Password: user.password
                 }
                 vm.usersTableData.push(tmp_user)
@@ -177,6 +178,9 @@ export default {
     watch: {
     },
     methods: {
+      goToNewUser() {
+          this.$router.push({ name: 'AdminUserCreate' })
+      },
       goToUser() {
         var vm = this
         var userData = []
@@ -238,7 +242,7 @@ export default {
         console.log(value)
 
         // filter our data
-        const filtered = this.originalQuotesTableData.filter(d => {
+        const filtered = this.originalUsersTableData.filter(d => {
           // Concat data
           return Object.keys(d)
             .map(k => String(d[k]))
@@ -247,7 +251,7 @@ export default {
             .indexOf(val) !== -1 || !val
         })
         // update the rows
-        this.quotesTableData = filtered
+        this.usersTableData = filtered
       } 
     },
     computed: {
@@ -271,9 +275,13 @@ export default {
 <style scss>
 
 table > tbody > .table-active > td {
-    background-color: #FFD950!important;
+    background-color: #FFD950 !important;
     box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.07), 0px 4px 5px 0px rgba(0, 0, 0, 0.05), 0px 1px 10px 0px rgba(0, 0, 0, 0.03);
     color: #665720;
+}
+
+.new-user-btn {
+  margin-bottom: 1.5rem;
 }
 
 </style>

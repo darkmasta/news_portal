@@ -19,22 +19,17 @@
           </div>
           <div class="media-body ml-4">
             <h4 class="font-weight-bold mb-0">{{ userData.name }}</h4>
-            <b-btn class="mt-2" variant="primary" size="sm" @click="edit = !edit"
-              >Edit</b-btn
-            >
           </div>
         </div>
       </div>
       <div class="col-lg-12 mb-4">
-        <b-card title="User Details">
+        <b-card title="Kullanici Bilgileri">
           <b-card-body>
             <b-row>
               <b-col>
                 <b-form-group label="Isim">
-                  <span v-if="!edit">{{ userData.name }}</span>
                   <b-input
                     label="Isim"
-                    v-if="edit"
                     placeholder="Isim"
                     v-model="userData.name"
                   >
@@ -43,10 +38,8 @@
               </b-col>
               <b-col>
                 <b-form-group label="Soy Isim">
-                  <span v-if="!edit"> {{ userData.lastName }} </span>
                   <b-input
                     label="Soy Isim"
-                    v-if="edit"
                     placeholder="Soy Isim"
                     v-model="userData.lastName"
                   >
@@ -54,12 +47,10 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Phone">
-                  <span v-if="!edit">{{ userData.phone }}</span>
+                <b-form-group label="Telefon">
                   <b-input
-                    label="Phone"
-                    v-if="edit"
-                    placeholder="Phone"
+                    label="Telefon"
+                    placeholder="Telefon"
                     v-model="userData.phone"
                   >
                   </b-input>
@@ -68,12 +59,10 @@
             </b-row>
             <b-row>
               <b-col>
-                <b-form-group label="E-mail">
-                  <span v-if="!edit">{{ userData.email }}</span>
+              <b-form-group label="E-mail">
                   <b-input
-                    label="Email"
-                    v-if="edit"
-                    placeholder="Email"
+                    label="E-mail"
+                    placeholder="E-mail"
                     v-model="userData.email"
                   >
                   </b-input>
@@ -82,11 +71,9 @@
             </b-row>
             <b-row>
               <b-col cols="12">
-                <b-form-group label="Address">
-                  <span v-if="!edit">{{ userData.address }}</span>
+                <b-form-group label="Adres">
                   <b-input
                     label="Address"
-                    v-if="edit"
                     placeholder="Address"
                     v-model="userData.address"
                   >
@@ -97,12 +84,10 @@
 
             <b-row>
               <b-col cols="4">
-                <b-form-group label="Password">
-                  <span v-if="!edit">{{ userData.password}}</span>
+                <b-form-group label="Sifre">
                   <b-input
-                    label="Password"
-                    v-if="edit"
-                    placeholder="Password"
+                    label="Sifre"
+                    placeholder="Sifre"
                     v-model="userData.password"
                   >
                   </b-input>
@@ -110,8 +95,7 @@
               </b-col>
               <b-col>
                 <b-form-group label="Kullanici Rolu">
-                <span v-if="!edit">{{ userData.userRole }}</span>
-                <b-select v-model="userRole" class="" v-if="edit">
+                <b-select v-model="userRole" class="">
                     <option v-for="(userRole, index) in userRoles" 
                         :key="index" v-bind:value="userRole"> 
                         {{userRole}}
@@ -123,8 +107,7 @@
 
             <b-row>
               <b-col cols="3">
-                <b-btn @click="submitProfile(userData)">Save</b-btn>
-                <b-btn variant="danger" class="ml-5" @click="deleteUser()">Delete User</b-btn>
+                <b-btn @click="submitProfile(userData)">Kaydet</b-btn>
               </b-col>
             </b-row>
           </b-card-body>
@@ -141,9 +124,12 @@
 import axios from "axios";
 import Vue from "vue";
 import AxiosPlugin from "vue-axios-cors";
+import Notifications from 'vue-notification'
+
 
 Vue.use(axios);
 Vue.use(AxiosPlugin);
+Vue.use(Notifications)
 axios.defaults.withCredentials = true;
 
 export default {
@@ -156,19 +142,18 @@ export default {
     file: null,
     id: 0,
     imgPreview: null,
-    edit: false,
-    userRoles: ['Admin', 'Editor', 'Writer'],
     userRole: "",
+    userRoles: ['Admin', 'Editor', 'Writer'],
     userData: {
-      userRole: "",
       photo: "",
       username: "",
+      name: "Yeni Kullanici",
       lastName: "",
-      name: "",
+      password: "",
       email: "",
-      phone: "",
       id: null,
-      city: "",
+      admin: 0,
+      deleted_at: null,
     },
 
     sources: {
@@ -183,22 +168,8 @@ export default {
     data.id = vm.$route.params.id
     vm.id = data.id
 
-    axios.post(process.env.VUE_APP_SERVER_URL + "/user_by_id", {data}).then(
-      (response) => {
-        var userData = response.data;
-        vm.userData.email = userData.email;
-        vm.userData.name = userData.firstName;
-        vm.userData.lastName = userData.lastName;
-        vm.userData.password = userData.password;
-        vm.userData.userRole = userData.userRole;
-        vm.userData.address = userData.address;
-        vm.userData.phone = userData.phone;
-        console.log(response);
-      },
-      (response) => {
-        console.log(response);
-      }
-    );
+
+
   },
   methods: {
     setUserData(data) {
@@ -210,9 +181,7 @@ export default {
     },
     submitProfile(userData) {
       var vm = this;
-      var data = vm.userData;
-      data.id = vm.id
-      console.log(data);
+      
 
       if (vm.userRole.length < 2) {
         vm.$notify({
@@ -240,16 +209,15 @@ export default {
         console.log(data)
 
         axios
-            .post(process.env.VUE_APP_SERVER_URL + "/update_user_profile", { data })
+            .post(process.env.VUE_APP_SERVER_URL + "/create_new_user", { data })
             .then(
             (response) => {
                 var userData = response.data;
-                vm.edit = false;
                 console.log(userData)
                 if (userData._id.length > 7) {
                     vm.$notify({
                         type: 'success',
-                        text: 'Kullanici Basariyla Guncellendi!'
+                        text: 'Yeni Kullanici Basariyla Olusturuldu!'
                     })
                 }
             },
@@ -259,34 +227,6 @@ export default {
             );
       }
     },
-    deleteUser() {
-      var vm = this;
-      var data = vm.userData
-      data.id = vm.id
-
-      if (confirm('Kullanici Siliniyor. Emin Misiniz?')) {
-        axios
-          .post(process.env.VUE_APP_SERVER_URL + "/delete_user", { data })
-          .then(
-          (response) => {
-              var userData = response.data;
-              vm.edit = false;
-              console.log(userData)
-              if (userData._id.length > 7) {
-                  vm.$notify({
-                      type: 'success',
-                      text: 'Kullanici Basariyla Silindi!'
-                  })
-              }
-          },
-          (response) => {
-              console.log(response);
-          }
-          );  
-      } else {
-        return
-      }
-    }
   },
 };
 </script>

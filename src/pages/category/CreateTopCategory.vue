@@ -25,12 +25,28 @@ export default {
   },
   methods: {
     submitTopCategory(categoryName) {
+      var vm = this
       var data = {"categoryName": categoryName}
+
+      if (categoryName.length < 2) {
+        vm.$notify({
+            type: 'warn',
+            text: 'Kategori Ismi Bos Olamaz!'
+        })
+      } else {
        axios
         .post(process.env.VUE_APP_SERVER_URL + "/add_top_category/", {data})
         .then((response) => {
           console.log(response.data);
+          var categoryData = response.data
+          if (categoryData == 'success') {
+            vm.$notify({
+                type: 'success',
+                text: 'Ust Kategori Basariyle Olusturuldu!'
+            })
+          }
         });
+      }
     },
   }
 };

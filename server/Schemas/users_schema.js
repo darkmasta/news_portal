@@ -15,7 +15,7 @@ var userSchema = new Schema({
   state: String,
   about: String,
   zip: Number,
-  is_admin: Boolean,
+  userRole: String,
 });
 
 module.exports.userSchema = userSchema;

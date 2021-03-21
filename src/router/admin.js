@@ -77,6 +77,14 @@ export default [
         },
         component: () => import("@/pages/admin/User"),
       },
+      {
+        path: "admin/users-new/",
+        name: "AdminUserCreate",
+        meta: {
+          auth: false,
+        },
+        component: () => import("@/pages/admin/NewUser"),
+      },
     ],
   },
 ];

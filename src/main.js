@@ -8,6 +8,7 @@ import router from "./router";
 import store from "./store";
 
 import BootstrapVue from "bootstrap-vue";
+import Notifications from "vue-notification";
 
 import globals from "./globals";
 import Popper from "popper.js";
@@ -21,6 +22,7 @@ Vue.config.productionTip = false;
 Vue.config.theme = "soft";
 Vue.use(BootstrapVue);
 Vue.use(require("vue-moment"));
+Vue.use(Notifications);
 
 Vue.prototype.$axios = axios;
 // Global RTL flag

@@ -11,7 +11,7 @@ import quotesRoutes from "./quotes";
 import categoryRoutes from "./category";
 import ordersRoutes from "./orders";
 import instantHelpsRoutes from "./instant-help";
-import customersRoutes from "./customers";
+import postsRoutes from "./posts";
 import invoicingRoutes from "./invoicing";
 import adminRoutes from "./admin";
 import dashboardRoutes from "./dashboard";
@@ -27,7 +27,7 @@ const ROUTES = []
   .concat(categoryRoutes)
   .concat(ordersRoutes)
   .concat(instantHelpsRoutes)
-  .concat(customersRoutes)
+  .concat(postsRoutes)
   .concat(invoicingRoutes)
   .concat(adminRoutes);
 

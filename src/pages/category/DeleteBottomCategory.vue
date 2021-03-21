@@ -69,16 +69,20 @@ export default {
   },
   methods: {
     deleteBottomCategory (topCategory, bottomCategory) {
+        var vm = this
         var data = {"topCategory": topCategory, "bottomCategory": bottomCategory}
         axios
-            .post(process.env.VUE_APP_SERVER_URL + "/add_bottom_category/", {data})
+            .post(process.env.VUE_APP_SERVER_URL + "/delete_bottom_category/", {data})
             .then((response) => {
                 console.log(response.data);
+              if (response.data.nModified > 0) {
+                vm.$notify({
+                    type: 'success',
+                    text: 'Alt Kategori Basariyle Silindi!'
+                })
+              }
             });
     },
-    setArray(a, b) {
-        window[a]= b;
-    }
   }
 };
 </script>

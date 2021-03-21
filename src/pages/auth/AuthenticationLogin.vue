@@ -5,13 +5,11 @@
         <div class="d-flex justify-content-center align-items-center pb-2 mb-4 mt-5">
           <b-img :src="require('@/assets/images/logo-login.png')" />
         </div>
-        <p class="header ml-5 mt-5">
+        <p class="header ml-5 mt-5" id="welcome-text">
           Welcome!<br>
           Defenshere<br>
           Dashboard
         </p>
-        <p class="subtitle ml-5 mt-5">
-          Process and a cash-back program, the Apple Card also breaks down your monthly purchase.
         </p>
       </b-col>
       <b-col cols="8">
@@ -23,10 +21,6 @@
                 <h4>Login to Dashboard</h4>
               </div>
               <!-- / Logo -->
-
-              <span class="mt-5">
-                Process and a cash-back program, the Apple Card also breaks down your monthly purchase.
-              </span>
 
               <!-- Form -->
               <form class="mt-5" @submit.prevent="loginUser(model)" > 
@@ -54,12 +48,6 @@
                   <b-btn type="submit" variant="primary">Login</b-btn>
                 </div>
               </form>
-              <p class="mt-5">
-                Process and a cash-back program, the Apple Card also breaks down your monthly purchase.
-              </p>
-              <p class="mt-5">
-                <strong>George Arkin</strong>, founder of LearnVest
-              </p>
               <!-- / Form -->
             </b-card>
           </b-col>
@@ -148,3 +136,10 @@ export default {
   },
 };
 </script>
+
+<style >
+#welcome-text {
+  text-align: center;
+}
+
+</style>

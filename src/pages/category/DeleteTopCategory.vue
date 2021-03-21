@@ -51,16 +51,21 @@ export default {
     console.log(vm.categoriesData)
   },
   methods: {
-    submitTopCategory(topCategory) {
+    deleteTopCategory(topCategory) {
+      var vm = this
       var data = {"topCategory": topCategory}
       console.log(data)
-      /*
        axios
-        .post(process.env.VUE_APP_SERVER_URL + "/add_top_category/", {data})
+        .post(process.env.VUE_APP_SERVER_URL + "/delete_top_category/", {data})
         .then((response) => {
-          console.log(response.data);
+          console.log(response.data.nModified);
+          if (response.data.nModified > 0) {
+            vm.$notify({
+                type: 'success',
+                text: 'Ust Kategori Basariyle Silindi!'
+            })
+          }
         });
-      */
     },
   }
 };
