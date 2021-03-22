@@ -90,8 +90,9 @@ export default {
     data() {
       return {
         value: "",
-        fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} ,  
-                 { key: 'Password', sortable: true}, { key: 'Status', sortable: true}],
+        fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} , { key: 'Son_Gorulme', sortable: true}, 
+                 { key: 'Password', sortable: true}, { key: 'Kullanici_Dili', sortable: true},
+                 { key: 'Status', sortable: true}],
         usersTableData: [], 
         originalUsersTableData: [], 
         loading: false,
@@ -147,7 +148,8 @@ export default {
                   Id: user._id.slice(-4),
                   Status:  user.userRole,
                   Email: user.email,
-                  Full_Name: user.firstName + ' ' + user.lastName,
+                  Kullanici_Dili: user.defaultLang,
+                  Son_Gorulme: moment(user.lastLogin).fromNow(),
                   Password: user.password
                 }
                 vm.usersTableData.push(tmp_user)
@@ -156,19 +158,6 @@ export default {
 
           })
 
-      axios.get(process.env.VUE_APP_SERVER_URL + '/user').then(
-        (response) => {
-          var userData = response.data
-          //console.log(userData)
-          vm.profit = userData.defaultProfit
-          vm.city = userData.city
-          vm.state = userData.state
-          vm.zipCode = userData.zip
-        },
-        (response) => {
-          console.log(response)
-        }
-        )
     },
     events: {
         click: function(data) {

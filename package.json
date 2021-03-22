@@ -11,6 +11,9 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^26.0.0",
+    "@ckeditor/ckeditor5-vue": "^2.0.1",
+    "@ckeditor/ckeditor5-vue2": "^1.0.5",
     "@vue/eslint-config-prettier": "^6.0.0",
     "axios": "^0.20.0",
     "bootstrap": "~4.4.1",

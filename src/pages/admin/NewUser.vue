@@ -68,6 +68,16 @@
                   </b-input>
                 </b-form-group>
               </b-col>
+              <b-col>
+                <b-form-group label="Kullanici Dili">
+                <b-select v-model="defaultLang" class="">
+                    <option v-for="(defaultLang, index) in languages" 
+                        :key="index" v-bind:value="defaultLang"> 
+                        {{defaultLang}}
+                    </option>
+                </b-select>
+                </b-form-group>
+              </b-col>
             </b-row>
             <b-row>
               <b-col cols="12">
@@ -144,6 +154,8 @@ export default {
     imgPreview: null,
     userRole: "",
     userRoles: ['Admin', 'Editor', 'Writer'],
+    languages: ['Turkce', 'Ingilizce', 'Arapca', 'Rusca', 'Ukraynaca', 'Fransizca'],
+    defaultLang: '',
     userData: {
       photo: "",
       username: "",
@@ -188,24 +200,30 @@ export default {
             type: 'warn',
             text: 'Kullanici Rolu Bos Olamaz!'
         });
-      } else if (vm.userData.name < 2) {
+      } else if (vm.userData.name.length < 2) {
         vm.$notify({
             type: 'warn',
             text: 'Kullanici Adi Bos Olamaz!'
         });
-      } else if (vm.userData.email < 2) {
+      } else if (vm.userData.email.length < 2) {
         vm.$notify({
             type: 'warn',
             text: 'Email Bos Olamaz!'
         });
-      } else if (vm.userData.password < 2) {
+      } else if (vm.userData.password.length < 2) {
         vm.$notify({
             type: 'warn',
             text: 'Sifre Bos Olamaz!'
         });
+      } else if (vm.defaultLang.length < 2) {
+        vm.$notify({
+            type: 'warn',
+            text: 'Kullanici Dili Bos Olamaz!'
+        })
       } else {
         var data = vm.userData;
         data.userRole = vm.userRole
+        data.defaultLang = vm.defaultLang
         console.log(data)
 
         axios

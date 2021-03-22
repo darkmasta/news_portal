@@ -6,16 +6,14 @@ var express = require("express");
 var router = express.Router();
 
 var Users = require("../Models/users");
-var Leads = require("../Models/leads");
-var Customers = require("../Models/customers");
 
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 var _ = require("underscore");
-var CryptoJS = require("crypto-js");
-const { doc } = require("prettier");
+const { decodeCookie } = require("../helpers/decode-cookie");
 
 router.get("/users", function (req, res) {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
   var userArr = [];
   var query = Users.User.find();
 
@@ -32,12 +30,7 @@ router.get("/users", function (req, res) {
 });
 
 router.get("/user", function (req, res) {
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var promise = Users.User.find({ email: email });
 
@@ -59,13 +52,9 @@ router.post("/user_by_id", jsonParser, function (req, res) {
 
 router.post("/update_user_profile", jsonParser, function (req, res) {
   var userData = req.body.data;
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1]; // admin, editor, or writer
+  console.log(userData);
 
   if (String(isAdmin).toLowerCase() == "admin") {
     let firstName = userData.name.split(" ")[0];
@@ -81,6 +70,7 @@ router.post("/update_user_profile", jsonParser, function (req, res) {
       phone: userData.phone,
       address: userData.address,
       userRole: userRole,
+      defaultLang: userData.defaultLang,
     };
 
     var options = {
@@ -104,13 +94,7 @@ router.post("/update_user_profile", jsonParser, function (req, res) {
 
 router.post("/create_new_user", jsonParser, function (req, res) {
   var userData = req.body.data;
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1]; // admin, editor, or writer
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin") {
     var User = new Users.User({
@@ -121,6 +105,7 @@ router.post("/create_new_user", jsonParser, function (req, res) {
       address: userData.address,
       password: userData.password,
       userRole: String(userData.userRole).toLowerCase(),
+      defaultLang: userData.defaultLang,
     });
 
     var promise = User.save();
@@ -136,12 +121,7 @@ router.post("/create_new_user", jsonParser, function (req, res) {
 
 router.post("/delete_user", jsonParser, function (req, res) {
   var userData = req.body.data;
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var isAdmin = cookieData.split("~")[1]; // admin, editor, or writer
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin") {
     Users.User.findOneAndDelete({ _id: userData.id })

@@ -7,15 +7,17 @@ var ObjectId = Schema.Types.ObjectId;
 var userSchema = new Schema({
   firstName: String,
   lastName: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now,
+  },
   password: String,
-  phone: String,
-  address: String,
-  city: String,
-  state: String,
-  about: String,
-  zip: Number,
   userRole: String,
+  defaultLang: String,
 });
 
 module.exports.userSchema = userSchema;

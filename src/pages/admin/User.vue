@@ -18,7 +18,7 @@
             />
           </div>
           <div class="media-body ml-4">
-            <h4 class="font-weight-bold mb-0">{{ userData.name }}</h4>
+            <h4 class="font-weight-bold mb-0">{{ userData.firstName }} {{userData.lastName}}</h4>
             <b-btn class="mt-2" variant="primary" size="sm" @click="edit = !edit"
               >Edit</b-btn
             >
@@ -31,12 +31,12 @@
             <b-row>
               <b-col>
                 <b-form-group label="Isim">
-                  <span v-if="!edit">{{ userData.name }}</span>
+                  <span v-if="!edit">{{ userData.firstName }}</span>
                   <b-input
                     label="Isim"
                     v-if="edit"
                     placeholder="Isim"
-                    v-model="userData.name"
+                    v-model="userData.firstName"
                   >
                   </b-input>
                 </b-form-group>
@@ -53,18 +53,7 @@
                   </b-input>
                 </b-form-group>
               </b-col>
-              <b-col>
-                <b-form-group label="Phone">
-                  <span v-if="!edit">{{ userData.phone }}</span>
-                  <b-input
-                    label="Phone"
-                    v-if="edit"
-                    placeholder="Phone"
-                    v-model="userData.phone"
-                  >
-                  </b-input>
-                </b-form-group>
-              </b-col>
+              
             </b-row>
             <b-row>
               <b-col>
@@ -79,18 +68,22 @@
                   </b-input>
                 </b-form-group>
               </b-col>
+              <b-col>
+                <b-form-group label="Kullanici Dili">
+                <span v-if="!edit">{{defaultLang}}</span>
+                <b-select v-model="defaultLang" class="" v-if="edit">
+                    <option v-for="(defaultLang, index) in languages" 
+                        :key="index" v-bind:value="defaultLang"> 
+                        {{defaultLang}}
+                    </option>
+                </b-select>
+                </b-form-group>
+              </b-col>
             </b-row>
             <b-row>
               <b-col cols="12">
-                <b-form-group label="Address">
-                  <span v-if="!edit">{{ userData.address }}</span>
-                  <b-input
-                    label="Address"
-                    v-if="edit"
-                    placeholder="Address"
-                    v-model="userData.address"
-                  >
-                  </b-input>
+                <b-form-group label="Son Gorulme">
+                  <span>{{ userData.lastLogin }}</span>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -139,12 +132,8 @@
 
 <script>
 import axios from "axios";
-import Vue from "vue";
-import AxiosPlugin from "vue-axios-cors";
+import moment from "moment"
 
-Vue.use(axios);
-Vue.use(AxiosPlugin);
-axios.defaults.withCredentials = true;
 
 export default {
   name: "profile",
@@ -159,16 +148,17 @@ export default {
     edit: false,
     userRoles: ['Admin', 'Editor', 'Writer'],
     userRole: "",
+    languages: ['Turkce', 'Ingilizce', 'Arapca', 'Rusca', 'Ukraynaca', 'Fransizca'],
+    defaultLang: '',
     userData: {
       userRole: "",
       photo: "",
-      username: "",
+      firstName: "",
       lastName: "",
       name: "",
       email: "",
-      phone: "",
+      lastLogin: '',
       id: null,
-      city: "",
     },
 
     sources: {
@@ -187,12 +177,14 @@ export default {
       (response) => {
         var userData = response.data;
         vm.userData.email = userData.email;
-        vm.userData.name = userData.firstName;
+        vm.userData.firstName = userData.firstName;
         vm.userData.lastName = userData.lastName;
         vm.userData.password = userData.password;
         vm.userData.userRole = userData.userRole;
-        vm.userData.address = userData.address;
-        vm.userData.phone = userData.phone;
+        vm.userRole = userData.userRole
+
+        vm.defaultLang = userData.defaultLang;
+        vm.userData.lastLogin = moment(userData.lastLogin).fromNow()
         console.log(response);
       },
       (response) => {
@@ -219,7 +211,7 @@ export default {
             type: 'warn',
             text: 'Kullanici Rolu Bos Olamaz!'
         });
-      } else if (vm.userData.name < 2) {
+      } else if (vm.userData.firstName < 2) {
         vm.$notify({
             type: 'warn',
             text: 'Kullanici Adi Bos Olamaz!'
@@ -237,6 +229,7 @@ export default {
       } else {
         var data = vm.userData;
         data.userRole = vm.userRole
+        data.defaultLang = vm.defaultLang
         console.log(data)
 
         axios

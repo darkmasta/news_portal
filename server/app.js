@@ -3,9 +3,7 @@ require("dotenv").config({
 });
 
 var express = require("express");
-var CryptoJS = require("crypto-js");
 var cors = require("cors");
-var http = require("http");
 var fs = require("fs");
 var passport = require("passport");
 var bodyParser = require("body-parser");
@@ -13,7 +11,6 @@ var moment = require("moment");
 var https = require("https");
 moment.locale("en");
 const path = require("path");
-const lineReader = require("line-reader");
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,8 +19,6 @@ var mongoose = require("mongoose");
 
 mongoose.Promise = require("bluebird");
 
-var _ = require("underscore");
-var s = require("underscore.string.spxis");
 const common = require("./helpers/common-functions");
 
 const UserRoutes = require("./routes/user_routes");

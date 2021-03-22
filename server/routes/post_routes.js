@@ -10,10 +10,7 @@ var Posts = require("../Models/posts");
 
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
-var _ = require("underscore");
-var CryptoJS = require("crypto-js");
-var fs = require("fs");
-const { ObjectID } = require("mongodb");
+const { decodeCookie } = require("../helpers/decode-cookie");
 
 router.post("/get_posts", jsonParser, function (req, res) {
   var promise = Posts.Post.find({});
@@ -25,13 +22,7 @@ router.post("/get_posts", jsonParser, function (req, res) {
 
 router.post("/create_post", jsonParser, function (req, res) {
   var postData = req.body.data;
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1]; // admin, editor, or writer
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin" || isAdmin == "editor" || isAdmin == "writer") {
     var Post = new Posts.Post({

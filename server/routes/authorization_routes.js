@@ -11,7 +11,6 @@ var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 var _ = require("underscore");
 var CryptoJS = require("crypto-js");
-const { enc } = require("crypto-js");
 
 router.get("/success", function (req, res) {
   var query = Users.User.findOne({ email: req.user.email });
@@ -26,22 +25,29 @@ router.get("/success", function (req, res) {
       res.json("Error signing in");
     } else {
       req.user.data = user;
-      var encryptData = req.user.email;
 
       console.log(user);
 
-      encryptData += "~";
-      encryptData += user.userRole;
+      Users.User.findByIdAndUpdate(
+        { _id: user._id },
+        { lastLogin: Date.now() },
+        (err, data) => {
+          var encryptData = req.user.email;
 
-      console.log(encryptData);
+          encryptData += "~";
+          encryptData += user.userRole;
 
-      var token = CryptoJS.AES.encrypt(
-        String(encryptData),
-        String(process.env.JWT_SECRET)
-      ).toString();
+          console.log(encryptData);
 
-      res.cookie("defensehere", token, { maxAge: 90000000 });
-      res.json("Success");
+          var token = CryptoJS.AES.encrypt(
+            String(encryptData),
+            String(process.env.JWT_SECRET)
+          ).toString();
+
+          res.cookie("defensehere", token, { maxAge: 90000000 });
+          res.json("Success");
+        }
+      );
     }
   });
 });
