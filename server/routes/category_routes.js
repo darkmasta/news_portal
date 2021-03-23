@@ -12,9 +12,8 @@ var categoryData = require("../Schemas/categories_data");
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 var _ = require("underscore");
-var CryptoJS = require("crypto-js");
 var fs = require("fs");
-const { ObjectID } = require("mongodb");
+const { decodeCookie } = require("../helpers/decode-cookie");
 
 router.post("/get_categories", jsonParser, function (req, res) {
   var promise = Categories.Category.find({});
@@ -25,13 +24,7 @@ router.post("/get_categories", jsonParser, function (req, res) {
 });
 
 router.post("/add_top_category", jsonParser, function (req, res) {
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1].toLowerCase(); // admin, editor, or writer
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
 
@@ -59,14 +52,7 @@ router.post("/add_bottom_category", jsonParser, function (req, res) {
   var data = req.body.data;
   var topCategory = data.topCategory;
   var bottomCategory = data.bottomCategory;
-
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1].toLowerCase(); // admin, editor, or writer
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin") {
     var promise = Categories.Category.updateMany(
@@ -91,14 +77,7 @@ router.post("/add_bottom_category", jsonParser, function (req, res) {
 router.post("/delete_top_category", jsonParser, function (req, res) {
   var data = req.body.data;
   var topCategory = data.topCategory;
-
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1].toLowerCase(); // admin, editor, or write
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin") {
     var promise = Categories.Category.update(
@@ -122,14 +101,7 @@ router.post("/delete_top_category", jsonParser, function (req, res) {
 router.post("/delete_bottom_category", jsonParser, function (req, res) {
   var data = req.body.data;
   var bottomCategory = data.bottomCategory;
-
-  var cookieData = CryptoJS.AES.decrypt(
-    req.cookies.defensehere,
-    String(process.env.JWT_SECRET)
-  ).toString(CryptoJS.enc.Utf8);
-
-  var email = cookieData.split("~")[0];
-  var isAdmin = cookieData.split("~")[1].toLowerCase(); // admin, editor, or write
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (isAdmin == "admin") {
     var promise = Categories.Category.update(
@@ -151,8 +123,7 @@ router.post("/delete_bottom_category", jsonParser, function (req, res) {
 });
 
 router.post("/upload_image", jsonParser, function (req, res) {
-  var img = req.files.files;
-  console.log(img.name);
+  var img = req.files.file;
 
   fs.writeFile("./images/" + img.name, img.data, "binary", function (err) {
     if (err) throw err;

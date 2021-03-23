@@ -24,6 +24,7 @@ const common = require("./helpers/common-functions");
 const UserRoutes = require("./routes/user_routes");
 const CategoryRoutes = require("./routes/category_routes");
 const AuthorizationRoutes = require("./routes/authorization_routes");
+const PostRoutes = require("./routes/post_routes");
 
 var app = express();
 
@@ -60,6 +61,7 @@ app.use(passport.session());
 app.use("/", UserRoutes);
 app.use("/", CategoryRoutes);
 app.use("/", AuthorizationRoutes);
+app.use("/", PostRoutes);
 
 app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");

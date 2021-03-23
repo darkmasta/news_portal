@@ -8,6 +8,7 @@ var router = express.Router();
 var Users = require("../Models/users");
 var Posts = require("../Models/posts");
 
+var fs = require("fs");
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 const { decodeCookie } = require("../helpers/decode-cookie");
@@ -21,21 +22,32 @@ router.post("/get_posts", jsonParser, function (req, res) {
 });
 
 router.post("/create_post", jsonParser, function (req, res) {
-  var postData = req.body.data;
+  var postData = req.body;
+  var img = req.files.file;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  // console.log("POST_DATA", postData);
+  // console.log("REQ_BODY", req.body);
+  // console.log("FILES", req.files);
 
   if (isAdmin == "admin" || isAdmin == "editor" || isAdmin == "writer") {
     var Post = new Posts.Post({
       owner: postData.owner,
-      content: postData.content,
+      content: postData.editorData,
       categories: postData.categories,
+      postTitle: postData.postTitle,
       topic: postData.topic,
+      postImage: img.name,
     });
 
-    Post.save()
-      .exec()
-      .then((post) => res.json(post))
-      .catch((err) => res.json(err));
+    fs.writeFile("./images/" + img.name, img.data, "binary", function (err) {
+      if (err) throw err;
+      console.log("File saved.");
+
+      Post.save()
+        .then((post) => res.json("success"))
+        .catch((err) => res.json(err));
+    });
   } else {
     res.json("Error");
   }
