@@ -4,6 +4,7 @@ require("dotenv").config({
 
 var express = require("express");
 var router = express.Router();
+var ba64 = require("ba64");
 
 var Users = require("../Models/users");
 var Posts = require("../Models/posts");
@@ -23,30 +24,29 @@ router.post("/get_posts", jsonParser, function (req, res) {
 
 router.post("/create_post", jsonParser, function (req, res) {
   var postData = req.body;
-  var img = req.files.file;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
-
-  // console.log("POST_DATA", postData);
-  // console.log("REQ_BODY", req.body);
-  // console.log("FILES", req.files);
 
   if (isAdmin == "admin" || isAdmin == "editor" || isAdmin == "writer") {
     var Post = new Posts.Post({
-      owner: postData.owner,
+      owner: email,
       content: postData.editorData,
       categories: postData.categories,
       postTitle: postData.postTitle,
       topic: postData.topic,
-      postImage: img.name,
+      postImage: postData.fileName + ".jpeg",
     });
-
-    fs.writeFile("./images/" + img.name, img.data, "binary", function (err) {
+    ba64.writeImage("./images/" + postData.fileName, postData.file, function (
+      err
+    ) {
       if (err) throw err;
-      console.log("File saved.");
+
+      console.log("Image saved successfully");
 
       Post.save()
         .then((post) => res.json("success"))
         .catch((err) => res.json(err));
+
+      // do stuff
     });
   } else {
     res.json("Error");

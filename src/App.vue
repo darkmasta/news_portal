@@ -17,7 +17,7 @@ export default {
   name: 'app',
   metaInfo: {
     title: 'Index',
-    titleTemplate: '%s - Dealership'
+    titleTemplate: '%s - Defensehere'
   },
   updated () {
     // Remove loading state

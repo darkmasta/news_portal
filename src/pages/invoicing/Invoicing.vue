@@ -67,11 +67,6 @@ export default {
         class: "text-left align-middle",
       },
       {
-        key: "file",
-        label: "",
-        class: "text-left align-middle",
-      },
-      {
         key: "id",
         label: "ID",
         sortable: true,
@@ -79,8 +74,8 @@ export default {
         class: "text-left align-middle",
       },
       {
-        key: "email",
-        label: "Email",
+        key: "tag",
+        label: "Tag Name",
         sortable: true,
         sortDirection: "desc",
         class: "text-left align-middle",
@@ -103,10 +98,6 @@ export default {
   created () {
     var vm = this
 
-    this.$nextTick(() => {
-      vm.fetchUser();
-      vm.getOrders()
-    })
 
     vm.orders.forEach(order => {
       var tmp_order = {
@@ -124,7 +115,6 @@ export default {
     console.log(vm.orders)
   },
   computed: {
-    ...mapGetters({orders: "allOrders", user: 'getUser'}),
     totalItems() {
       return this.ordersTableData.length;
     },

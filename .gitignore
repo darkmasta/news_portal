@@ -1,4 +1,5 @@
 node_modules/
 ./server/variables.env
 variables.env
-*.env
+.env
+

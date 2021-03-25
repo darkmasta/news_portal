@@ -15,6 +15,7 @@ import postsRoutes from "./posts";
 import invoicingRoutes from "./invoicing";
 import adminRoutes from "./admin";
 import dashboardRoutes from "./dashboard";
+import homeRoutes from "./home";
 
 Vue.use(Router);
 Vue.use(Meta);
@@ -29,7 +30,8 @@ const ROUTES = []
   .concat(instantHelpsRoutes)
   .concat(postsRoutes)
   .concat(invoicingRoutes)
-  .concat(adminRoutes);
+  .concat(adminRoutes)
+  .concat(homeRoutes);
 
 ROUTES.push({
   path: "*",
