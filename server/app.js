@@ -89,7 +89,9 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 */
 
-app.get("/dist", function (req, res) {});
+app.get("/", function (req, res) {
+  res.render("index.html");
+});
 
 app.post(
   "/login/local",
