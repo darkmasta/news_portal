@@ -3,7 +3,14 @@
   "version": "1.5.2",
   "private": true,
   "main": "./server/app.js",
-  "scripts": {},
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e"
+  },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^26.0.0",
     "@ckeditor/ckeditor5-vue": "^2.0.1",
@@ -20,6 +27,7 @@
     "connect-ensure-login": "^0.1.1",
     "consolidate": "^0.15.1",
     "cookie-parser": "^1.4.3",
+    "core-js": "^3.9.1",
     "cors": "^2.8.5",
     "cron": "^1.7.2",
     "crypto-js": "^4.0.0",
