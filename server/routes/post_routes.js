@@ -28,7 +28,6 @@ router.post("/create_post", jsonParser, function (req, res) {
 
   if (isAdmin == "admin" || isAdmin == "editor" || isAdmin == "writer") {
     var Post = new Posts.Post({
-      owner: email,
       content: postData.editorData,
       categories: postData.categories,
       postTitle: postData.postTitle,

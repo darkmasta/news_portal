@@ -146,70 +146,38 @@ export default {
   methods: {
     submitPost: function () {
       var vm = this
-      var data = {}
-      data.editorData = vm.editorData
-      data.postTitle = vm.postTitle
-      data.categories = vm.selectedCategories
-      console.log(data)
+			const { canvas } = this.$refs.cropper.getResult();
+			if (canvas) {
+				const formData = new FormData();
+				canvas.toBlob(blob => {
+          this.blobToBase64(blob).then(res => {
+            const formData = new FormData();
+            formData.append('file', res);
+            formData.append('fileName', vm.imageName);
+            formData.append("editorData", vm.editorData)
+            formData.append("postTitle", vm.postTitle)
+            formData.append("categories", vm.selectedCategories)
 
-      const file = this.$refs.file.files[0];
-      vm.file = file
-      const formData = new FormData();
-      formData.append("file", vm.file)
-      formData.append("editorData", vm.editorData)
-      formData.append("postTitle", vm.postTitle)
-      formData.append("categories", vm.selectedCategories)
-
-      axios
-        .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          }, 
-        })
-        .then((response) => {
-          var data = response.data;
-          console.log(data);
-        });
-    },
-    uploadImage2: function() {
-      var vm = this
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-      const file = this.$refs.file.files[0];
-      vm.file = file;
-      if (!allowedTypes.includes(file.type)) {
-        this.message = "Filetype is wrong!!";
-      }
-      if (file.size > 500000) {
-        this.message = "Too large, max size allowed is 500kb";
-      }
-
-      const formData = new FormData();
-      formData.append("file", vm.file)
-
-      console.log(file)
-      
-      /*
-      axios
-        .post(process.env.VUE_APP_SERVER_URL + "/upload_image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(
-          (response) => {
-            console.log(response.data)
-            if (response.data == "success") {
-              vm.$notify({
-                  type: 'success',
-                  text: 'Haber Resmi Yuklendi!'
+            axios
+              .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                }, 
+              })
+              .then((response) => {
+                var data = response.data;
+                console.log(data);
+                if (response.data == "success") {
+                  vm.$notify({
+                      type: 'success',
+                      text: 'Haber Resmi Yuklendi!'
+                  });
+                }
               });
-            }
-          },
-          (response) => {
-            console.log(response);
-          }
-        );
-        */
+          });
+				// Perhaps you should add the setting appropriate file format here
+				}, 'image/jpeg');
+			}
     },
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
