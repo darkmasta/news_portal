@@ -2,4 +2,7 @@ node_modules/
 ./server/variables.env
 variables.env
 .env
+npm-debug.log
+.DS_Store
+/*.env
 

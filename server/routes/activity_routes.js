@@ -6,6 +6,7 @@ var express = require("express");
 var router = express.Router();
 
 var Activities = require("../Models/activities");
+var ba64 = require("ba64");
 
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
@@ -24,18 +25,28 @@ router.post("/get_activities", jsonParser, function (req, res) {
 router.post("/create_activity", jsonParser, function (req, res) {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  var data = req.body.data;
+  var data = req.body; // form data
 
-  var tagName = data.tagName;
-
-  if (isAdmin == "admin") {
+  if (isAdmin == "admin" || isAdmin == "editor" || isAdmin == "writer") {
     var Activity = new Activities.Activity({
-      tagName: tagName,
+      activityName: data.activityName,
+      activityTitle: data.activityTitle,
+      activityPosition: data.activityPosition,
+      activityImage: data.fileName + ".jpeg",
+      startDate: data.startDate,
+      endDate: data.endDate,
     });
 
-    Activity.save()
-      .then((activity) => res.json("success"))
-      .catch((err) => res.json(err));
+    ba64.writeImage("./images/" + data.fileName, data.file, function (err) {
+      if (err) throw err;
+
+      console.log("Activity Image saved successfully");
+
+      Activity.save()
+        .then((activity) => res.json("success"))
+        .catch((err) => res.json(err));
+      // do stuff
+    });
   } else {
     res.json("Error");
   }

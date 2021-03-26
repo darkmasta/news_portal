@@ -35,12 +35,13 @@ router.post("/create_post", jsonParser, function (req, res) {
       topic: postData.topic,
       postImage: postData.fileName + ".jpeg",
     });
+
     ba64.writeImage("./images/" + postData.fileName, postData.file, function (
       err
     ) {
       if (err) throw err;
 
-      console.log("Image saved successfully");
+      console.log("Post Image saved successfully");
 
       Post.save()
         .then((post) => res.json("success"))

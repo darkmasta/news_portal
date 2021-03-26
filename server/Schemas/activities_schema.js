@@ -5,6 +5,7 @@ var ObjectId = Schema.Types.ObjectId;
 
 var activitySchema = new Schema({
   activityName: String,
+  activityTitle: String,
   activityPosition: String,
   activityImage: String,
   state: String,

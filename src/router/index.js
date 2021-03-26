@@ -12,7 +12,7 @@ import categoryRoutes from "./category";
 import ordersRoutes from "./orders";
 import instantHelpsRoutes from "./instant-help";
 import postsRoutes from "./posts";
-import invoicingRoutes from "./invoicing";
+import activitiesRoutes from "./activity";
 import adminRoutes from "./admin";
 import dashboardRoutes from "./dashboard";
 import homeRoutes from "./home";
@@ -29,7 +29,7 @@ const ROUTES = []
   .concat(ordersRoutes)
   .concat(instantHelpsRoutes)
   .concat(postsRoutes)
-  .concat(invoicingRoutes)
+  .concat(activitiesRoutes)
   .concat(adminRoutes)
   .concat(homeRoutes);
 

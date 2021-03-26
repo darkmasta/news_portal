@@ -16,30 +16,9 @@
     </header>
 
     <div class="activities_center">
-        <div class="activity_item">
-
-        </div>
-        <div class="activity_item">
-
-        </div>
-        <div class="activity_item">
-
-        </div>
-        
-
+        <activity :activity="activity" v-for="activity in activities" />
     </div>
 
-    <div class="activities_center">
-        <div class="activity_item">
-
-        </div>
-        <div class="activity_item">
-
-        </div>
-        <div class="activity_item">
-
-        </div>
-    </div>
 
 
 
@@ -49,6 +28,7 @@
 </template>
 <script>
 import axios from "axios";
+import Activity from '../activities/Activity.vue';
 
 
 export default {
@@ -56,11 +36,26 @@ export default {
   metaInfo: {
     title: "Home Page",
   },
-  data() {
-    return {}
+  components: {
+    Activity
   },
+  data: () => ({
+      activities: [],
+  }),
   created() {
     var vm = this;
+
+
+    axios
+        .post(process.env.VUE_APP_SERVER_URL + "/get_activities/", {})
+        .then((response) => {
+            console.log(response.data);
+            vm.activities = response.data
+            vm.activities.forEach( activity => {
+                activity.activityImage = process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage;
+            })
+        })
+
   },
   methods: {
   }
@@ -101,6 +96,7 @@ ul li:hover {
     justify-content: center;
     margin: 20px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .activity_item{
@@ -108,7 +104,6 @@ ul li:hover {
     border: 5px solid black;
     flex: 0 0 calc(20% - 2rem);
     height: 100%;
-    padding: 20px;
     margin: 20px;
 }
 

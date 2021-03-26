@@ -2,6 +2,7 @@
   "name": "appwork-vue-starter",
   "version": "1.5.2",
   "private": true,
+  "main": "./server/app.js",
   "scripts": {
     "start": "npm run serve",
     "serve": "vue-cli-service serve",
@@ -172,5 +173,8 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }

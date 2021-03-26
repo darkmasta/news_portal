@@ -25,6 +25,7 @@ const UserRoutes = require("./routes/user_routes");
 const CategoryRoutes = require("./routes/category_routes");
 const AuthorizationRoutes = require("./routes/authorization_routes");
 const PostRoutes = require("./routes/post_routes");
+const ActivityRoutes = require("./routes/activity_routes");
 
 var app = express();
 
@@ -62,6 +63,7 @@ app.use("/", UserRoutes);
 app.use("/", CategoryRoutes);
 app.use("/", AuthorizationRoutes);
 app.use("/", PostRoutes);
+app.use("/", ActivityRoutes);
 
 app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
