@@ -8,7 +8,11 @@
     </div>
     <b-row>
       <b-col class="categories__container">
-        <div v-for="(categoryTitle, index) in categoryTitles" :key="index" class="categories__single-category">
+        <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
+            @click="clickCategory(index)" class="categories__single-category"
+            :class="{expand_category: clickedCategory == index,
+                    collapse_category: clickedCategory != index } 
+                    ">
           <h3 class="category__title">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
@@ -106,6 +110,7 @@ export default {
   data() {
     return {
       categoriesData: {},
+      clickedCategory: undefined,
       categoryTitles: [],
       selectedCategories: [],
       postTitle: '',
@@ -135,13 +140,32 @@ export default {
     var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
 
-       axios
-        .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
-        .then((response) => {
+
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
+      .then((response) => {
           //console.log(response.data);
           vm.categoriesData = response.data[0];
-          console.log(vm.categoriesData)
-        });
+          console.log(vm.categoriesData.updatedCategories)
+          vm.categoriesData.updatedCategories.forEach(element => {
+              vm.categoryTitles.push(element.topCategory)
+          });
+
+          // remove duplicates
+          // it is expected from top categories
+          var uniqueCategoryTitles = [...new Set(vm.categoryTitles)]
+          vm.categoryTitles = uniqueCategoryTitles;
+
+          vm.categoriesData.updatedCategories.forEach(element => {
+              if( vm.categoriesData[element.topCategory] ) {
+                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
+              } else {
+                  vm.categoriesData[element.topCategory] =  new Array();
+                  if (!element.bottomCategory == "")
+                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
+              }
+          })
+      });
   },
   methods: {
     submitPost: function () {
@@ -245,144 +269,14 @@ export default {
 				}, 'image/jpeg');
 			}
 		},
+    clickCategory(index) {
+      var vm = this
+      vm.clickedCategory = index
+    }
   },
 };
 </script>
 
 <style>
-.post-title-center {
-  margin: 30px auto;
-}
 
-.post-title-center input {
-  width: 90%;
-}
-
-.post-title {
-  width: 1000px;
-}
-
-.editor-center {
-  display: flex;
-  justify-content: center;
-  margin-top:
-}
-
-.ck.ck-reset, .ck.ck-reset_all, .ck.ck-reset_all * {
-  width: 85%;
-}
-.ck.ck-editor__main>.ck-editor__editable {
-  height: 40vh;
-  margin-bottom: 2em;
-}
-
-.categories__container {
-  height: 60vh;
-  width: 80vw;
-  display: flex;
-  flex-wrap: wrap;
-}
-.categories__single-category {
-  background: #21B8B5;
-  color: #0E2928;
-  margin: 0.5rem;
-  height: calc(50% - 1rem);
-  flex: 0 0 calc(20% - 1rem);
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-.category__title {
-  text-align: center;
-  font-size: 1.2rem;
-}
-.category__list {
-  list-style-type: none;
-}
-.upload-image {
-  margin: 1rem auto;
-  background: #0E2928;
-  color: #fff;
-}
-.cropper {
-  height: 600px;
-  width: auto;
-  background: #DDD;
-}
-
-.upload-example-cropper {
-	border: solid 1px #EEE;
-	height: 300px;
-	width: 100%;
-}
-
-.upload-example {
-  position: relative;
-}
-
-.button-wrapper {
-	display: flex;
-	justify-content: center;
-	margin-top: 17px;
-}
-
-.button {
-	color: white;
-	font-size: 16px;
-	padding: 10px 20px;
-	background: #3fb37f;
-	cursor: pointer;
-	transition: background 0.5s;
-}
-
-.button:hover {
-	background: #38d890;
-}
-
-.button input {
-	display: none;
-}
-
-.img-name {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.img-name-text {
-  position: absolute;
-  right: 20px;
-  bottom: 250px;
-  color: black;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  width: 100px;
-  background: rgba(63, 179, 127, 0.7);
-  transition: background 0.5s;
-}
-
-.img-name-text:hover {
-  background: #3fb37f;
-}
-
-.reset-button {
-  position: absolute;
-  right: 20px;
-  bottom: 160px;
-  color: black;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  width: 42px;
-  background: rgba(63, 179, 127, 0.7);
-  transition: background 0.5s;
-}
-
-.reset-button:hover {
-  background: #3fb37f;
-}
 </style>
