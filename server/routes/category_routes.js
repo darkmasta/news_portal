@@ -48,6 +48,76 @@ router.post("/add_top_category", jsonParser, function (req, res) {
   }
 });
 
+router.post("/update_top_category", jsonParser, function (req, res) {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body.data;
+  var categoryName = data.categoryName;
+  var topCategory = data.topCategory;
+
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Categories.Category.update(
+    {
+      "updatedCategories.topCategory": topCategory,
+      "updatedCategories.bottomCategory": "",
+    },
+    {
+      $set: {
+        "updatedCategories.$.topCategory": categoryName,
+      },
+    }
+  );
+
+  promise.then(function (doc) {
+    var promise2 = Categories.Category.updateMany(
+      {
+        "updatedCategories.topCategory": topCategory,
+      },
+      {
+        $set: {
+          "updatedCategories.$.topCategory": categoryName,
+        },
+      },
+      {
+        upsert: true,
+      }
+    );
+
+    promise2.then(function (doc) {
+      res.json("success");
+    });
+  });
+});
+
+router.post("/update_bottom_category", jsonParser, function (req, res) {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body.data;
+
+  var categoryName = data.categoryName;
+  var bottomCategory = data.bottomCategory;
+  var topCategory = data.topCategory;
+
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Categories.Category.update(
+    {
+      "updatedCategories.bottomCategory": bottomCategory,
+      "updatedCategories.topCategory": topCategory,
+    },
+    {
+      $set: {
+        "updatedCategories.$.bottomCategory": categoryName,
+      },
+    }
+  );
+
+  promise.then(function (doc) {
+    res.json("success");
+  });
+});
+
 router.post("/add_bottom_category", jsonParser, function (req, res) {
   var data = req.body.data;
   var topCategory = data.topCategory;
@@ -91,7 +161,7 @@ router.post("/delete_top_category", jsonParser, function (req, res) {
       }
     );
     promise.then(function (doc) {
-      res.json(doc);
+      res.json("success");
     });
   } else {
     res.json("Error");

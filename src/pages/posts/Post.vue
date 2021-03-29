@@ -192,6 +192,10 @@ header {
    font-size: 1rem;
 }
 
+.news_texts ul li:hover {
+    cursor: pointer;
+}
+
 .news_texts ul>li:before { 
     content:'\ffed'; 
     margin-right: 1.5em;
@@ -213,6 +217,17 @@ header {
 
 .categories_box ul {
     list-style-type: none;
+}
+
+.categories_box ul li {
+    display: inline-block;
+    margin: 20px 2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.categories_box ul li:hover {
+    cursor: pointer;
 }
 
 .categories_box ul li {

@@ -10,6 +10,9 @@
     <create-top-category></create-top-category> 
     <create-bottom-category></create-bottom-category>
     <div class="divider"></div>
+    <update-top-category />
+    <update-bottom-category />
+    <div class="divider"></div>
     <delete-top-category></delete-top-category>
     <delete-bottom-category></delete-bottom-category>
   </div>
@@ -21,6 +24,9 @@ import CreateTopCategory from "./CreateTopCategory"
 import CreateBottomCategory from "./CreateBottomCategory"
 import DeleteTopCategory from "./DeleteTopCategory"
 import DeleteBottomCategory from "./DeleteBottomCategory"
+import UpdateTopCategory from "./UpdateTopCategory"
+import UpdateBottomCategory from "./UpdateBottomCategory"
+
 
 
 export default {
@@ -29,7 +35,9 @@ export default {
     'create-top-category': CreateTopCategory,
     'create-bottom-category': CreateBottomCategory,
     'delete-top-category': DeleteTopCategory,
-    'delete-bottom-category': DeleteBottomCategory
+    'delete-bottom-category': DeleteBottomCategory,
+    'update-top-category': UpdateTopCategory,
+    'update-bottom-category': UpdateBottomCategory
   },
   metaInfo: {
     title: "Category Create",

@@ -54,16 +54,17 @@ export default {
     deleteTopCategory(topCategory) {
       var vm = this
       var data = {"topCategory": topCategory}
-      console.log(data)
        axios
         .post(process.env.VUE_APP_SERVER_URL + "/delete_top_category/", {data})
         .then((response) => {
-          console.log(response.data.nModified);
-          if (response.data.nModified > 0) {
+          console.log(response.data)
+          if (response.data == 'success') {
             vm.$notify({
                 type: 'success',
                 text: 'Ust Kategori Basariyle Silindi!'
             })
+            
+            setTimeout(function(){ location.reload(); }, 2000);
           }
         });
     },

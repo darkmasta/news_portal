@@ -53,7 +53,7 @@ export default {
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
       .then((response) => {
-          //console.log(response.data);
+          console.log(response.data);
           vm.categoriesData = response.data[0];
           console.log(vm.categoriesData.updatedCategories)
           vm.categoriesData.updatedCategories.forEach(element => {
