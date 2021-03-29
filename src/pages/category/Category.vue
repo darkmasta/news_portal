@@ -11,7 +11,11 @@
     </b-row>
     <b-row>
       <b-col class="categories__container">
-        <div v-for="(categoryTitle, index) in categoryTitles" :key="index" class="categories__single-category">
+        <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
+            @click="clickCategory(index)" class="categories__single-category"
+            :class="{expand_category: clickedCategory == index,
+                    collapse_category: clickedCategory != index } 
+                    ">
           <h3 class="category__title">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
@@ -38,6 +42,7 @@ export default {
     return {
       categoriesData: {},
       categoryTitles: [],
+      clickedCategory: undefined,
       selectedCategories: [],
     }
   },
@@ -45,42 +50,43 @@ export default {
     var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
 
-       axios
-        .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
-        .then((response) => {
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
+      .then((response) => {
           //console.log(response.data);
           vm.categoriesData = response.data[0];
-          console.log(vm.categoriesData)
-        });
+          console.log(vm.categoriesData.updatedCategories)
+          vm.categoriesData.updatedCategories.forEach(element => {
+              vm.categoryTitles.push(element.topCategory)
+          });
+
+          // remove duplicates
+          // it is expected from top categories
+          var uniqueCategoryTitles = [...new Set(vm.categoryTitles)]
+          vm.categoryTitles = uniqueCategoryTitles;
+
+          vm.categoriesData.updatedCategories.forEach(element => {
+              if( vm.categoriesData[element.topCategory] ) {
+                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
+              } else {
+                  vm.categoriesData[element.topCategory] =  new Array();
+                  if (!element.bottomCategory == "")
+                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
+              }
+          })
+      });
+
+  },
+  methods: {
+    clickCategory(index) {
+      var vm = this
+      vm.clickedCategory = index
+    }
   }
 };
 </script>
 
 <style>
-.categories__container {
-  background: #fff;
-  height: 80vh;
-  width: 80vw;
-  display: flex;
-  flex-wrap: wrap;
-}
-.categories__single-category {
-  background: #21B8B5;
-  color: #0E2928;
-  margin: 0.5rem;
-  border: 5px solid black;
-  height: calc(50% - 1rem);
-  flex: 0 0 calc(25% - 1rem);
-  overflow: scroll;
-}
-.category__title {
-  text-align: center;
-  font-size: 1.2rem;
-}
-.category__list {
-  list-style-type: none;
-}
-
 
 
 

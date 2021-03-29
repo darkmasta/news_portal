@@ -13,6 +13,14 @@ export default [
         },
         component: () => import("@/pages/home/HomePage"),
       },
+      {
+        path: "posts/:id",
+        name: "Post",
+        meta: {
+          auth: false,
+        },
+        component: () => import("@/pages/posts/Post"),
+      },
     ],
   },
 ];

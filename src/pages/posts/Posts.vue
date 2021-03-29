@@ -11,13 +11,19 @@
 
   <b-table
       class="table nexus-table" hover select-mode="multi" 
-                      borderless selectable  
+      borderless selectable  
+      @row-selected="rowSelected" ref="myTable" 
       :items="postsTableData"
       :fields="tableFields">
       <template #cell(postImage)="data" >
           <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
   </b-table>
+
+  <b-btn class="p-3 px-5 mt-4" size="lg" variant="warning" 
+          style="float: right; margin-left: 25px;"
+          v-if="selectedRows.length == 1"
+          @click="goToPost()">Go to Post!</b-btn>
 
 <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
   <span class="close">&times;</span>
@@ -40,9 +46,9 @@ import moment from 'moment'
 
 import "vue-search-select/dist/VueSearchSelect.css";
 export default {
-  name: "orders",
+  name: "Posts",
   metaInfo: {
-    title: "Orders",
+    title: "Posts",
   },
   data: () => ({
     tableFields: [
@@ -91,7 +97,8 @@ export default {
     postsTableData: [],
     previewImageUrl: null,
     previewImageName: '',
-    previewToggle: false
+    previewToggle: false,
+    selectedRows: []
   }),
   created() {
     var vm = this
@@ -120,9 +127,34 @@ export default {
 
   },
   methods: {
-    onRowSelected(data) {
+    rowSelected(data) {
       this.selectedRows = data;
       console.log(data);
+    },
+    goToPost() {
+      var vm = this
+      var postData = []
+      vm.selectedRows.forEach( selectedPost => {
+        console.log(selectedPost)
+          vm.posts.forEach( post => {
+          if (post._id.slice(-4) == selectedPost.id) {
+              postData.push(post)
+          }
+          })
+      })
+      if (postData.length == 1) {
+          console.log(postData)
+          this.$router.push({ name: 'Post', params: { id: postData[0]._id } })
+      }
+    },
+    clickRows(which) {
+        let myTable = this.$refs.myTable.$el,
+            tableBody = myTable.getElementsByTagName('tbody')[0],
+            tableRows = tableBody.getElementsByTagName('tr')
+        which.forEach(idx => {
+            tableRows[idx].click()
+        })
+        console.log("items")
     },
     filter(value) {
       const val = value.toLowerCase();

@@ -327,3 +327,31 @@ select.form-control-lg[size="0"]:not([multiple]) {
 .reset-button:hover {
   background: #3fb37f;
 }
+
+.activity_item img {
+    flex-shrink: 0;
+    height: 100%;
+    width: auto; 
+}
+
+.activity_item h4 {
+    position: relative;
+    top: -100%;
+    color: white;
+    background: rgba(0,0,0,0.6);
+    left: 30%;
+    width: 50%;
+    text-align: center;
+    z-index: 10;
+}
+
+.activity_item p {
+    position: relative;
+    top: -90%;
+    color: white;
+    background: rgba(204,12,0,0.6);
+    left: 30%;
+    width: 50%;
+    text-align: center;
+    z-index: 10;
+}

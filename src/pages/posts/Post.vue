@@ -46,16 +46,10 @@
     </div> 
 
 
-    <b-row> 
-        <b-col cols="8" class="activity_box">
-            <activity :activity="activities[0]" />
-        </b-col>
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[1]" />
-        </b-col>
-    </b-row>
-
-
+    <div class="post_content">
+        <div v-html="post.content">
+        </div>
+    </div>
 
 
 
@@ -63,52 +57,56 @@
 </template>
 <script>
 import axios from "axios";
-import Activity from '../activities/Activity.vue';
 
 
 export default {
-  name: "home-page",
+  name: "post",
   metaInfo: {
-    title: "Home Page",
+    title: "Post",
   },
   components: {
-    Activity
   },
   data: () => ({
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       language: 'Turkce 🇹🇷',
       activities: [],
+      post: {}
   }),
   created() {
     var vm = this;
 
+    var data = {}
+    data.id = vm.$route.params.id
+    vm.id = data.id
 
-    axios
-        .post(process.env.VUE_APP_SERVER_URL + "/get_activities/", {})
-        .then((response) => {
-            console.log(response.data);
-            vm.activities = response.data
-            vm.activities.forEach( activity => {
-                activity.activityImage = process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage;
-                axios.get(activity.activityImage)
-                     .then((response) => {
-                         console.log(response.data)
-                     })
-                     .catch((error) => {
-                         if(error)
-                         console.log(activity.activityImage.split('/').pop())
-                         activity.activityImage = 'https://defensehere.herokuapp.com/images/' + 
-                                                        activity.activityImage.split('/').pop()
-                     }) 
+    axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
+         .then(
+            (response) => {
+                vm.post = response.data;
+                console.log(post)
+            },
+            (err) => {
+                console.error(err);
             })
-        })
+
+
+
 
   },
   methods: {
+
   }
 };
 </script>
 <style>
+
+.post_content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto;
+}
+
 .activity_box {
     height: 100px;
 }
@@ -241,6 +239,7 @@ header {
     height: 100%;
     margin: 20px;
 }
+
 
 
 
