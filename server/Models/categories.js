@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Categories = require("../Schemas/categories_schema"); // Customer Schema
+var Categories = require("../Schemas/categories_schema");
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 var db = mongoose.connection;

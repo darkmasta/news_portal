@@ -2,20 +2,20 @@ require("dotenv").config({
   path: "variables.env",
 });
 
-var express = require("express");
-var cors = require("cors");
-var fs = require("fs");
-var passport = require("passport");
-var bodyParser = require("body-parser");
-var moment = require("moment");
-var https = require("https");
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+const moment = require("moment");
+const https = require("https");
 moment.locale("en");
 const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 
 // lets require/import the mongodb native drivers.
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 mongoose.Promise = require("bluebird");
 
@@ -29,7 +29,7 @@ const ActivityRoutes = require("./routes/activity_routes");
 
 var app = express();
 
-var fileupload = require("express-fileupload");
+const fileupload = require("express-fileupload");
 app.use(fileupload());
 
 app.use(
@@ -43,7 +43,7 @@ app.use(
 app.use(require("morgan")("combined"));
 app.use(require("cookie-parser")());
 app.use(require("body-parser").urlencoded({ extended: false }));
-var jsonParser = bodyParser.json();
+const jsonParser = bodyParser.json();
 app.use(
   require("express-session")({
     secret: "keyboard cat",

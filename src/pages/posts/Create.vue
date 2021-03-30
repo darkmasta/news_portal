@@ -17,6 +17,7 @@
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
               class="category__list-item">
+              {{index2}}
               <input type="checkbox" :value="category" v-model="selectedCategories"> 
               {{category}}
             </li>
@@ -91,28 +92,28 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Haber Anahtar Kelimeler" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postKeywords"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postSeoWords"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Seo Url Adresi" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postSeoUrl"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Seo Url Adresi" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+        <b-input-group prepend="Seo Baslik Aciklamasi" class="mt-2">
+          <b-form-input v-model="postSeoHeader"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
@@ -120,35 +121,35 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postEnglishLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Arapca Haber 🇸🇦" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postArabicLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Rusca Haber 🇷🇺" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postRussianLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Ukraynaca Haber 🇺🇦" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postUkranianLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
         <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
+          <b-form-input v-model="postFrenchLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
@@ -189,14 +190,6 @@ export default {
     Cropper,
     Datepicker
   },
-  props: {
-    model: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
-  },
   data() {
     return {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
@@ -225,7 +218,16 @@ export default {
       image: null,
       imageName: "",
       postCustomUrl: '',
-      publishDate: null,
+      publishDate: '',
+      postKeywords: '',
+      postSeoWords: '',
+      postSeoUrl: '',
+      postSeoHeader: '',
+      postEnglishLink: '',
+      postArabicLink: '',
+      postRussianLink: '',
+      postUkranianLink: '',
+      postFrenchLink: ''
     }
   },
   created() {
@@ -266,13 +268,24 @@ export default {
 			if (canvas) {
 				const formData = new FormData();
 				canvas.toBlob(blob => {
-          this.blobToBase64(blob).then(res => {
+          vm.blobToBase64(blob).then(res => {
             const formData = new FormData();
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
             formData.append("editorData", vm.editorData)
             formData.append("postTitle", vm.postTitle)
             formData.append("categories", vm.selectedCategories)
+            formData.append("publishDate", vm.publishDate)
+            formData.append("postKeywords", vm.postKeywords)
+            formData.append("postCustomUrl", vm.postCustomUrl)
+            formData.append("postSeoWords", vm.postSeoWords)
+            formData.append("postSeoUrl", vm.postSeoUrl)
+            formData.append("postSeoHeader", vm.postSeoHeader)
+            formData.append("postEnglishLink", vm.postEnglishLink)
+            formData.append("postArabicLink", vm.postArabicLink)
+            formData.append("postRussianLink", vm.postRussianLink)
+            formData.append("postUkranianLink", vm.postUkranianLink)
+            formData.append("postFrenchLink", vm.postFrenchLink)
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {

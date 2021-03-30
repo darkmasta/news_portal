@@ -45,6 +45,9 @@
         </ul>
     </div> 
 
+    <div class="postImage">
+        <img :src="post.postImage">
+    </div>
 
     <div class="post_content">
         <div v-html="post.content">
@@ -70,24 +73,50 @@ export default {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       language: 'Turkce 🇹🇷',
       activities: [],
-      post: {}
+      post: {},
+      customUrl: '',
+      id: ''
   }),
   created() {
     var vm = this;
 
-    var data = {}
+    let data = {}
     data.id = vm.$route.params.id
     vm.id = data.id
 
-    axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
-         .then(
+    var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+
+    if (checkForHexRegExp.test(vm.id)) {
+        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
+            .then(
+                (response) => {
+                        vm.post = response.data;
+                        let customUrl = vm?.post.postTitle.toLowerCase().split(' ').join('-')
+                        // console.log("CUSTOM URL = ", customUrl)
+                        if (vm.id == vm.post._id) { // id url'si custom url'e git
+                            this.$router.push({ name: 'Post', params: { id: customUrl }})
+                        } else {
+                            console.log("URL id degil")
+                        }
+                },
+                (err) => {
+                    console.error(err);
+                })
+    } else {
+        let data2 = {}
+        data2.postTitle = vm.post.postTitle || vm.$route.params.id.split('-').join(' ') 
+        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_title", {data2})
+            .then(
             (response) => {
+                console.log(response.data)
                 vm.post = response.data;
-                console.log(post)
             },
             (err) => {
-                console.error(err);
-            })
+                console.error(err)
+            }
+            )
+    }
+    
 
 
 

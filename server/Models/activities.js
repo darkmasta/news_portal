@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Activities = require("../Schemas/activities_schema"); // Customer Schema
+var Activities = require("../Schemas/activities_schema");
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 var db = mongoose.connection;

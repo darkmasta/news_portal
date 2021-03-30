@@ -23,11 +23,24 @@ router.post("/create_post", jsonParser, function (req, res) {
     res.json("Authentication Error");
 
   var Post = new Posts.Post({
+    owner: email,
     content: postData.editorData,
     categories: postData.categories,
-    postTitle: postData.postTitle,
+    postTitle: postData.postTitle.toLowerCase(),
     topic: postData.topic,
     postImage: postData.fileName + ".jpeg",
+    postKeywords: postData.postKeywords,
+    postCustomUrl: postData.postCustomUrl,
+    postSeoWords: postData.postSeoWords,
+    postSeoUrl: postData.postSeoUrl,
+    postSeoHeader: postData.postSeoHeader,
+    postLanguage: postData.postLanguage,
+    publishDate: postData.publishDate,
+    postEnglishLink: postData.postEnglishLink,
+    postArabicLink: postData.postArabicLink,
+    postRussianLink: postData.postRussianLink,
+    postUkranianLink: postData.postUkranianLink,
+    postFrenchLink: postData.postFrenchLink,
   });
 
   ba64.writeImage("./images/" + postData.fileName, postData.file, function (
@@ -45,10 +58,27 @@ router.post("/create_post", jsonParser, function (req, res) {
 
 router.post("/post_by_id", jsonParser, function (req, res) {
   var postData = req.body.data;
+  var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+
+  if (!checkForHexRegExp.test(postData.id)) res.json("Not and Id");
 
   var promise = Post.find({ _id: postData.id });
 
-  promise.then((doc) => res.json(doc.pop()));
+  promise
+    .then((doc) => {
+      res.json(doc.pop());
+    })
+    .catch((err) => {
+      res.json("Not an Id");
+    });
+});
+
+router.post("/post_by_title", jsonParser, function (req, res) {
+  var postData = req.body.data2;
+
+  var promise = Post.find({ postTitle: postData.postTitle });
+
+  promise.then((doc) => res.json(doc.pop())).catch((err) => res.json(err));
 });
 
 module.exports = router;
