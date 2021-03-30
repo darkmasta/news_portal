@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
           <h4>Create Post</h4>
@@ -25,44 +25,132 @@
       </b-col>
     </b-row>
     <b-row>
-      <div class="post-title-center">
-          	<div class="upload-example">
-              <div v-show="image">
-                	<cropper
-                    :src="image"
-                    ref="cropper"
-                  />
-              </div>
-         			<div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
-                <i class="fa fa-times"></i>
-              </div>
-              <div v-show="image" class="img-name-text" title="Image Name">
-                {{imageName}}
-              </div>
-              <div class="img-name">
-                <b-form-input v-model="imageName" placeholder="Image Name"></b-form-input>  
-              </div>
-              <div class="button-wrapper">
-
-              
-                <span class="button" @click="$refs.file.click()">
-                  <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                  Load image
-                </span>
-
-                <span class="button ml-5" @click="crop">
-                   Crop 
-                </span>
-
-                <span class="button ml-5" @click="uploadImage">
-                    Upload Image
-                </span>
-              </div>
+      <b-col cols="12">
+        <div class="upload-example">
+          <div v-show="image">
+              <cropper
+                :src="image"
+                ref="cropper"
+              />
+          </div>
+          <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
+            <i class="fa fa-times"></i>
+          </div>
+          <div v-show="image" class="img-name-text" title="Image Name">
+            {{imageName}}
+          </div>
+          <b-col cols="6" offset="3">
+            <div class="img-name">
+                <b-form-group label="Foto Ismi">
+                  <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                </b-form-group>
             </div>
-        <b-input-group prepend="Haber Basligi" class="post-title mt-2">
-          <b-form-input v-model="postTitle"></b-form-input>
+          </b-col>
+          <div class="button-wrapper">
+        
+          <span class="button" @click="$refs.file.click()">
+            <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+            Load image
+          </span>
+
+          <span class="button ml-5" @click="crop">
+            Crop 
+          </span>
+
+
+          </div>
+        </div>
+      </b-col>
+      <b-row>
+      <b-col cols="12" class="publish_date mt-4">
+        <b-col cols="10" class="offset-7">
+            <b-input-group prepend="Haber Basligi" class="mt-2">
+              <b-form-input v-model="postTitle"></b-form-input>
+            </b-input-group>
+        </b-col>
+        <b-col cols="3">
+          <b-form-group label="Yayinlanma Tarihi">
+            <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Tarihi" />
+          </b-form-group>
+        </b-col>
+        <b-col cols="3">
+          <b-form-group label="Yayinlanma Saati">
+            <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Saati" />
+          </b-form-group>
+        </b-col>
+      </b-col>
+      </b-row>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Haber URL'si" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
         </b-input-group>
-      </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Haber Anahtar Kelimeler" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Seo Url Adresi" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Seo Url Adresi" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <div class="divider mt-4 mb-4"></div>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Baglantili Arapca Haber 🇸🇦" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Baglantili Rusca Haber 🇷🇺" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Baglantili Ukraynaca Haber 🇺🇦" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+        <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
+          <b-form-input v-model="postCustomUrl"></b-form-input>
+        </b-input-group>
+      </b-col>
     </b-row>
     <b-row>
       <b-col>
@@ -86,6 +174,7 @@ import axios from "axios";
 import _ from "underscore";
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css';
+import Datepicker from "vuejs-datepicker";
 
 import categoryData from "../category/categories_data"
 
@@ -98,6 +187,7 @@ export default {
   name: "PostsCreate",
   components: {
     Cropper,
+    Datepicker
   },
   props: {
     model: {
@@ -109,6 +199,7 @@ export default {
   },
   data() {
     return {
+      languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       categoriesData: {},
       clickedCategory: undefined,
       categoryTitles: [],
@@ -118,7 +209,6 @@ export default {
       editorData: '<p>Content of the editor.</p>',
       editorConfig: {
          // The configuration of the editor.
-         width: 1000,
       },
       coordinates: {
 				width: 0,
@@ -134,6 +224,8 @@ export default {
       file: null,
       image: null,
       imageName: "",
+      postCustomUrl: '',
+      publishDate: null,
     }
   },
   created() {
@@ -278,5 +370,21 @@ export default {
 </script>
 
 <style>
+.publish_date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.divider {
+  height: 1rem;
+  width: 4000px;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 7%, rgba(0,212,255,1) 100%);
+}
+
+.ck-editor__editable {
+  min-width: 1200px;
+}
 
 </style>

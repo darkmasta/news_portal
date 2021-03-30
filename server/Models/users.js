@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Users = require("../Schemas/users_schema"); // Matches Schema
+var Users = require("../Schemas/users_schema");
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 var db = mongoose.connection;

@@ -121,11 +121,17 @@ export default {
             if (response.data == "Error signing in") {
               console.log(response);
               vm.errors = true;
+              vm.$notify({
+                  type: 'error',
+                  text: 'Hata!'
+              })
               vm.errorMessage = "Error logging in";
-            } else if (response.data == "Success") {
-              console.log(response);
-              vm.errors = false;
-              this.$router.push({ name: "Dashboard" });
+            } else if (response.data == "success") {
+              vm.$notify({
+                  type: 'success',
+                  text: 'Giris Basarili!'
+              })
+              setTimeout(() => {this.$router.push({ name: "Dashboard" })}, 1000);
             }
           },
           (response) => {

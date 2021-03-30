@@ -44,7 +44,7 @@ export default {
                 type: 'success',
                 text: 'Ust Kategori Basariyle Olusturuldu!'
             })
-            setTimeout(function(){ location.reload(); }, 2000);
+            setTimeout(() => { location.reload(); }, 2000);
           }
         });
       }

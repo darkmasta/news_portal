@@ -1,7 +1,3 @@
-require("dotenv").config({
-  path: "variables.env",
-});
-
 var express = require("express");
 var router = express.Router();
 

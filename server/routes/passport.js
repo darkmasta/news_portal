@@ -1,5 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const Users = require("../Models/users");
+const User = Users.User;
 
 module.exports = function (passport) {
   passport.serializeUser(function (user, cb) {
@@ -13,7 +14,7 @@ module.exports = function (passport) {
   passport.use(
     new LocalStrategy(function (username, password, done) {
       console.log(username); // passport bug'i username email aslinda
-      Users.User.findOne({ email: username, password: password }, function (
+      User.findOne({ email: username, password: password }, function (
         err,
         user
       ) {

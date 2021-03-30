@@ -270,6 +270,7 @@ export default {
                       type: 'success',
                       text: 'Kullanici Basariyla Silindi!'
                   })
+                  setTimeout(() => { this.$router.push({ name: 'AdminUsers' }) }, 2000);
               }
           },
           (response) => {

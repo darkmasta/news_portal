@@ -1,26 +1,19 @@
-require("dotenv").config({
-  path: "variables.env",
-});
+const express = require("express");
+const router = express.Router();
 
-var express = require("express");
-var router = express.Router();
+const Categories = require("../Models/categories");
+const Category = Categories.Category;
+const categoryData = require("../Schemas/categories_data");
 
-var Users = require("../Models/users");
-var Categories = require("../Models/categories");
-var categoryData = require("../Schemas/categories_data");
-
-var bodyParser = require("body-parser");
-var jsonParser = bodyParser.json();
-var _ = require("underscore");
-var fs = require("fs");
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+const fs = require("fs");
 const { decodeCookie } = require("../helpers/decode-cookie");
 
 router.post("/get_categories", jsonParser, function (req, res) {
-  var promise = Categories.Category.find({});
+  var promise = Category.find({});
 
-  promise.then(function (doc) {
-    res.json(doc);
-  });
+  promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
 });
 
 router.post("/add_top_category", jsonParser, function (req, res) {
@@ -30,22 +23,18 @@ router.post("/add_top_category", jsonParser, function (req, res) {
 
   var categoryName = data.categoryName;
 
-  if (isAdmin == "admin") {
-    var promise = Categories.Category.updateMany(
-      {},
-      {
-        $push: {
-          updatedCategories: { topCategory: categoryName, bottomCategory: "" },
-        },
-      }
-    );
+  if (!isAdmin == "admin") res.json("Authorization Error");
 
-    promise.then(function (doc) {
-      res.json("success");
-    });
-  } else {
-    res.json("Error");
-  }
+  var promise = Category.updateMany(
+    {},
+    {
+      $push: {
+        updatedCategories: { topCategory: categoryName, bottomCategory: "" },
+      },
+    }
+  );
+
+  promise.then((doc) => res.json("success")).catch((err) => res.json(err));
 });
 
 router.post("/update_top_category", jsonParser, function (req, res) {
@@ -57,7 +46,7 @@ router.post("/update_top_category", jsonParser, function (req, res) {
 
   if (!isAdmin == "admin") res.json("Authentication Error");
 
-  var promise = Categories.Category.update(
+  var promise = Category.update(
     {
       "updatedCategories.topCategory": topCategory,
       "updatedCategories.bottomCategory": "",
@@ -69,8 +58,8 @@ router.post("/update_top_category", jsonParser, function (req, res) {
     }
   );
 
-  promise.then(function (doc) {
-    var promise2 = Categories.Category.updateMany(
+  promise.then((doc) => {
+    var promise2 = Category.updateMany(
       {
         "updatedCategories.topCategory": topCategory,
       },
@@ -84,7 +73,7 @@ router.post("/update_top_category", jsonParser, function (req, res) {
       }
     );
 
-    promise2.then(function (doc) {
+    promise2.then((doc) => {
       res.json("success");
     });
   });
@@ -101,7 +90,7 @@ router.post("/update_bottom_category", jsonParser, function (req, res) {
 
   if (!isAdmin == "admin") res.json("Authentication Error");
 
-  var promise = Categories.Category.update(
+  var promise = Category.update(
     {
       "updatedCategories.bottomCategory": bottomCategory,
       "updatedCategories.topCategory": topCategory,
@@ -113,9 +102,7 @@ router.post("/update_bottom_category", jsonParser, function (req, res) {
     }
   );
 
-  promise.then(function (doc) {
-    res.json("success");
-  });
+  promise.then((doc) => res.json("success"));
 });
 
 router.post("/add_bottom_category", jsonParser, function (req, res) {
@@ -124,24 +111,21 @@ router.post("/add_bottom_category", jsonParser, function (req, res) {
   var bottomCategory = data.bottomCategory;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  if (isAdmin == "admin") {
-    var promise = Categories.Category.updateMany(
-      {},
-      {
-        $push: {
-          updatedCategories: {
-            topCategory: topCategory,
-            bottomCategory: bottomCategory,
-          },
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Category.updateMany(
+    {},
+    {
+      $push: {
+        updatedCategories: {
+          topCategory: topCategory,
+          bottomCategory: bottomCategory,
         },
-      }
-    );
-    promise.then(function (doc) {
-      res.json(doc);
-    });
-  } else {
-    res.json("Error");
-  }
+      },
+    }
+  );
+
+  promise.then((doc) => res.json(doc));
 });
 
 router.post("/delete_top_category", jsonParser, function (req, res) {
@@ -149,23 +133,20 @@ router.post("/delete_top_category", jsonParser, function (req, res) {
   var topCategory = data.topCategory;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  if (isAdmin == "admin") {
-    var promise = Categories.Category.update(
-      { "updatedCategories.topCategory": topCategory },
-      {
-        $pull: {
-          updatedCategories: {
-            topCategory: topCategory,
-          },
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Category.update(
+    { "updatedCategories.topCategory": topCategory },
+    {
+      $pull: {
+        updatedCategories: {
+          topCategory: topCategory,
         },
-      }
-    );
-    promise.then(function (doc) {
-      res.json("success");
-    });
-  } else {
-    res.json("Error");
-  }
+      },
+    }
+  );
+
+  promise.then((doc) => res.json("success"));
 });
 
 router.post("/delete_bottom_category", jsonParser, function (req, res) {
@@ -173,27 +154,27 @@ router.post("/delete_bottom_category", jsonParser, function (req, res) {
   var bottomCategory = data.bottomCategory;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  if (isAdmin == "admin") {
-    var promise = Categories.Category.update(
-      { "updatedCategories.bottomCategory": bottomCategory },
-      {
-        $pull: {
-          updatedCategories: {
-            bottomCategory: bottomCategory,
-          },
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Category.update(
+    { "updatedCategories.bottomCategory": bottomCategory },
+    {
+      $pull: {
+        updatedCategories: {
+          bottomCategory: bottomCategory,
         },
-      }
-    );
-    promise.then(function (doc) {
-      res.json(doc);
-    });
-  } else {
-    res.json("Error");
-  }
+      },
+    }
+  );
+
+  promise.then((doc) => res.json(doc));
 });
 
 router.post("/upload_image", jsonParser, function (req, res) {
   var img = req.files.file;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin") res.json("Authentication Error");
 
   fs.writeFile("./images/" + img.name, img.data, "binary", function (err) {
     if (err) throw err;

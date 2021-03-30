@@ -1,19 +1,13 @@
-require("dotenv").config({
-  path: "variables.env",
-});
+const express = require("express");
+const router = express.Router();
 
-var express = require("express");
-var router = express.Router();
+const Users = require("../Models/users");
+const User = Users.User;
 
-var Users = require("../Models/users");
-
-var bodyParser = require("body-parser");
-var jsonParser = bodyParser.json();
-var _ = require("underscore");
-var CryptoJS = require("crypto-js");
+const CryptoJS = require("crypto-js");
 
 router.get("/success", function (req, res) {
-  var query = Users.User.findOne({ email: req.user.email });
+  var query = User.findOne({ email: req.user.email });
 
   query.exec(function (err, user) {
     if (err) {
@@ -26,9 +20,7 @@ router.get("/success", function (req, res) {
     } else {
       req.user.data = user;
 
-      console.log(user);
-
-      Users.User.findByIdAndUpdate(
+      User.findByIdAndUpdate(
         { _id: user._id },
         { lastLogin: Date.now() },
         (err, data) => {
@@ -37,15 +29,13 @@ router.get("/success", function (req, res) {
           encryptData += "~";
           encryptData += user.userRole;
 
-          console.log(encryptData);
-
           var token = CryptoJS.AES.encrypt(
             String(encryptData),
             String(process.env.JWT_SECRET)
           ).toString();
 
           res.cookie("defensehere", token, { maxAge: 90000000 });
-          res.json("Success");
+          res.json("success");
         }
       );
     }

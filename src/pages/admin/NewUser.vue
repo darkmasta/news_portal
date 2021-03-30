@@ -31,7 +31,7 @@
                   <b-input
                     label="Isim"
                     placeholder="Isim"
-                    v-model="userData.name"
+                    v-model="userData.firstName"
                   >
                   </b-input>
                 </b-form-group>
@@ -159,7 +159,7 @@ export default {
     userData: {
       photo: "",
       username: "",
-      name: "Yeni Kullanici",
+      firstName: "Yeni Kullanici",
       lastName: "",
       password: "",
       email: "",
@@ -200,7 +200,7 @@ export default {
             type: 'warn',
             text: 'Kullanici Rolu Bos Olamaz!'
         });
-      } else if (vm.userData.name.length < 2) {
+      } else if (vm.userData.firstName.length < 2) {
         vm.$notify({
             type: 'warn',
             text: 'Kullanici Adi Bos Olamaz!'
@@ -237,6 +237,7 @@ export default {
                         type: 'success',
                         text: 'Yeni Kullanici Basariyla Olusturuldu!'
                     })
+                    setTimeout(() => { this.$router.push({ name: 'AdminUser' , params: { id: userData._id } }) }, 2000);
                 }
             },
             (response) => {

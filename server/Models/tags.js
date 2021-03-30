@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Tags = require("../Schemas/tags_schema"); // Customer Schema
+var Tags = require("../Schemas/tags_schema"); //
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 var db = mongoose.connection;
