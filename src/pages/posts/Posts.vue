@@ -18,6 +18,9 @@
       <template #cell(postImage)="data" >
           <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
+      <template #cell(details)="data" >
+        <a href="#" @click="goToPostLink(data)">Habere Git ></a>
+      </template>
   </b-table>
 
   <b-btn class="p-3 px-5 mt-4" size="lg" variant="warning" 
@@ -114,7 +117,8 @@ export default {
                 date: moment(post.date).fromNow(),
                 status: 'active',
                 postImage: process.env.VUE_APP_SERVER_URL + '/images/' + post.postImage,
-                Baslik: post.postTitle
+                Baslik: post.postTitle,
+                details: post._id
               }
               vm.postsTableData.push(tmp_post)
             })
@@ -146,6 +150,9 @@ export default {
           console.log(postData)
           this.$router.push({ name: 'Post', params: { id: postData[0]._id } })
       }
+    },
+    goToPostLink(data) {
+      this.$router.push({ name: 'Post', params: { id: data.value } })
     },
     clickRows(which) {
         let myTable = this.$refs.myTable.$el,

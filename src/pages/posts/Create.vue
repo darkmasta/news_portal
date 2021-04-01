@@ -17,7 +17,6 @@
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
               class="category__list-item">
-              {{index2}}
               <input type="checkbox" :value="category" v-model="selectedCategories"> 
               {{category}}
             </li>
@@ -58,13 +57,19 @@
             Crop 
           </span>
 
+          <label class="switch">
+            <input type="checkbox" v-model="toggleEditImage">
+            <span class="slider round"></span>
+            <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+          </label>
+
 
           </div>
         </div>
       </b-col>
       <b-row>
-      <b-col cols="12" class="publish_date mt-4">
-        <b-col cols="10" class="offset-7">
+      <b-col cols="12" class="publish_date mt-4 ml-3">
+        <b-col cols="11" class="offset-8">
             <b-input-group prepend="Haber Basligi" class="mt-2">
               <b-form-input v-model="postTitle"></b-form-input>
             </b-input-group>
@@ -76,8 +81,9 @@
         </b-col>
         <b-col cols="3">
           <b-form-group label="Yayinlanma Saati">
-            <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Saati" />
+            <vue-timepicker v-model="publishHour" close-on-complete></vue-timepicker>
           </b-form-group>
+
         </b-col>
       </b-col>
       </b-row>
@@ -119,6 +125,13 @@
     </b-row>
     <div class="divider mt-4 mb-4"></div>
     <b-row>
+      <b-col>
+        <div class="editor-center mt-2">
+          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
           <b-form-input v-model="postEnglishLink"></b-form-input>
@@ -146,21 +159,14 @@
         </b-input-group>
       </b-col>
     </b-row>
-        <b-row>
+    <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
           <b-form-input v-model="postFrenchLink"></b-form-input>
         </b-input-group>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col>
-        <div class="editor-center mt-5">
-          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
-        </div>
-      </b-col>
-    </b-row>
-    <b-row>
+    <b-row class="mt-4">
       <b-col offset="9">
          <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn">
           <span class="fas fa-plus-circle"></span> Haberi Kaydet
@@ -176,6 +182,9 @@ import _ from "underscore";
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css';
 import Datepicker from "vuejs-datepicker";
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
+
 
 import categoryData from "../category/categories_data"
 
@@ -188,13 +197,15 @@ export default {
   name: "PostsCreate",
   components: {
     Cropper,
-    Datepicker
+    Datepicker,
+    VueTimepicker
   },
   data() {
     return {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       categoriesData: {},
       clickedCategory: undefined,
+      toggleEditImage: false,
       categoryTitles: [],
       selectedCategories: [],
       postTitle: '',
@@ -213,12 +224,16 @@ export default {
 				coordinates: null,
 				image: null
 			},
+      base64: '',
       message: "",
       file: null,
       image: null,
+      imageWidth: 0,
+      imageHeight: 0,
       imageName: "",
       postCustomUrl: '',
       publishDate: '',
+      publishHour: '',
       postKeywords: '',
       postSeoWords: '',
       postSeoUrl: '',
@@ -265,17 +280,20 @@ export default {
     submitPost: function () {
       var vm = this
 			const { canvas } = this.$refs.cropper.getResult();
-			if (canvas) {
+			if (vm.toggleEditImage && canvas) {
+
 				const formData = new FormData();
 				canvas.toBlob(blob => {
           vm.blobToBase64(blob).then(res => {
             const formData = new FormData();
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
+            formData.append('toggleEditImage', vm.toggleEditImage);
             formData.append("editorData", vm.editorData)
             formData.append("postTitle", vm.postTitle)
             formData.append("categories", vm.selectedCategories)
             formData.append("publishDate", vm.publishDate)
+            formData.append("publishHour", vm.publishHour)
             formData.append("postKeywords", vm.postKeywords)
             formData.append("postCustomUrl", vm.postCustomUrl)
             formData.append("postSeoWords", vm.postSeoWords)
@@ -286,6 +304,7 @@ export default {
             formData.append("postRussianLink", vm.postRussianLink)
             formData.append("postUkranianLink", vm.postUkranianLink)
             formData.append("postFrenchLink", vm.postFrenchLink)
+
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
@@ -306,7 +325,57 @@ export default {
           });
 				// Perhaps you should add the setting appropriate file format here
 				}, 'image/jpeg');
-			}
+			} else if (this.toggleEditImage == false) {
+        /*
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+        const file = this.$refs.file.files[0];
+        vm.file = file;
+        if (!allowedTypes.includes(file.type)) {
+          this.message = "Filetype is wrong!!";
+        }
+        if (file.size > 500000) {
+          this.message = "Too large, max size allowed is 500kb";
+        }
+        */
+
+
+        const formData = new FormData();
+        formData.append("file", vm.base64)
+        formData.append('fileName', vm.imageName);
+        formData.append('toggleEditImage', vm.toggleEditImage);
+        formData.append("editorData", vm.editorData)
+        formData.append("postTitle", vm.postTitle)
+        formData.append("categories", vm.selectedCategories)
+        formData.append("publishDate", vm.publishDate)
+        formData.append("publishHour", vm.publishHour)
+        formData.append("postKeywords", vm.postKeywords)
+        formData.append("postCustomUrl", vm.postCustomUrl)
+        formData.append("postSeoWords", vm.postSeoWords)
+        formData.append("postSeoUrl", vm.postSeoUrl)
+        formData.append("postSeoHeader", vm.postSeoHeader)
+        formData.append("postEnglishLink", vm.postEnglishLink)
+        formData.append("postArabicLink", vm.postArabicLink)
+        formData.append("postRussianLink", vm.postRussianLink)
+        formData.append("postUkranianLink", vm.postUkranianLink)
+        formData.append("postFrenchLink", vm.postFrenchLink)
+
+        axios
+          .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            }, 
+          })
+          .then((response) => {
+            var data = response.data;
+            console.log(data);
+            if (response.data == "success") {
+              vm.$notify({
+                  type: 'success',
+                  text: 'Haber Resmi Yuklendi!'
+              });
+            }
+          });
+      }
     },
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
@@ -318,10 +387,12 @@ export default {
 		},
 		loadImage(event) {
 			var input = event.target;
+
 			if (input.files && input.files[0]) {
 				var reader = new FileReader();
 				reader.onload = (e) => {
 					this.image = e.target.result;
+          this.base64 = this.image
 				};
 				reader.readAsDataURL(input.files[0]);
 			}
@@ -377,7 +448,7 @@ export default {
     clickCategory(index) {
       var vm = this
       vm.clickedCategory = index
-    }
+    },
   },
 };
 </script>
@@ -398,6 +469,91 @@ export default {
 
 .ck-editor__editable {
   min-width: 1200px;
+}
+
+.input-group>.input-group-prepend {
+    flex: 0 0 20%;
+}
+.input-group .input-group-text {
+    width: 100%;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  margin-left: 50px;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch_text {
+  position: relative;
+  left: 75px;
+  color: #666;
+  text-decoration: line-through;
+} 
+
+.switch_closed {
+  text-decoration: none;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #3fb37f;
+}
+
+input:checked + .switch_text {
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #3fb37f;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 </style>

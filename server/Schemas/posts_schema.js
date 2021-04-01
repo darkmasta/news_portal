@@ -16,6 +16,7 @@ var postSchema = new Schema({
   postSeoUrl: String,
   postLanguage: String,
   publishDate: Date,
+  publishHour: String,
   postEnglishLink: String,
   postArabicLink: String,
   postRussianLink: String,

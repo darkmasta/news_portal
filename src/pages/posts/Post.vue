@@ -49,6 +49,14 @@
         <img :src="post.postImage">
     </div>
 
+    <b-row>
+        <b-col cols="2" >
+            <div class="publish_date">
+                <span>{{post.publishDate.split('T').shift()}} --- {{post.publishHour}}</span>
+            </div>
+        </b-col>
+    </b-row>
+
     <div class="post_content">
         <div v-html="post.content">
         </div>
@@ -284,6 +292,11 @@ header {
     margin: 20px;
 }
 
+.publish_date {
+    font-size: 16px;
+    font-weight: 500;
+    background: rgba(13,105,56, 0.5);
+}
 
 
 

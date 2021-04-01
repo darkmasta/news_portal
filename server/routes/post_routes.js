@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ba64 = require("ba64");
+const fs = require("fs");
 
 const Posts = require("../Models/posts");
 const Post = Posts.Post;
@@ -9,13 +10,13 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const { decodeCookie } = require("../helpers/decode-cookie");
 
-router.post("/get_posts", jsonParser, function (req, res) {
+router.post("/get_posts", jsonParser, (req, res) => {
   Post.find({})
     .then((posts) => res.json(posts))
     .catch((err) => res.json(err));
 });
 
-router.post("/create_post", jsonParser, function (req, res) {
+router.post("/create_post", jsonParser, (req, res) => {
   var postData = req.body;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
@@ -23,7 +24,7 @@ router.post("/create_post", jsonParser, function (req, res) {
     res.json("Authentication Error");
 
   var Post = new Posts.Post({
-    owner: email,
+    ownerEmail: email,
     content: postData.editorData,
     categories: postData.categories,
     postTitle: postData.postTitle.toLowerCase(),
@@ -36,6 +37,7 @@ router.post("/create_post", jsonParser, function (req, res) {
     postSeoHeader: postData.postSeoHeader,
     postLanguage: postData.postLanguage,
     publishDate: postData.publishDate,
+    publishHour: postData.publishHour,
     postEnglishLink: postData.postEnglishLink,
     postArabicLink: postData.postArabicLink,
     postRussianLink: postData.postRussianLink,
@@ -43,10 +45,11 @@ router.post("/create_post", jsonParser, function (req, res) {
     postFrenchLink: postData.postFrenchLink,
   });
 
-  ba64.writeImage("./images/" + postData.fileName, postData.file, function (
-    err
-  ) {
-    if (err) throw err;
+  if (!postData.isBase64) {
+  }
+
+  ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
+    if (err) res.json(err);
 
     console.log("Post Image saved successfully");
 
@@ -56,7 +59,7 @@ router.post("/create_post", jsonParser, function (req, res) {
   });
 });
 
-router.post("/post_by_id", jsonParser, function (req, res) {
+router.post("/post_by_id", jsonParser, (req, res) => {
   var postData = req.body.data;
   var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
@@ -73,7 +76,7 @@ router.post("/post_by_id", jsonParser, function (req, res) {
     });
 });
 
-router.post("/post_by_title", jsonParser, function (req, res) {
+router.post("/post_by_title", jsonParser, (req, res) => {
   var postData = req.body.data2;
 
   var promise = Post.find({ postTitle: postData.postTitle });
@@ -82,3 +85,10 @@ router.post("/post_by_title", jsonParser, function (req, res) {
 });
 
 module.exports = router;
+
+function base64_encode(file) {
+  // read binary data
+  var bitmap = fs.readFileSync(file);
+  // convert binary data to base64 encoded string
+  return new Buffer(bitmap).toString("base64");
+}
