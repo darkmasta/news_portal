@@ -6,10 +6,10 @@ const User = Users.User;
 
 const CryptoJS = require("crypto-js");
 
-router.get("/success", function (req, res) {
+router.get("/success", (req, res) => {
   var query = User.findOne({ email: req.user.email });
 
-  query.exec(function (err, user) {
+  query.exec((err, user) => {
     if (err) {
       return handleError(err);
       res.json("Error finding user");
@@ -42,7 +42,7 @@ router.get("/success", function (req, res) {
   });
 });
 
-router.get("/fail", function (req, res) {
+router.get("/fail", (req, res) => {
   res.json("Error signing in");
 });
 

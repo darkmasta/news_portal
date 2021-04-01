@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const { decodeCookie } = require("../helpers/decode-cookie");
 
-router.get("/users", function (req, res) {
+router.get("/users", (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
   var userArr = [];
   var query = User.find();
@@ -20,7 +20,7 @@ router.get("/users", function (req, res) {
   });
 });
 
-router.get("/user", function (req, res) {
+router.get("/user", (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var promise = User.find({ email: email });
@@ -28,7 +28,7 @@ router.get("/user", function (req, res) {
   promise.then((doc) => res.json(doc.pop()));
 });
 
-router.post("/user_by_id", jsonParser, function (req, res) {
+router.post("/user_by_id", jsonParser, (req, res) => {
   var userData = req.body.data;
 
   var promise = User.find({ _id: userData.id });
@@ -36,7 +36,7 @@ router.post("/user_by_id", jsonParser, function (req, res) {
   promise.then((doc) => res.json(doc.pop()));
 });
 
-router.post("/update_user_profile", jsonParser, function (req, res) {
+router.post("/update_user_profile", jsonParser, (req, res) => {
   var userData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
@@ -69,7 +69,7 @@ router.post("/update_user_profile", jsonParser, function (req, res) {
   });
 });
 
-router.post("/create_new_user", jsonParser, function (req, res) {
+router.post("/create_new_user", jsonParser, (req, res) => {
   var userData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
@@ -91,7 +91,7 @@ router.post("/create_new_user", jsonParser, function (req, res) {
     .catch((err) => res.json(err));
 });
 
-router.post("/delete_user", jsonParser, function (req, res) {
+router.post("/delete_user", jsonParser, (req, res) => {
   var userData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 

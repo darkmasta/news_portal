@@ -256,6 +256,76 @@ export default {
   },
   created() {
     var vm = this;
+    let data = {}
+    data.id = vm.$route.params.id
+    vm.id = data.id
+
+    var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+
+
+    if (checkForHexRegExp.test(vm.id) == true) {
+        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
+            .then(
+                (response) => {
+                        vm.post = response.data;
+                        console.log(vm.post);
+                        vm.editorData = vm.post.content
+                        vm.publishDate = vm.post.date
+                        vm.publishHour = vm.post.publishHour
+                        vm.postTitle = vm.post.postTitle
+                        vm.clickedCategory = vm.post.categories
+                        vm.imageName = vm.post.postImage
+                        vm.postCustomUrl = vm.post.postCustomUrl
+                        vm.postKeywords = vm.post.postKeywords
+                        vm.postSeoWords = vm.post.postSeoWords
+                        vm.postSeoUrl = vm.post.postSeoUrl
+                        vm.postSeoHeader = vm.post.postSeoHeader
+                        vm.postEnglishLink = vm.post.postEnglishLink
+                        vm.postArabicLink = vm.post.postArabicLink
+                        vm.postRussianLink = vm.post.postRussianLink
+                        vm.postUkranianLink = vm.post.postUkranianLink
+
+                        const reader = new FileReader()
+                        const img = File.createFromFileName('../../server/images/' + vm.post.postImage)
+                        
+                        console.log(img)
+
+                        /*
+                        let customUrl = vm.post.postTitle.toLowerCase().split(' ').join('-')
+                        if (vm.id == vm.post._id) { // id url'si custom url'e git
+                            // this.$router.push({ name: 'Post', params: { id: customUrl }})
+                        } else {
+                            console.log("URL id degil")
+                        }
+                        */
+                },
+                (err) => {
+                    console.error(err);
+                })
+    } else if (checkForHexRegExp.test(vm.id) == false){
+        let data2 = {}
+        console.log(vm.$route.params.id)
+        data2.postTitle = vm.post.postTitle || vm.$route.params.id.split('-').join(' ') 
+
+        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_title", {data2})
+            .then(
+            (response) => {
+                console.log(response.data)
+                vm.post = response.data;
+                vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
+                console.log(vm.post);
+            },
+            (err) => {
+                console.error(err)
+            }
+            )
+    }
+    
+
+
+
+
+
     vm.categoryTitles = Object.keys(categoryData)
 
 
@@ -414,35 +484,36 @@ export default {
    	reset() {
 			this.image = null;
 		},
-		loadImage(event) {
-			var input = event.target;
-      var vm = this
+    loadImage(event) {
+        var input = event.target;
+        var vm = this
 
-			if (input.files && input.files[0]) {
-        console.log(input.files[0])
-				var reader = new FileReader();
-        var fr = new FileReader;
+        if (input.files && input.files[0]) {
+            console.log(input.files[0])
+            var reader = new FileReader();
+            var fr = new FileReader;
 
-        fr.onload = function() {
-          var img = new Image;
+            fr.onload = function() {
+            var img = new Image;
 
-          img.onload = () => {
-            vm.imageWidth = img.width; 
-            vm.imageHeight = img.height;
-          }
+            img.onload = () => {
+                vm.imageWidth = img.width; 
+                vm.imageHeight = img.height;
+            }
 
-          img.src = fr.result
+            img.src = fr.result
+            }
+
+            fr.readAsDataURL(input.files[0])
+
+            reader.onload = (e) => {
+                this.image = e.target.result;
+                this.base64 = this.image
+            };
+
+            reader.readAsDataURL(input.files[0]);
         }
-
-        fr.readAsDataURL(input.files[0])
-
-				reader.onload = (e) => {
-					this.image = e.target.result;
-          this.base64 = this.image
-				};
-				reader.readAsDataURL(input.files[0]);
-			}
-		},
+    },
     blobToBase64 (blob)  {
       const reader = new FileReader();
       reader.readAsDataURL(blob);

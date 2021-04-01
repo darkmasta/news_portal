@@ -65,12 +65,12 @@ app.use("/", AuthorizationRoutes);
 app.use("/", PostRoutes);
 app.use("/", ActivityRoutes);
 
-app.all("/*", function (req, res, next) {
+app.all("/*", (req, res, next) => {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -89,7 +89,7 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 */
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.render("index.html");
 });
 
@@ -101,7 +101,7 @@ app.post(
   })
 );
 
-app.get("/images/:id", jsonParser, function (req, res) {
+app.get("/images/:id", jsonParser, (req, res) => {
   var id = req.params.id;
 
   path.resolve("temp/index.html");

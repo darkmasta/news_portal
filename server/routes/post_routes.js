@@ -43,10 +43,9 @@ router.post("/create_post", jsonParser, (req, res) => {
     postRussianLink: postData.postRussianLink,
     postUkranianLink: postData.postUkranianLink,
     postFrenchLink: postData.postFrenchLink,
+    state: postData.state,
+    isDraft: postData.saveAsDraft,
   });
-
-  if (!postData.isBase64) {
-  }
 
   ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
     if (err) res.json(err);
@@ -85,10 +84,3 @@ router.post("/post_by_title", jsonParser, (req, res) => {
 });
 
 module.exports = router;
-
-function base64_encode(file) {
-  // read binary data
-  var bitmap = fs.readFileSync(file);
-  // convert binary data to base64 encoded string
-  return new Buffer(bitmap).toString("base64");
-}

@@ -11,13 +11,13 @@ const _ = require("underscore");
 const fs = require("fs");
 const { decodeCookie } = require("../helpers/decode-cookie");
 
-router.post("/get_activities", jsonParser, function (req, res) {
+router.post("/get_activities", jsonParser, (req, res) => {
   var promise = Activity.find({});
 
   promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
 });
 
-router.post("/create_activity", jsonParser, function (req, res) {
+router.post("/create_activity", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body; // form data
@@ -34,7 +34,7 @@ router.post("/create_activity", jsonParser, function (req, res) {
     endDate: data.endDate,
   });
 
-  ba64.writeImage("./images/" + data.fileName, data.file, function (err) {
+  ba64.writeImage("./images/" + data.fileName, data.file, (err) => {
     if (err) throw err;
 
     console.log("Activity Image saved successfully");

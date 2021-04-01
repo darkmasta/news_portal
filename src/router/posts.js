@@ -21,6 +21,14 @@ export default [
         },
         component: () => import("@/pages/posts/Create"),
       },
+      {
+        path: "posts/edit/:id",
+        name: "Posts Edit",
+        meta: {
+          auth: false,
+        },
+        component: () => import("@/pages/posts/PostEdit"),
+      },
     ],
   },
 ];

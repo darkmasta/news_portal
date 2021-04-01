@@ -28,7 +28,18 @@ var postSchema = new Schema({
   content: String,
   state: String,
   date: { type: Date, default: Date.now },
+  logs: [
+    {
+      editor: String,
+      editDate: Date,
+      editText: String,
+    },
+  ],
   postLanguages: [String],
+  isNowEditing: Boolean,
+  isOnAir: Boolean,
+  isDraft: Boolean,
+  position: String,
 });
 
 module.exports.postSchema = postSchema;

@@ -10,13 +10,13 @@ const jsonParser = bodyParser.json();
 const fs = require("fs");
 const { decodeCookie } = require("../helpers/decode-cookie");
 
-router.post("/get_categories", jsonParser, function (req, res) {
+router.post("/get_categories", jsonParser, (req, res) => {
   var promise = Category.find({});
 
   promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
 });
 
-router.post("/add_top_category", jsonParser, function (req, res) {
+router.post("/add_top_category", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
@@ -37,7 +37,7 @@ router.post("/add_top_category", jsonParser, function (req, res) {
   promise.then((doc) => res.json("success")).catch((err) => res.json(err));
 });
 
-router.post("/update_top_category", jsonParser, function (req, res) {
+router.post("/update_top_category", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
@@ -79,7 +79,7 @@ router.post("/update_top_category", jsonParser, function (req, res) {
   });
 });
 
-router.post("/update_bottom_category", jsonParser, function (req, res) {
+router.post("/update_bottom_category", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
@@ -105,7 +105,7 @@ router.post("/update_bottom_category", jsonParser, function (req, res) {
   promise.then((doc) => res.json("success"));
 });
 
-router.post("/add_bottom_category", jsonParser, function (req, res) {
+router.post("/add_bottom_category", jsonParser, (req, res) => {
   var data = req.body.data;
   var topCategory = data.topCategory;
   var bottomCategory = data.bottomCategory;
@@ -128,7 +128,7 @@ router.post("/add_bottom_category", jsonParser, function (req, res) {
   promise.then((doc) => res.json(doc));
 });
 
-router.post("/delete_top_category", jsonParser, function (req, res) {
+router.post("/delete_top_category", jsonParser, (req, res) => {
   var data = req.body.data;
   var topCategory = data.topCategory;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
@@ -149,7 +149,7 @@ router.post("/delete_top_category", jsonParser, function (req, res) {
   promise.then((doc) => res.json("success"));
 });
 
-router.post("/delete_bottom_category", jsonParser, function (req, res) {
+router.post("/delete_bottom_category", jsonParser, (req, res) => {
   var data = req.body.data;
   var bottomCategory = data.bottomCategory;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
@@ -170,13 +170,13 @@ router.post("/delete_bottom_category", jsonParser, function (req, res) {
   promise.then((doc) => res.json(doc));
 });
 
-router.post("/upload_image", jsonParser, function (req, res) {
+router.post("/upload_image", jsonParser, (req, res) => {
   var img = req.files.file;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (!isAdmin == "admin") res.json("Authentication Error");
 
-  fs.writeFile("./images/" + img.name, img.data, "binary", function (err) {
+  fs.writeFile("./images/" + img.name, img.data, "binary", (err) => {
     if (err) throw err;
     console.log("File saved.");
     res.json("success");

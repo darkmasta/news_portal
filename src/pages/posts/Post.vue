@@ -1,7 +1,7 @@
 <template>
 <div class="main_container">
     <header>
-        <div class="logo">
+        <div class="logo" style="cursor: pointer;">
             <img :src="require('@/assets/images/logo.png')" /> 
         </div> 
 
@@ -45,16 +45,44 @@
         </ul>
     </div> 
 
-    <div class="postImage">
+
+
+    <div class="post_title">
+        <h1>{{post.postTitle}}</h1> 
+
+    </div>
+
+    <div class="post_image">
         <img :src="post.postImage">
     </div>
 
     <b-row>
-        <b-col cols="2" >
+        <b-col cols="2" class="offset-2">
             <div class="publish_date">
                 <span>{{publishDate}} --- {{post.publishHour}}</span>
             </div>
         </b-col>
+
+        <b-col cols="3">
+            <div class="publish_date" style="background: #ccc;">
+                <span>Writer: {{post.ownerEmail}}</span>
+            </div>
+        </b-col>
+
+        <b-col cols="2" class="ml-2">
+            <span class="button manset mt-5">
+                Manset 
+            </span>
+        </b-col>
+
+        <b-col cols="2" class="ml-2">
+            <span class="button taslak mt-5" @click="goToUpdatePost">
+                Taslak/Guncelle
+            </span>
+        </b-col>
+    </b-row>
+
+    <b-row>
     </b-row>
 
     <div class="post_content">
@@ -120,6 +148,8 @@ export default {
             (response) => {
                 console.log(response.data)
                 vm.post = response.data;
+                vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
+                console.log(vm.post);
             },
             (err) => {
                 console.error(err)
@@ -133,7 +163,11 @@ export default {
 
   },
   methods: {
-
+      goToUpdatePost() {
+          var vm = this
+          let id = vm.post._id
+          this.$router.push({ name: 'Posts Edit', params: { id: id}})
+      }
   },
   computed: {
       publishDate: function() {
@@ -301,12 +335,51 @@ header {
     margin: 20px;
 }
 
+.post_title {
+   display: flex; 
+   justify-content: center;
+   margin: 20px auto;
+}
+
 .publish_date {
+    position: relative;
+    top: 10px;
+    right: -50px;
     font-size: 16px;
     font-weight: 500;
+    width: 75%;
     background: rgba(13,105,56, 0.5);
 }
 
+.publish_date span {
+    padding: 10px;
+    text-align: center;
+}
 
+.post_image {
+    display: flex;
+    justify-content: center;
+}
+
+.post_image  img{
+    width: 60%;
+    height: auto;
+}
+
+.main_container {
+    overflow-y: scroll !important;
+}
+
+.manset {
+    position: relative;
+    top: 10px;
+    right: 100px;
+}
+
+.taslak {
+    position: relative;
+    top: 10px;
+    right: 270px;
+}
 
 </style>
