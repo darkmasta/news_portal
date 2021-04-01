@@ -31,6 +31,8 @@
               <cropper
                 :src="image"
                 ref="cropper"
+                :transitions="true"
+                @change="updateSize"
               />
           </div>
           <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
@@ -206,6 +208,7 @@ export default {
       categoriesData: {},
       clickedCategory: undefined,
       toggleEditImage: false,
+      secondTryForBugFix: false,
       categoryTitles: [],
       selectedCategories: [],
       postTitle: '',
@@ -279,9 +282,10 @@ export default {
   methods: {
     submitPost: function () {
       var vm = this
-			const { canvas } = this.$refs.cropper.getResult();
+			const { coordinates, canvas } = this.$refs.cropper.getResult();
 			if (vm.toggleEditImage && canvas) {
 
+        console.log(coordinates)
 				const formData = new FormData();
 				canvas.toBlob(blob => {
           vm.blobToBase64(blob).then(res => {
@@ -325,58 +329,77 @@ export default {
           });
 				// Perhaps you should add the setting appropriate file format here
 				}, 'image/jpeg');
-			} else if (this.toggleEditImage == false) {
-        /*
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-        const file = this.$refs.file.files[0];
-        vm.file = file;
-        if (!allowedTypes.includes(file.type)) {
-          this.message = "Filetype is wrong!!";
-        }
-        if (file.size > 500000) {
-          this.message = "Too large, max size allowed is 500kb";
-        }
-        */
+			} else if (this.toggleEditImage == false && this.secondTryForBugFix == false) {
 
+       	this.$refs.cropper.setCoordinates({
+          width: vm.imageWidth,
+          height: vm.imageHeight,
+          left: 0,
+          top: 0 
+        })
 
-        const formData = new FormData();
-        formData.append("file", vm.base64)
-        formData.append('fileName', vm.imageName);
-        formData.append('toggleEditImage', vm.toggleEditImage);
-        formData.append("editorData", vm.editorData)
-        formData.append("postTitle", vm.postTitle)
-        formData.append("categories", vm.selectedCategories)
-        formData.append("publishDate", vm.publishDate)
-        formData.append("publishHour", vm.publishHour)
-        formData.append("postKeywords", vm.postKeywords)
-        formData.append("postCustomUrl", vm.postCustomUrl)
-        formData.append("postSeoWords", vm.postSeoWords)
-        formData.append("postSeoUrl", vm.postSeoUrl)
-        formData.append("postSeoHeader", vm.postSeoHeader)
-        formData.append("postEnglishLink", vm.postEnglishLink)
-        formData.append("postArabicLink", vm.postArabicLink)
-        formData.append("postRussianLink", vm.postRussianLink)
-        formData.append("postUkranianLink", vm.postUkranianLink)
-        formData.append("postFrenchLink", vm.postFrenchLink)
+        this.$refs.cropper.setCoordinates(({ coordinates, imageSize }) => ({
+          width: imageSize.width,
+          height: imageSize.height
+        }))
 
-        axios
-          .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            }, 
-          })
-          .then((response) => {
-            var data = response.data;
-            console.log(data);
-            if (response.data == "success") {
-              vm.$notify({
-                  type: 'success',
-                  text: 'Haber Resmi Yuklendi!'
-              });
-            }
-          });
+        vm.secondTryForBugFix = true
+
+        vm.$notify({
+          type: 'warn',
+          text: 'Resim hazirlaniyor, lutfen tekrar deneyin'
+        })
+
+      } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
+          canvas.toBlob(blob => {
+            vm.blobToBase64(blob).then(res => {
+              console.log(coordinates)
+              const formData = new FormData();
+              formData.append("file", res)
+              formData.append('fileName', vm.imageName);
+              formData.append('toggleEditImage', vm.toggleEditImage);
+              formData.append("editorData", vm.editorData)
+              formData.append("postTitle", vm.postTitle)
+              formData.append("categories", vm.selectedCategories)
+              formData.append("publishDate", vm.publishDate)
+              formData.append("publishHour", vm.publishHour)
+              formData.append("postKeywords", vm.postKeywords)
+              formData.append("postCustomUrl", vm.postCustomUrl)
+              formData.append("postSeoWords", vm.postSeoWords)
+              formData.append("postSeoUrl", vm.postSeoUrl)
+              formData.append("postSeoHeader", vm.postSeoHeader)
+              formData.append("postEnglishLink", vm.postEnglishLink)
+              formData.append("postArabicLink", vm.postArabicLink)
+              formData.append("postRussianLink", vm.postRussianLink)
+              formData.append("postUkranianLink", vm.postUkranianLink)
+              formData.append("postFrenchLink", vm.postFrenchLink)
+
+              axios
+                .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  }, 
+                })
+                .then((response) => {
+                  var data = response.data;
+                  console.log(data);
+                  if (response.data == "success") {
+                    this.secondTryForBugFix = false
+                    vm.$notify({
+                        type: 'success',
+                        text: 'Haber Resmi Yuklendi!'
+                    });
+                  }
+                });
+            });
+          // Perhaps you should add the setting appropriate file format here
+          }, 'image/jpeg')
       }
     },
+    updateSize({ coordinates }) {
+			this.size.width = Math.round(coordinates.width);
+			this.size.height = Math.round(coordinates.height);
+		},
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
 			this.coordinates = coordinates;
@@ -387,9 +410,26 @@ export default {
 		},
 		loadImage(event) {
 			var input = event.target;
+      var vm = this
 
 			if (input.files && input.files[0]) {
+        console.log(input.files[0])
 				var reader = new FileReader();
+        var fr = new FileReader;
+
+        fr.onload = function() {
+          var img = new Image;
+
+          img.onload = () => {
+            vm.imageWidth = img.width; 
+            vm.imageHeight = img.height;
+          }
+
+          img.src = fr.result
+        }
+
+        fr.readAsDataURL(input.files[0])
+
 				reader.onload = (e) => {
 					this.image = e.target.result;
           this.base64 = this.image

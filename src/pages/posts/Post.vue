@@ -52,7 +52,7 @@
     <b-row>
         <b-col cols="2" >
             <div class="publish_date">
-                <span>{{post.publishDate.split('T').shift()}} --- {{post.publishHour}}</span>
+                <span>{{publishDate}} --- {{post.publishHour}}</span>
             </div>
         </b-col>
     </b-row>
@@ -94,13 +94,13 @@ export default {
 
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
-    if (checkForHexRegExp.test(vm.id)) {
+
+    if (checkForHexRegExp.test(vm.id) == true) {
         axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
             .then(
                 (response) => {
                         vm.post = response.data;
-                        let customUrl = vm?.post.postTitle.toLowerCase().split(' ').join('-')
-                        // console.log("CUSTOM URL = ", customUrl)
+                        let customUrl = vm.post.postTitle.toLowerCase().split(' ').join('-')
                         if (vm.id == vm.post._id) { // id url'si custom url'e git
                             this.$router.push({ name: 'Post', params: { id: customUrl }})
                         } else {
@@ -110,9 +110,11 @@ export default {
                 (err) => {
                     console.error(err);
                 })
-    } else {
+    } else if (checkForHexRegExp.test(vm.id) == false){
         let data2 = {}
+        console.log(vm.$route.params.id)
         data2.postTitle = vm.post.postTitle || vm.$route.params.id.split('-').join(' ') 
+
         axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_title", {data2})
             .then(
             (response) => {
@@ -132,6 +134,13 @@ export default {
   },
   methods: {
 
+  },
+  computed: {
+      publishDate: function() {
+          var vm = this
+          if(vm.post && vm.post.publishDate) return vm.post.publishDate.split('T').shift()
+          else return "No Date is avaliable"
+      }
   }
 };
 </script>
