@@ -46,10 +46,8 @@
     </div> 
 
 
-
     <div class="post_title">
         <h1>{{post.postTitle}}</h1> 
-
     </div>
 
     <div class="post_image">
@@ -111,6 +109,7 @@ export default {
       activities: [],
       post: {},
       customUrl: '',
+      image: '',
       id: ''
   }),
   created() {
@@ -122,6 +121,8 @@ export default {
 
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
+
+    setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
 
     if (checkForHexRegExp.test(vm.id) == true) {
         axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
@@ -147,6 +148,8 @@ export default {
             .then(
             (response) => {
                 console.log(response.data)
+                setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
+                vm.image = process.env.VUE_APP_SERVER_URL + /images/ + response.data.postImage
                 vm.post = response.data;
                 vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
                 console.log(vm.post);
@@ -158,7 +161,7 @@ export default {
     }
     
 
-
+    if (vm.post)  vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
 
 
   },
@@ -174,6 +177,11 @@ export default {
           var vm = this
           if(vm.post && vm.post.publishDate) return vm.post.publishDate.split('T').shift()
           else return "No Date is avaliable"
+      },
+      imageSrc: () => {
+          var vm = this
+          if (vm.post && vm.post.postImage) return process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
+          else return "No image"
       }
   }
 };

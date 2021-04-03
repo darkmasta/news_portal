@@ -2,18 +2,46 @@
   <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
-          <h4>Create Post</h4>
-          <span>Selected Categories: </span>{{selectedCategories}}
+          <h2 style="text-decoration: underline;">Edit Post</h2>
       </div>
     </div>
     <b-row>
+        <b-col cols="6" class="offset-5">
+            <h3>Edit Tarihi</h3> 
+        </b-col>
+
+        <b-col cols="10" class="offset-1" v-for="(log, index) in editLogs" :key="index">
+            <b-input-group prepend="Edit Log" class="mt-2">
+                <b-form-input v-model="log.editText">
+                </b-form-input>
+                <b-form-input v-bind:value="log.editor" disabled></b-form-input>
+                <div class="edit_buttons">
+                  <span class="fas fa-times" @click="removeLog(index)"></span>
+                  <span class="far fa-edit" @click="editLog(index)"></span>
+                </div>
+            </b-input-group>
+        </b-col>
+
+        <b-col cols="6" class="offset-5 mt-4">
+            <h3>Son Edit Sebebi</h3> 
+        </b-col>
+        <b-col cols="10" class="offset-1">
+            <b-input-group prepend="Son Edit Sebebi" class="mt-2">
+                <b-form-input v-model="latestLogText"></b-form-input>
+            </b-input-group>
+        </b-col>
+
+        <div class="divider mt-4 mb-4"></div>
+
+    </b-row>
+    <b-row>
       <b-col class="categories__container">
         <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
-            @click="clickCategory(index)" class="categories__single-category"
+             class="categories__single-category"
             :class="{expand_category: clickedCategory == index,
                     collapse_category: clickedCategory != index } 
                     ">
-          <h3 class="category__title">{{categoryTitle}}</h3>
+          <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
               class="category__list-item">
@@ -25,6 +53,11 @@
       </b-col>
     </b-row>
     <b-row>
+        <b-col cols="12" class="mt-2 mb-2">
+            <span>Selected Categories: </span>{{selectedCategories}}
+        </b-col>
+    </b-row>
+    <b-row>
       <b-col cols="12">
         <div class="upload-example">
           <div v-show="image">
@@ -32,7 +65,6 @@
                 :src="image"
                 ref="cropper"
                 :transitions="true"
-                @change="updateSize"
               />
           </div>
           <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
@@ -75,8 +107,9 @@
           </div>
         </div>
       </b-col>
+      <div class="divider mt-4 mb-4"></div>
       <b-row>
-      <b-col cols="12" class="publish_date mt-4 ml-3">
+      <b-col cols="12" class="publish_date_box mt-4 ml-3">
         <b-col cols="11" class="offset-8">
             <b-input-group prepend="Haber Basligi" class="mt-2">
               <b-form-input v-model="postTitle"></b-form-input>
@@ -215,6 +248,7 @@ export default {
       toggleEditImage: false,
       secondTryForBugFix: false,
       saveAsDraft: false,
+      editLogDynamicText: '',
       categoryTitles: [],
       selectedCategories: [],
       postTitle: '',
@@ -233,6 +267,8 @@ export default {
 				coordinates: null,
 				image: null
 			},
+      editLogs: [''],
+      latestLogText: '',
       base64: '',
       message: "",
       file: null,
@@ -260,81 +296,53 @@ export default {
     data.id = vm.$route.params.id
     vm.id = data.id
 
-    var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+    axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
+        .then((response) => {
+                    vm.post = response.data;
+                    console.log(vm.post);
+                    vm.editorData = vm.post.content
+                    vm.publishDate = vm.post.date
+                    vm.publishHour = vm.post.publishHour
+                    vm.postTitle = vm.post.postTitle
+                    var categoryArray = vm.post.categories[0]
+                    categoryArray = categoryArray.split(',')
+                    vm.selectedCategories = categoryArray
+
+                    vm.editLogs = vm.post.logs
+                    vm.imageName = vm.post.postImage
+                    vm.postCustomUrl = vm.post.postCustomUrl
+                    vm.postKeywords = vm.post.postKeywords
+                    vm.postSeoWords = vm.post.postSeoWords
+                    vm.postSeoUrl = vm.post.postSeoUrl
+                    vm.postSeoHeader = vm.post.postSeoHeader
+                    vm.postEnglishLink = vm.post.postEnglishLink
+                    vm.postArabicLink = vm.post.postArabicLink
+                    vm.postRussianLink = vm.post.postRussianLink
+                    vm.postUkranianLink = vm.post.postUkranianLink
 
 
-    if (checkForHexRegExp.test(vm.id) == true) {
-        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
-            .then(
-                (response) => {
-                        vm.post = response.data;
-                        console.log(vm.post);
-                        vm.editorData = vm.post.content
-                        vm.publishDate = vm.post.date
-                        vm.publishHour = vm.post.publishHour
-                        vm.postTitle = vm.post.postTitle
-                        vm.clickedCategory = vm.post.categories
-                        vm.imageName = vm.post.postImage
-                        vm.postCustomUrl = vm.post.postCustomUrl
-                        vm.postKeywords = vm.post.postKeywords
-                        vm.postSeoWords = vm.post.postSeoWords
-                        vm.postSeoUrl = vm.post.postSeoUrl
-                        vm.postSeoHeader = vm.post.postSeoHeader
-                        vm.postEnglishLink = vm.post.postEnglishLink
-                        vm.postArabicLink = vm.post.postArabicLink
-                        vm.postRussianLink = vm.post.postRussianLink
-                        vm.postUkranianLink = vm.post.postUkranianLink
-
-                        const reader = new FileReader()
-                        const img = File.createFromFileName('../../server/images/' + vm.post.postImage)
-                        
-                        console.log(img)
-
-                        /*
-                        let customUrl = vm.post.postTitle.toLowerCase().split(' ').join('-')
-                        if (vm.id == vm.post._id) { // id url'si custom url'e git
-                            // this.$router.push({ name: 'Post', params: { id: customUrl }})
-                        } else {
-                            console.log("URL id degil")
-                        }
-                        */
-                },
-                (err) => {
-                    console.error(err);
-                })
-    } else if (checkForHexRegExp.test(vm.id) == false){
-        let data2 = {}
-        console.log(vm.$route.params.id)
-        data2.postTitle = vm.post.postTitle || vm.$route.params.id.split('-').join(' ') 
-
-        axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_title", {data2})
-            .then(
-            (response) => {
-                console.log(response.data)
-                vm.post = response.data;
-                vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
-                console.log(vm.post);
+                    fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                let objectURL = URL.createObjectURL(blob);
+                                let myImage = new Image();
+                                myImage.src = objectURL;
+                                vm.image = myImage.src
+                            })
             },
             (err) => {
-                console.error(err)
-            }
-            )
-    }
-    
-
-
-
+                console.error(err);
+            })
 
 
     vm.categoryTitles = Object.keys(categoryData)
-
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
       .then((response) => {
           //console.log(response.data);
           vm.categoriesData = response.data[0];
-          console.log(vm.categoriesData.updatedCategories)
+          //console.log(vm.categoriesData.updatedCategories)
           vm.categoriesData.updatedCategories.forEach(element => {
               vm.categoryTitles.push(element.topCategory)
           });
@@ -353,6 +361,7 @@ export default {
                   vm.categoriesData[element.topCategory].push(element.bottomCategory)
               }
           })
+
       });
   },
   methods: {
@@ -360,157 +369,135 @@ export default {
       var vm = this
 			const { coordinates, canvas } = this.$refs.cropper.getResult();
 			if (vm.toggleEditImage && canvas) {
+		    const formData = new FormData();
+			canvas.toBlob(blob => {
+                vm.blobToBase64(blob).then(res => {
+                const formData = new FormData();
+                formData.append('file', res);
+                formData.append('fileName', vm.imageName);
+                formData.append('toggleEditImage', vm.toggleEditImage);
+                formData.append("editorData", vm.editorData)
+                formData.append("postTitle", vm.postTitle)
+                formData.append("categories", vm.selectedCategories)
+                formData.append("publishDate", vm.publishDate)
+                formData.append("publishHour", vm.publishHour)
+                formData.append("postKeywords", vm.postKeywords)
+                formData.append("postCustomUrl", vm.postCustomUrl)
+                formData.append("postSeoWords", vm.postSeoWords)
+                formData.append("postSeoUrl", vm.postSeoUrl)
+                formData.append("postSeoHeader", vm.postSeoHeader)
+                formData.append("postEnglishLink", vm.postEnglishLink)
+                formData.append("postArabicLink", vm.postArabicLink)
+                formData.append("postRussianLink", vm.postRussianLink)
+                formData.append("postUkranianLink", vm.postUkranianLink)
+                formData.append("postFrenchLink", vm.postFrenchLink)
+                formData.append("latestLogText", vm.latestLogText)
+                formData.append("id", vm.id)
+                vm.editLogs.push(vm.latestLogText)
+                console.log(vm.editLogs)
+                console.log(vm.latestLogText)
+                formData.append("logs", vm.editLogs)
 
-        console.log(coordinates)
-				const formData = new FormData();
-				canvas.toBlob(blob => {
-          vm.blobToBase64(blob).then(res => {
-            const formData = new FormData();
-            formData.append('file', res);
-            formData.append('fileName', vm.imageName);
-            formData.append('toggleEditImage', vm.toggleEditImage);
-            formData.append("editorData", vm.editorData)
-            formData.append("postTitle", vm.postTitle)
-            formData.append("categories", vm.selectedCategories)
-            formData.append("publishDate", vm.publishDate)
-            formData.append("publishHour", vm.publishHour)
-            formData.append("postKeywords", vm.postKeywords)
-            formData.append("postCustomUrl", vm.postCustomUrl)
-            formData.append("postSeoWords", vm.postSeoWords)
-            formData.append("postSeoUrl", vm.postSeoUrl)
-            formData.append("postSeoHeader", vm.postSeoHeader)
-            formData.append("postEnglishLink", vm.postEnglishLink)
-            formData.append("postArabicLink", vm.postArabicLink)
-            formData.append("postRussianLink", vm.postRussianLink)
-            formData.append("postUkranianLink", vm.postUkranianLink)
-            formData.append("postFrenchLink", vm.postFrenchLink)
 
-
-            axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                }, 
-              })
-              .then((response) => {
-                var data = response.data;
-                console.log(data);
-                if (response.data == "success") {
-                  vm.$notify({
-                      type: 'success',
-                      text: 'Haber Resmi Yuklendi!'
-                  });
-                }
-              });
-          });
-				// Perhaps you should add the setting appropriate file format here
-				}, 'image/jpeg');
+                axios
+                    .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
+                        headers: {
+                        "Content-Type": "multipart/form-data",
+                        }, 
+                    })
+                    .then((response) => {
+                        var data = response.data;
+                        console.log(data);
+                        if (response.data == "success") {
+                        vm.$notify({
+                            type: 'success',
+                            text: 'Haber Resmi Yuklendi!'
+                        });
+                        }
+                    });
+                });
+			}, 'image/jpeg');
 			} else if (this.toggleEditImage == false && this.secondTryForBugFix == false) {
 
-       	this.$refs.cropper.setCoordinates({
-          width: vm.imageWidth,
-          height: vm.imageHeight,
-          left: 0,
-          top: 0 
-        })
+                this.$refs.cropper.setCoordinates(({ coordinates, imageSize }) => ({
+                width: imageSize.width,
+                height: imageSize.height
+                }))
 
-        this.$refs.cropper.setCoordinates(({ coordinates, imageSize }) => ({
-          width: imageSize.width,
-          height: imageSize.height
-        }))
+                vm.secondTryForBugFix = true
 
-        vm.secondTryForBugFix = true
-
-        vm.$notify({
-          type: 'warn',
-          text: 'Resim hazirlaniyor, lutfen tekrar deneyin'
-        })
-
-      } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
-          canvas.toBlob(blob => {
-            vm.blobToBase64(blob).then(res => {
-              console.log(coordinates)
-              const formData = new FormData();
-              formData.append("file", res)
-              formData.append('fileName', vm.imageName);
-              formData.append('toggleEditImage', vm.toggleEditImage);
-              formData.append("editorData", vm.editorData)
-              formData.append("postTitle", vm.postTitle)
-              formData.append("categories", vm.selectedCategories)
-              formData.append("publishDate", vm.publishDate)
-              formData.append("publishHour", vm.publishHour)
-              formData.append("postKeywords", vm.postKeywords)
-              formData.append("postCustomUrl", vm.postCustomUrl)
-              formData.append("postSeoWords", vm.postSeoWords)
-              formData.append("postSeoUrl", vm.postSeoUrl)
-              formData.append("postSeoHeader", vm.postSeoHeader)
-              formData.append("postEnglishLink", vm.postEnglishLink)
-              formData.append("postArabicLink", vm.postArabicLink)
-              formData.append("postRussianLink", vm.postRussianLink)
-              formData.append("postUkranianLink", vm.postUkranianLink)
-              formData.append("postFrenchLink", vm.postFrenchLink)
-
-              axios
-                .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  }, 
+                vm.$notify({
+                type: 'warn',
+                text: 'Resim hazirlaniyor, lutfen tekrar deneyin'
                 })
-                .then((response) => {
-                  var data = response.data;
-                  console.log(data);
-                  if (response.data == "success") {
-                    this.secondTryForBugFix = false
-                    vm.$notify({
-                        type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
+
+            } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
+                canvas.toBlob(blob => {
+                    vm.blobToBase64(blob).then(res => {
+                        const formData = new FormData();
+                        formData.append('file', res);
+                        formData.append('fileName', vm.imageName);
+                        formData.append('toggleEditImage', vm.toggleEditImage);
+                        formData.append("editorData", vm.editorData)
+                        formData.append("postTitle", vm.postTitle)
+                        formData.append("categories", vm.selectedCategories)
+                        formData.append("publishDate", vm.publishDate)
+                        formData.append("publishHour", vm.publishHour)
+                        formData.append("postKeywords", vm.postKeywords)
+                        formData.append("postCustomUrl", vm.postCustomUrl)
+                        formData.append("postSeoWords", vm.postSeoWords)
+                        formData.append("postSeoUrl", vm.postSeoUrl)
+                        formData.append("postSeoHeader", vm.postSeoHeader)
+                        formData.append("postEnglishLink", vm.postEnglishLink)
+                        formData.append("postArabicLink", vm.postArabicLink)
+                        formData.append("postRussianLink", vm.postRussianLink)
+                        formData.append("postUkranianLink", vm.postUkranianLink)
+                        formData.append("postFrenchLink", vm.postFrenchLink)
+                        formData.append("latestLogText", vm.latestLogText)
+                        formData.append("id", vm.id)
+
+                        console.log(vm.editLogs)
+                        formData.append("logs", vm.editLogs)
+
+
+                    axios
+                        .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        }, 
+                        })
+                        .then((response) => {
+                        var data = response.data;
+                        console.log(data);
+                        if (response.data == "success") {
+                            this.secondTryForBugFix = false
+                            vm.$notify({
+                                type: 'success',
+                                text: 'Haber Resmi Yuklendi!'
+                            });
+                        }
+                        });
                     });
-                  }
-                });
-            });
-          // Perhaps you should add the setting appropriate file format here
-          }, 'image/jpeg')
-      }
+                }, 'image/jpeg')}
     },
-    updateSize({ coordinates }) {
-			this.size.width = Math.round(coordinates.width);
-			this.size.height = Math.round(coordinates.height);
-		},
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
 			this.coordinates = coordinates;
 			this.image = canvas.toDataURL();
-		},
+	},
    	reset() {
 			this.image = null;
-		},
+	},
     loadImage(event) {
         var input = event.target;
         var vm = this
 
         if (input.files && input.files[0]) {
-            console.log(input.files[0])
             var reader = new FileReader();
-            var fr = new FileReader;
-
-            fr.onload = function() {
-            var img = new Image;
-
-            img.onload = () => {
-                vm.imageWidth = img.width; 
-                vm.imageHeight = img.height;
-            }
-
-            img.src = fr.result
-            }
-
-            fr.readAsDataURL(input.files[0])
-
             reader.onload = (e) => {
                 this.image = e.target.result;
                 this.base64 = this.image
             };
-
             reader.readAsDataURL(input.files[0]);
         }
     },
@@ -523,45 +510,6 @@ export default {
         };
       });
     },
-    uploadImage() {
-      var vm = this
-			const { canvas } = this.$refs.cropper.getResult();
-			if (canvas) {
-        const file = this.$refs.file.files[0];
-				const formData = new FormData();
-				canvas.toBlob(blob => {
-          this.blobToBase64(blob).then(res => {
-            formData.append('file', res);
-            formData.append('fileName', file.name.split('.').shift());
-            formData.append("editorData", vm.editorData)
-            formData.append("postTitle", vm.postTitle)
-            formData.append("categories", vm.selectedCategories)
-
-            axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-              .then(
-                (response) => {
-                  console.log(response.data)
-                  if (response.data == "success") {
-                    vm.$notify({
-                        type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
-                    });
-                  }
-                },
-                (response) => {
-                  console.log(response);
-                }
-              );
-          });
-				// Perhaps you should add the setting appropriate file format here
-				}, 'image/jpeg');
-			}
-		},
     clickCategory(index) {
       var vm = this
       if (vm.clickedCategory == index) {
@@ -570,12 +518,48 @@ export default {
         vm.clickedCategory = index
       }
     },
+    removeLog(index) {
+      var vm = this
+      console.log(vm.editLogs[index])
+      var data = {}
+      data['id'] = vm.editLogs[index]._id
+      console.log(data)
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/delete_post_log/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'success',
+                  text: 'Haber Log\'u Basariyle Silindi!'
+              });
+              vm.editLogs.splice(index, 1);
+          }
+        });
+    },
+    editLog(index) {
+      var vm = this
+      console.log(vm.editLogs[index])
+      var data =  vm.editLogs[index]
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/edit_post_log/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'success',
+                  text: 'Haber Log\'u Basariyle Guncellendi!'
+              });
+              // vm.editLogs.splice(index, 1);
+          }
+        });
+    }
   },
 };
 </script>
 
 <style>
-.publish_date {
+.publish_date_box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -704,5 +688,19 @@ input:checked + .slider:before {
     padding: 1.4em .5em;
     font-size: 1em;
     background-color: #f2f2f3;
+}
+
+.edit_buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.edit_buttons span {
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 15px;
+  cursor: pointer;
 }
 </style>
