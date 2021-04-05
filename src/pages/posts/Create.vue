@@ -289,13 +289,45 @@ export default {
     submitPost: function () {
       var vm = this
 			const { coordinates, canvas } = this.$refs.cropper.getResult();
+      if (!canvas || canvas == undefined) {
+          vm.$notify({
+            type: 'success',
+            text: 'Haber resmi bos olamaz'
+          })
+          return;
+      }
 			if (vm.toggleEditImage && canvas) {
-
-        console.log(coordinates)
 				const formData = new FormData();
 				canvas.toBlob(blob => {
           vm.blobToBase64(blob).then(res => {
             const formData = new FormData();
+            if(!res)  {
+              vm.$notify({
+                type: 'success',
+                text: 'Haber resmi bos olamaz'
+              })
+            }
+            if(!vm.imageName || vm.imageName == "") {
+              vm.$notify({
+                type: 'warn',
+                text: 'Lutfen Resim Ismi Giriniz'
+              })
+              return;
+            }
+            if(!vm.publishDate || vm.publishDate == "") {
+              vm.$notify({
+                type: 'warn',
+                text: 'Haber Tarihi Bos Olamaz'
+              })
+              return;
+            }
+            if(!vm.postTitle || vm.postTitle == "") {
+              vm.$notify({
+                type: 'warn',
+                text: 'Haber Basligi Bos Olamaz'
+              })
+              return;
+            }
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
             formData.append('toggleEditImage', vm.toggleEditImage);
@@ -332,7 +364,7 @@ export default {
                   });
                 }
               });
-          });
+            })
 				// Perhaps you should add the setting appropriate file format here
 				}, 'image/jpeg');
 			} else if (this.toggleEditImage == false && this.secondTryForBugFix == false) {
@@ -357,11 +389,46 @@ export default {
         })
 
       } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
+          if (!canvas || canvas == undefined) {
+              vm.$notify({
+                type: 'success',
+                text: 'Haber resmi bos olamaz'
+              })
+              return;
+          }
           canvas.toBlob(blob => {
             vm.blobToBase64(blob).then(res => {
               console.log(coordinates)
               const formData = new FormData();
               formData.append("file", res)
+              if (!res || res == undefined) {
+                vm.$notify({
+                  type: 'warn',
+                  text: 'Haber resmi bos olamaz'
+                })
+                return;
+              }
+              if(!vm.imageName || vm.imageName == "") {
+                vm.$notify({
+                  type: 'warn',
+                  text: 'Lutfen Resim Ismi Giriniz'
+                })
+                return;
+              }
+              if(!vm.publishDate || vm.publishDate == "") {
+                vm.$notify({
+                  type: 'warn',
+                  text: 'Haber Tarihi Bos Olamaz'
+                })
+                return;
+              }
+              if(!vm.postTitle || vm.postTitle == "") {
+                vm.$notify({
+                  type: 'warn',
+                  text: 'Haber Basligi Bos Olamaz'
+                })
+                return;
+              }
               formData.append('fileName', vm.imageName);
               formData.append('toggleEditImage', vm.toggleEditImage);
               formData.append("editorData", vm.editorData)

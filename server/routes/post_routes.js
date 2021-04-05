@@ -46,12 +46,13 @@ router.post("/create_post", jsonParser, (req, res) => {
     state: postData.state,
     logs: [
       {
-        editor: ownerEmail,
+        editor: email,
         editDate: Date.now(),
         editText: "Post created",
       },
     ],
     isDraft: postData.saveAsDraft,
+    isLocked: false,
   });
 
   ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
@@ -139,21 +140,6 @@ router.post("/update_post", jsonParser, (req, res) => {
   });
 });
 
-router.post("/open_edit_post", jsonParser, (req, res) => {
-  var postData = req.body;
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
-
-  if (!isAdmin == "admin") res.json("Authentication Error");
-
-  Post.updateOne(
-    { _id: postData.id },
-    {
-      state: postData.state,
-      isDraft: postData.saveAsDraft || false,
-    }
-  ).then((doc) => res.json(doc));
-});
-
 router.post("/edit_post_log", jsonParser, (req, res) => {
   var logData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
@@ -190,19 +176,36 @@ router.post("/delete_post_log", jsonParser, (req, res) => {
   ).then((doc) => res.json("success"));
 });
 
-router.post("/close_edit_post", jsonParser, (req, res) => {
-  var postData = req.body;
+router.post("/lock_post", jsonParser, (req, res) => {
+  var postData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
 
   Post.updateOne(
     { _id: postData.id },
     {
-      state: postData.state,
-      isDraft: postData.saveAsDraft || false,
+      isLocked: true,
+      lockerEditor: email,
     }
   ).then((doc) => res.json(doc));
+});
+
+router.post("/unlock_post", jsonParser, (req, res) => {
+  var postData = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
+
+  Post.updateOne(
+    { _id: postData.id },
+    {
+      isLocked: false,
+      lockerEditor: "",
+    }
+  ).then((doc) => res.json("success"));
 });
 
 module.exports = router;

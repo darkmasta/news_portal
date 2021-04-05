@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-md-12">
           <h2 style="text-decoration: underline;">Edit Post</h2>
+          <span class="info_message">{{info_message}}</span>
       </div>
     </div>
     <b-row>
@@ -240,99 +241,121 @@ export default {
     Datepicker,
     VueTimepicker
   },
-  data() {
-    return {
-      languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
-      categoriesData: {},
-      clickedCategory: undefined,
-      toggleEditImage: false,
-      secondTryForBugFix: false,
-      saveAsDraft: false,
-      editLogDynamicText: '',
-      categoryTitles: [],
-      selectedCategories: [],
-      postTitle: '',
-      editor: ClassicEditor,
-      editorData: '<p>Content of the editor.</p>',
-      editorConfig: {
-         // The configuration of the editor.
-      },
-      coordinates: {
-				width: 0,
-				height: 0,
-				left: 0,
-				top: 0,
-      },
-      result: {
-				coordinates: null,
-				image: null
-			},
-      editLogs: [''],
-      latestLogText: '',
-      base64: '',
-      message: "",
-      file: null,
-      image: null,
-      imageWidth: 0,
-      imageHeight: 0,
-      imageName: "",
-      postCustomUrl: '',
-      publishDate: '',
-      publishHour: '',
-      postKeywords: '',
-      postSeoWords: '',
-      postSeoUrl: '',
-      postSeoHeader: '',
-      postEnglishLink: '',
-      postArabicLink: '',
-      postRussianLink: '',
-      postUkranianLink: '',
-      postFrenchLink: ''
-    }
-  },
+  data: () => ({
+    info_message: '',
+    languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
+    categoriesData: {},
+    clickedCategory: undefined,
+    toggleEditImage: false,
+    secondTryForBugFix: false,
+    saveAsDraft: false,
+    editLogDynamicText: '',
+    categoryTitles: [],
+    selectedCategories: [],
+    postTitle: '',
+    editor: ClassicEditor,
+    editorData: '<p>Content of the editor.</p>',
+    editorConfig: {
+        // The configuration of the editor.
+    },
+    coordinates: {
+      width: 0,
+      height: 0,
+      left: 0,
+      top: 0,
+    },
+    result: {
+      coordinates: null,
+      image: null
+    },
+    editLogs: [''],
+    latestLogText: '',
+    base64: '',
+    message: "",
+    file: null,
+    image: null,
+    imageWidth: 0,
+    imageHeight: 0,
+    imageName: "",
+    postCustomUrl: '',
+    publishDate: '',
+    publishHour: '',
+    postKeywords: '',
+    postSeoWords: '',
+    postSeoUrl: '',
+    postSeoHeader: '',
+    postEnglishLink: '',
+    postArabicLink: '',
+    postRussianLink: '',
+    postUkranianLink: '',
+    postFrenchLink: '',
+    user: {}
+  }),
   created() {
     var vm = this;
     let data = {}
     data.id = vm.$route.params.id
     vm.id = data.id
 
+
     axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
         .then((response) => {
-                    vm.post = response.data;
-                    console.log(vm.post);
-                    vm.editorData = vm.post.content
-                    vm.publishDate = vm.post.date
-                    vm.publishHour = vm.post.publishHour
-                    vm.postTitle = vm.post.postTitle
-                    var categoryArray = vm.post.categories[0]
-                    categoryArray = categoryArray.split(',')
-                    vm.selectedCategories = categoryArray
+          vm.post = response.data;
+          console.log(vm.post);
+          vm.editorData = vm.post.content
+          vm.publishDate = vm.post.date
+          vm.publishHour = vm.post.publishHour
+          vm.postTitle = vm.post.postTitle
+          var categoryArray = vm.post.categories[0]
+          categoryArray = categoryArray.split(',')
+          vm.selectedCategories = categoryArray
 
-                    vm.editLogs = vm.post.logs
-                    vm.imageName = vm.post.postImage
-                    vm.postCustomUrl = vm.post.postCustomUrl
-                    vm.postKeywords = vm.post.postKeywords
-                    vm.postSeoWords = vm.post.postSeoWords
-                    vm.postSeoUrl = vm.post.postSeoUrl
-                    vm.postSeoHeader = vm.post.postSeoHeader
-                    vm.postEnglishLink = vm.post.postEnglishLink
-                    vm.postArabicLink = vm.post.postArabicLink
-                    vm.postRussianLink = vm.post.postRussianLink
-                    vm.postUkranianLink = vm.post.postUkranianLink
+          axios.get(process.env.VUE_APP_SERVER_URL + "/user")
+                .then((response) => {
+                  vm.user = response.data
+                  console.log(vm.user)
+                  if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor ) {
+                    vm.info_message = "Bu haber su anda baska birisi tarafindan gunceleniyor." +
+                                        "\n Haber guncellemeye kapalidir." + 
+                                        "Editor: " + vm.post.lockerEditor
+                  } else if (vm.post.isLocked == false) {
+                    axios.post(process.env.VUE_APP_SERVER_URL + "/lock_post", {data})
+                      .then((response) => {
+                        console.log(response.data)
+                      })
+                  }
+                })
+
+          vm.editLogs = vm.post.logs
+          console.log("IS LOCKED",vm.post.isLocked)
+
+          vm.imageName = vm.post.postImage.split('.').shift()
+          vm.postCustomUrl = vm.post.postCustomUrl
+          vm.postKeywords = vm.post.postKeywords
+          vm.postSeoWords = vm.post.postSeoWords
+          vm.postSeoUrl = vm.post.postSeoUrl
+          vm.postSeoHeader = vm.post.postSeoHeader
+          vm.postEnglishLink = vm.post.postEnglishLink
+          vm.postArabicLink = vm.post.postArabicLink
+          vm.postRussianLink = vm.post.postRussianLink
+          vm.postUkranianLink = vm.post.postUkranianLink
 
 
-                    fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
-                            .then(res => res.blob())
-                            .then(blob => {
-                                let objectURL = URL.createObjectURL(blob);
-                                let myImage = new Image();
-                                myImage.src = objectURL;
-                                vm.image = myImage.src
-                            })
+          fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
+                  .then(res => res.blob())
+                  .then(blob => {
+                      let objectURL = URL.createObjectURL(blob);
+                      let myImage = new Image();
+                      myImage.src = objectURL;
+                      vm.image = myImage.src
+                  })
+
+
             },
             (err) => {
                 console.error(err);
             })
+
 
 
     vm.categoryTitles = Object.keys(categoryData)
@@ -364,58 +387,77 @@ export default {
 
       });
   },
+  beforeDestroy() {
+    var vm = this
+    let data = {}
+    data.id = vm.id
+    data.lockerEditor = ""
+
+    axios.post(process.env.VUE_APP_SERVER_URL + "/unlock_post", {data})
+      .then((response) => {
+        console.log(response.data)
+      })
+
+  },
   methods: {
     submitPost: function () {
       var vm = this
 			const { coordinates, canvas } = this.$refs.cropper.getResult();
 			if (vm.toggleEditImage && canvas) {
+        if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+          vm.$notify({
+            type: 'error',
+            text: 'Haber Kilitli!'
+          })
+          return;
+        }
 		    const formData = new FormData();
-			canvas.toBlob(blob => {
-                vm.blobToBase64(blob).then(res => {
-                const formData = new FormData();
-                formData.append('file', res);
-                formData.append('fileName', vm.imageName);
-                formData.append('toggleEditImage', vm.toggleEditImage);
-                formData.append("editorData", vm.editorData)
-                formData.append("postTitle", vm.postTitle)
-                formData.append("categories", vm.selectedCategories)
-                formData.append("publishDate", vm.publishDate)
-                formData.append("publishHour", vm.publishHour)
-                formData.append("postKeywords", vm.postKeywords)
-                formData.append("postCustomUrl", vm.postCustomUrl)
-                formData.append("postSeoWords", vm.postSeoWords)
-                formData.append("postSeoUrl", vm.postSeoUrl)
-                formData.append("postSeoHeader", vm.postSeoHeader)
-                formData.append("postEnglishLink", vm.postEnglishLink)
-                formData.append("postArabicLink", vm.postArabicLink)
-                formData.append("postRussianLink", vm.postRussianLink)
-                formData.append("postUkranianLink", vm.postUkranianLink)
-                formData.append("postFrenchLink", vm.postFrenchLink)
-                formData.append("latestLogText", vm.latestLogText)
-                formData.append("id", vm.id)
-                vm.editLogs.push(vm.latestLogText)
-                console.log(vm.editLogs)
-                console.log(vm.latestLogText)
-                formData.append("logs", vm.editLogs)
+        canvas.toBlob(blob => {
+          vm.blobToBase64(blob).then(res => {
+            const formData = new FormData();
+            formData.append('file', res);
+            formData.append('fileName', vm.imageName);
+            formData.append('toggleEditImage', vm.toggleEditImage);
+            formData.append("editorData", vm.editorData)
+            formData.append("postTitle", vm.postTitle)
+            formData.append("categories", vm.selectedCategories)
+            formData.append("publishDate", vm.publishDate)
+            formData.append("publishHour", vm.publishHour)
+            formData.append("postKeywords", vm.postKeywords)
+            formData.append("postCustomUrl", vm.postCustomUrl)
+            formData.append("postSeoWords", vm.postSeoWords)
+            formData.append("postSeoUrl", vm.postSeoUrl)
+            formData.append("postSeoHeader", vm.postSeoHeader)
+            formData.append("postEnglishLink", vm.postEnglishLink)
+            formData.append("postArabicLink", vm.postArabicLink)
+            formData.append("postRussianLink", vm.postRussianLink)
+            formData.append("postUkranianLink", vm.postUkranianLink)
+            formData.append("postFrenchLink", vm.postFrenchLink)
+            formData.append("latestLogText", vm.latestLogText)
+            formData.append("id", vm.id)
+            vm.editLogs.push(vm.latestLogText)
+            console.log(vm.editLogs)
+            console.log(vm.latestLogText)
+            formData.append("logs", vm.editLogs)
 
 
-                axios
-                    .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
-                        headers: {
-                        "Content-Type": "multipart/form-data",
-                        }, 
-                    })
-                    .then((response) => {
-                        var data = response.data;
-                        console.log(data);
-                        if (response.data == "success") {
-                        vm.$notify({
-                            type: 'success',
-                            text: 'Haber Resmi Yuklendi!'
-                        });
-                        }
+            axios
+                .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
+                    headers: {
+                    "Content-Type": "multipart/form-data",
+                    }, 
+                })
+                .then((response) => {
+                    var data = response.data;
+                    console.log(data);
+                    if (response.data == "success") {
+                    vm.$notify({
+                        type: 'success',
+                        text: 'Haber Resmi Yuklendi!'
                     });
+                    }
                 });
+          });
 			}, 'image/jpeg');
 			} else if (this.toggleEditImage == false && this.secondTryForBugFix == false) {
 
@@ -432,62 +474,71 @@ export default {
                 })
 
             } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
+                if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+                  console.log("asd")
+                  vm.$notify({
+                    type: 'error',
+                    text: 'Haber Kilitli!'
+                  })
+                  return;
+                }
+
                 canvas.toBlob(blob => {
-                    vm.blobToBase64(blob).then(res => {
-                        const formData = new FormData();
-                        formData.append('file', res);
-                        formData.append('fileName', vm.imageName);
-                        formData.append('toggleEditImage', vm.toggleEditImage);
-                        formData.append("editorData", vm.editorData)
-                        formData.append("postTitle", vm.postTitle)
-                        formData.append("categories", vm.selectedCategories)
-                        formData.append("publishDate", vm.publishDate)
-                        formData.append("publishHour", vm.publishHour)
-                        formData.append("postKeywords", vm.postKeywords)
-                        formData.append("postCustomUrl", vm.postCustomUrl)
-                        formData.append("postSeoWords", vm.postSeoWords)
-                        formData.append("postSeoUrl", vm.postSeoUrl)
-                        formData.append("postSeoHeader", vm.postSeoHeader)
-                        formData.append("postEnglishLink", vm.postEnglishLink)
-                        formData.append("postArabicLink", vm.postArabicLink)
-                        formData.append("postRussianLink", vm.postRussianLink)
-                        formData.append("postUkranianLink", vm.postUkranianLink)
-                        formData.append("postFrenchLink", vm.postFrenchLink)
-                        formData.append("latestLogText", vm.latestLogText)
-                        formData.append("id", vm.id)
+                  vm.blobToBase64(blob).then(res => {
+                      const formData = new FormData();
+                      formData.append('file', res);
+                      formData.append('fileName', vm.imageName);
+                      formData.append('toggleEditImage', vm.toggleEditImage);
+                      formData.append("editorData", vm.editorData)
+                      formData.append("postTitle", vm.postTitle)
+                      formData.append("categories", vm.selectedCategories)
+                      formData.append("publishDate", vm.publishDate)
+                      formData.append("publishHour", vm.publishHour)
+                      formData.append("postKeywords", vm.postKeywords)
+                      formData.append("postCustomUrl", vm.postCustomUrl)
+                      formData.append("postSeoWords", vm.postSeoWords)
+                      formData.append("postSeoUrl", vm.postSeoUrl)
+                      formData.append("postSeoHeader", vm.postSeoHeader)
+                      formData.append("postEnglishLink", vm.postEnglishLink)
+                      formData.append("postArabicLink", vm.postArabicLink)
+                      formData.append("postRussianLink", vm.postRussianLink)
+                      formData.append("postUkranianLink", vm.postUkranianLink)
+                      formData.append("postFrenchLink", vm.postFrenchLink)
+                      formData.append("latestLogText", vm.latestLogText)
+                      formData.append("id", vm.id)
 
-                        console.log(vm.editLogs)
-                        formData.append("logs", vm.editLogs)
+                      console.log(vm.editLogs)
+                      formData.append("logs", vm.editLogs)
 
 
-                    axios
-                        .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        }, 
-                        })
-                        .then((response) => {
-                        var data = response.data;
-                        console.log(data);
-                        if (response.data == "success") {
-                            this.secondTryForBugFix = false
-                            vm.$notify({
-                                type: 'success',
-                                text: 'Haber Resmi Yuklendi!'
-                            });
-                        }
-                        });
-                    });
+                  axios
+                      .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
+                      headers: {
+                          "Content-Type": "multipart/form-data",
+                      }, 
+                      })
+                      .then((response) => {
+                      var data = response.data;
+                      console.log(data);
+                      if (response.data == "success") {
+                          this.secondTryForBugFix = false
+                          vm.$notify({
+                              type: 'success',
+                              text: 'Haber Resmi Yuklendi!'
+                          });
+                      }
+                      });
+                  });
                 }, 'image/jpeg')}
     },
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
 			this.coordinates = coordinates;
 			this.image = canvas.toDataURL();
-	},
+	  },
    	reset() {
 			this.image = null;
-	},
+	  },
     loadImage(event) {
         var input = event.target;
         var vm = this
@@ -519,6 +570,14 @@ export default {
       }
     },
     removeLog(index) {
+      if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+        console.log("asd")
+        vm.$notify({
+          type: 'error',
+          text: 'Haber Kilitli!'
+        })
+        return;
+      }
       var vm = this
       console.log(vm.editLogs[index])
       var data = {}
@@ -539,6 +598,14 @@ export default {
     },
     editLog(index) {
       var vm = this
+      if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+        console.log("asd")
+        vm.$notify({
+          type: 'error',
+          text: 'Haber Kilitli!'
+        })
+        return;
+      }
       console.log(vm.editLogs[index])
       var data =  vm.editLogs[index]
       axios
@@ -563,6 +630,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.info_message {
+  font-size: 16px;
+  color: red;
+  display: inline-block;
+  margin-bottom: 2em;
 }
 
 .divider {
