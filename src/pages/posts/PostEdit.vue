@@ -6,9 +6,11 @@
           <span class="info_message">{{info_message}}</span>
       </div>
     </div>
-    <b-row>
+    <b-row  class="edit_log"
+              :class="{expand_edit_log: expandLog == true,
+                                     collapse_edit_log: expandLog == false}">
         <b-col cols="6" class="offset-5">
-            <h3>Edit Tarihi</h3> 
+            <h3 @click="expandEditLog()">Edit Tarihi</h3> 
         </b-col>
 
         <b-col cols="10" class="offset-1" v-for="(log, index) in editLogs" :key="index">
@@ -35,13 +37,17 @@
         <div class="divider mt-4 mb-4"></div>
 
     </b-row>
-    <b-row>
+    <b-row :class="{expand_category_box: expandCategory == true,
+                    collapse_category_box: expandCategory == false}"
+                >
+      <b-col cols="6" class="offset-5 mt-3 kategoriler">
+          <h3 @click="expandCategories()">Kategoriler</h3> 
+      </b-col>
       <b-col class="categories__container">
         <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
              class="categories__single-category"
             :class="{expand_category: clickedCategory == index,
-                    collapse_category: clickedCategory != index } 
-                    ">
+                    collapse_category: clickedCategory != index }">
           <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
@@ -53,13 +59,17 @@
         </div>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="!expandCategory">
         <b-col cols="12" class="mt-2 mb-2">
             <span>Selected Categories: </span>{{selectedCategories}}
         </b-col>
     </b-row>
-    <b-row>
+    <b-row :class="{expand_category_box: expandImage == true,
+                    collapse_category_box: expandImage == false}">
       <b-col cols="12">
+        <b-col cols="6" class="offset-5 mt-3 kategoriler">
+          <h3 @click="expandImageBox()">Haber Resmi</h3> 
+        </b-col>
         <div class="upload-example">
           <div v-show="image">
               <cropper
@@ -243,6 +253,9 @@ export default {
   },
   data: () => ({
     info_message: '',
+    expandLog: false,
+    expandCategory: true,
+    expandImage: true,
     languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
     categoriesData: {},
     clickedCategory: undefined,
@@ -567,6 +580,30 @@ export default {
         vm.clickedCategory = 100
       } else {
         vm.clickedCategory = index
+      }
+    },
+    expandCategories() {
+      var vm = this
+      if (vm.expandCategory == true) {
+        vm.expandCategory = false
+      } else {
+        vm.expandCategory = true
+      }
+    }, 
+    expandImageBox() {
+      var vm = this
+      if (vm.expandImage == true) {
+        vm.expandImage = false
+      } else {
+        vm.expandImage = true 
+      }
+    },
+    expandEditLog() {
+      var vm = this
+      if (vm.expandLog == true) {
+        vm.expandLog = false
+      } else {
+        vm.expandLog = true
       }
     },
     removeLog(index) {

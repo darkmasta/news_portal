@@ -228,7 +228,21 @@ select.form-control-lg[size="0"]:not([multiple]) {
   overflow-y: scroll;
 }
 
+.expand_category_box {
+  height: 50px;
+  overflow-y: hidden;
+}
+
 .collapse_category {
+  height: 30px;
+  overflow-y: hidden;
+}
+
+.edit_log {
+  transition: all 1s ease;
+}
+
+.collapse_edit_log {
   height: 30px;
   overflow-y: hidden;
 }

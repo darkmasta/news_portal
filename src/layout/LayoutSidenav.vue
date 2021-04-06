@@ -10,41 +10,41 @@
       <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/invoicing')?'success badge-dot': null" to="/invoicing" :active="isMenuActive('/invoicing')" :exact="true">Iletisim Duzenle</sidenav-router-link>
       <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanici Islemleri</sidenav-router-link>
       <li class="sidenav-item" style="">
-                  <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                    <i class="sidenav-icon ion ion-ios-settings"></i>
-                    <div>Item 1</div>
-                  </a>
-                  <ul class="sidenav-menu">
-                    <li class="sidenav-item">
-                      <a href="javascript:void(0)" class="sidenav-link">
-                        <div>Item 1.1</div>
-                      </a>
-                    </li>
-                    <li class="sidenav-item" style="">
-                      <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                        <div>Item 2.2</div>
-                      </a>
+        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+          <i class="sidenav-icon ion ion-ios-settings"></i>
+          <div>Item 1</div>
+        </a>
+        <ul class="sidenav-menu">
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div>Item 1.1</div>
+            </a>
+          </li>
+          <li class="sidenav-item" style="">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+              <div>Item 2.2</div>
+            </a>
 
-                      <ul class="sidenav-menu">
-                        <li class="sidenav-item">
-                          <a href="javascript:void(0)" class="sidenav-link">
-                            <div>Item 2.2.1</div>
-                          </a>
-                        </li>
-                        <li class="sidenav-item">
-                          <a href="javascript:void(0)" class="sidenav-link" id="111">
-                            <div>Item 2.2.2</div>
-                          </a>
-                        </li>
-                        <li class="sidenav-item">
-                          <a href="javascript:void(0)" class="sidenav-link">
-                            <div>Ne veriyim abime</div>
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="javascript:void(0)" class="sidenav-link">
+                  <div>Item 2.2.1</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="javascript:void(0)" class="sidenav-link" id="111">
+                  <div>Item 2.2.2</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="javascript:void(0)" class="sidenav-link">
+                  <div>Ne veriyim abime</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </div>
   </sidenav>
 </template>
