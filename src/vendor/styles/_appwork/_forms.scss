@@ -349,12 +349,11 @@ select.form-control-lg[size="0"]:not([multiple]) {
 }
 
 .activity_item h4 {
-    position: relative;
-    top: -100%;
     color: white;
     background: rgba(0,0,0,0.6);
-    left: 30%;
-    width: 50%;
+    position: relative;
+    top: -20%;
+    left: 0;
     text-align: center;
     z-index: 10;
 }

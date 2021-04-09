@@ -24,38 +24,37 @@
                   </b-form-group>
                 </div>
               </div>
-                  <b-table
-                    selectable
-                    :striped="striped"
-                    :bordered="bordered"
-                    :borderless="borderless"
-                    :outlined="outlined"
-                    :small="small"
-                    :hover="hover"
-                    :dark="dark"
-                    :fixed="fixed"
-                    :foot-clone="footClone"
-                    :no-border-collapse="noCollapse"
-                    :items="usersTableData"
-                    :fields="fields"
-                    :head-variant="headVariant"
-                    :table-variant="tableVariant"
-                    @row-selected="rowSelected" ref="myTable" 
-                  >
-                  </b-table>
+              <b-table
+                selectable
+                :striped="striped"
+                :bordered="bordered"
+                :borderless="borderless"
+                :outlined="outlined"
+                :small="small"
+                :hover="hover"
+                :dark="dark"
+                :fixed="fixed"
+                :foot-clone="footClone"
+                :no-border-collapse="noCollapse"
+                :items="usersTableData"
+                :fields="fields"
+                :head-variant="headVariant"
+                :table-variant="tableVariant"
+                @row-selected="rowSelected" ref="myTable" 
+              >
+                <template #cell(details)="data" >
+                  <a href="#" @click="goToUser(data)">Profil > </a>
+                </template>
+              </b-table>
 
-                  <b-btn class="p-3 px-5 mt-4" size="lg" variant="warning" 
-                            style="float: right; margin-left: 25px;"
-                            v-if="selectedUsers.length == 1"
-                            @click="goToUser()">Edit Selected User!</b-btn>
-            </div>
+        </div>
 
-          
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-  
+      
+      </b-card-body>
+    </b-card>
+  </b-col>
+</b-row>
+
 </div>
 </template>
 <script>
@@ -92,7 +91,7 @@ export default {
         value: "",
         fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} , { key: 'Son_Gorulme', sortable: true}, 
                  { key: 'Password', sortable: true}, { key: 'Kullanici_Dili', sortable: true},
-                 { key: 'Status', sortable: true}],
+                 { key: 'Status', sortable: true}, {key: 'Details', sortable: true}],
         usersTableData: [], 
         originalUsersTableData: [], 
         loading: false,
@@ -150,7 +149,8 @@ export default {
                   Email: user.email,
                   Kullanici_Dili: user.defaultLang,
                   Son_Gorulme: moment(user.lastLogin).fromNow(),
-                  Password: user.password
+                  Password: user.password,
+                  details: user._id
                 }
                 vm.usersTableData.push(tmp_user)
               })
@@ -170,20 +170,6 @@ export default {
       goToNewUser() {
           this.$router.push({ name: 'AdminUserCreate' })
       },
-      goToUser() {
-        var vm = this
-        var userData = []
-        vm.selectedUsers.forEach( selectedUser => {
-          vm.users.forEach( user => {
-            if (user._id.slice(-4) == selectedUser.Id) {
-              userData.push(user)
-            }
-          })
-        })
-        if (userData.length == 1) {
-          this.$router.push({ name: 'AdminUser', params: { id: userData[0]._id } })
-        }
-      },
       rowSelected(items) {
         this.selectedUsers = items
         console.log(items)
@@ -195,7 +181,6 @@ export default {
         which.forEach(idx => {
           tableRows[idx].click()
         })
-        console.log("items")
       },
       totalPriceCalc() {
         var vm = this;
@@ -225,6 +210,10 @@ export default {
       },
       reset () {
         this.item = {}
+      },
+      goToUser(data) {
+        console.log(data)
+        this.$router.push({ name: 'AdminUser', params: { id: data.item.details} })
       },
       filter (value) {
         const val = value.toLowerCase()

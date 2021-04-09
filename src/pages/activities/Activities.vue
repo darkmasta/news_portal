@@ -19,18 +19,33 @@
       <template #cell(activityImage)="data" >
           <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
+      <template #cell(details)="data" >
+        <a href="#" @click="goToActivity(data)">Etkinlige Git ></a>
+      </template>
     </b-table>
 
+  <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
+    <span class="close">&times;</span>
+
+    <div id="preview">
+      <img  :src="previewImageUrl" @click="previewToggle = false"/>
+    </div>
+
+    <div class="caption">
+      {{previewImageName}} 
+    </div>
   </div>
+
+</div>
 </template>
 <script>
 import axios from "axios";
 import moment from 'moment';
 
 export default {
-  name: "payments",
+  name: "activities",
   metaInfo: {
-    title: "Payments",
+    title: "Activities",
   },
   data: () => ({
     tableFields: [
@@ -82,13 +97,20 @@ export default {
         sortDirection: "desc",
         class: "text-center align-middle",
       },
+      {
+        key: "details",
+        sortable: "true"
+      }
     ],
     activities: [],
     activitiesTableData: [],
     originalActivitiesTableData: [],
     previewImageUrl: null,
     previewImageName: '',
-    previewToggle: false
+    previewToggle: false,
+    previewImageUrl: null,
+    previewImageName: '',
+    previewToggle: false,
   }),
   created() {
     var vm = this
@@ -106,7 +128,8 @@ export default {
                 status: 'active',
                 position: activity.activityPosition,
                 activityImage: process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage,
-                Baslik: activity.activityTitle
+                Baslik: activity.activityTitle,
+                details: activity._id
               }
               vm.activitiesTableData.push(tmp_activity)
             })
@@ -115,8 +138,67 @@ export default {
 
   },
   computed: {
-
   },
-  methods: {},
+  methods: {
+    goToActivity(data) {
+      this.$router.push({ name: 'Activity', params: { id: data.value } })
+     },
+     previewImage(imgName) {
+      var vm = this
+      vm.previewToggle = !vm.previewToggle
+
+      if (vm.previewImageUrl) vm.previewImageUrl = null
+        vm.previewImageUrl = imgName
+        vm.previewImageName = imgName.split('/').pop()
+    },
+  },
 };
 </script>
+
+<style>
+
+.preview-container {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.8);
+  width: 100vw;
+  height: 100vh;
+}
+
+#preview {
+  position:relative;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  animation-name: zoom;
+  animation-duration: 0.8s;
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+#preview img {
+  transform: translate(-50%, -50%);
+}
+
+.caption {
+  position: relative;
+  top: -10%;
+  left: 25%;
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  animation-name: zoom;
+  animation-duration: 0.8s;
+}
+</style>

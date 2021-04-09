@@ -9,6 +9,14 @@
     </b-col>
   </b-row>
 
+  <div class="row">
+    <div class="col">
+      <b-form-group>
+        <b-input size="sm"  placeholder="Search..." class="d-inline-block w-auto float-sm-right" @input="filter($event)" />
+      </b-form-group>
+    </div>
+  </div>
+
   <b-table
       class="table nexus-table" hover select-mode="multi" 
       borderless selectable  
@@ -23,10 +31,6 @@
       </template>
   </b-table>
 
-  <b-btn class="p-3 px-5 mt-4" size="lg" variant="warning" 
-          style="float: right; margin-left: 25px;"
-          v-if="selectedRows.length == 1"
-          @click="goToPost()">Go to Post!</b-btn>
 
 <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
   <span class="close">&times;</span>
@@ -46,8 +50,8 @@
 import axios from "axios";
 import moment from 'moment'
 
-
 import "vue-search-select/dist/VueSearchSelect.css";
+
 export default {
   name: "Posts",
   metaInfo: {
@@ -152,6 +156,7 @@ export default {
       }
     },
     goToPostLink(data) {
+      console.log(data)
       this.$router.push({ name: 'Post', params: { id: data.value } })
     },
     clickRows(which) {
@@ -163,24 +168,6 @@ export default {
         })
         console.log("items")
     },
-    filter(value) {
-      const val = value.toLowerCase();
-
-      // filter our data
-      const filtered = this.originalJsonData.filter((d) => {
-        // Concat data
-        return (
-          Object.keys(d)
-            .map((k) => String(d[k]))
-            .join("|")
-            .toLowerCase()
-            .indexOf(val) !== -1 || !val
-        );
-      });
-
-      // update the rows
-      this.jsonData = filtered;
-    },
     previewImage(imgName) {
       var vm = this
       vm.previewToggle = !vm.previewToggle
@@ -188,7 +175,22 @@ export default {
       if (vm.previewImageUrl) vm.previewImageUrl = null
         vm.previewImageUrl = imgName
         vm.previewImageName = imgName.split('/').pop()
-    }
+    },
+    filter (value) {
+      const val = value.toLowerCase()
+
+      // filter our data
+      const filtered = this.originalPostsTableData.filter(d => {
+        // Concat data
+        return Object.keys(d)
+          .map(k => String(d[k]))
+          .join('|')
+          .toLowerCase()
+          .indexOf(val) !== -1 || !val
+      })
+      // update the rows
+      this.postsTableData = filtered
+    } 
   },
 };
 </script>

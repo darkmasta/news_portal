@@ -54,7 +54,7 @@
         <img :src="post.postImage">
     </div>
 
-    <b-row>
+    <b-row class="post_buttons">
         <b-col cols="2" class="offset-2">
             <div class="publish_date">
                 <span>{{publishDate}} --- {{post.publishHour}}</span>
@@ -193,6 +193,10 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 30px auto;
+}
+
+.post_buttons {
+    justify-content: space-between;
 }
 
 .activity_box {

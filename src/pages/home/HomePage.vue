@@ -47,16 +47,53 @@
 
 
     <b-row> 
-        <b-col cols="8" class="activity_box">
+        <b-col cols="4" class="activity_box">
             <activity :activity="activities[0]" />
         </b-col>
         <b-col cols="4" class="activity_box">
             <activity :activity="activities[1]" />
         </b-col>
+        <b-col cols="4" class="activity_box">
+            <activity :activity="activities[0]" />
+        </b-col>
+    </b-row>
+
+    <b-row class="top_slider_container">
+        <b-col cols="7" class="top_slider">
+            <div>SLIDER</div>
+        </b-col>
+        <b-col class="top_slider_right_box">
+            <b-row class="test_box">
+                <b-col  class="slider_right_single_item">
+                </b-col>
+                <b-col  class="slider_right_single_item">
+                </b-col>
+            </b-row>
+            <b-row class="test_box">
+                <b-col  class="slider_right_single_item">
+                </b-col>
+                <b-col  class="slider_right_single_item">
+                </b-col>
+            </b-row>
+            <b-row class="test_box">
+                <b-col cols="12" class="bottom_full_width_ad">
+                </b-col>
+            </b-row>
+        </b-col>
     </b-row>
 
 
-
+    <b-row class="mt-5"> 
+        <b-col cols="4" class="activity_box">
+            <activity :activity="activities[0]" />
+        </b-col>
+        <b-col cols="4" class="activity_box">
+            <activity :activity="activities[1]" />
+        </b-col>
+        <b-col cols="4" class="activity_box">
+            <activity :activity="activities[0]" />
+        </b-col>
+    </b-row>
 
 
 </div>
@@ -115,7 +152,8 @@ export default {
 .main_container {
   background: rgb(255,255,255);
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 header {
@@ -240,6 +278,52 @@ header {
     flex: 0 0 calc(20% - 2rem);
     height: 100%;
     margin: 20px;
+}
+
+.text_box {
+    background: coral;
+}
+
+.top_slider_container {
+    margin: 20px;
+    margin-top: 40px;
+}
+
+.top_slider {
+    height: 40vh;
+    background: coral;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top_slider div{
+    font-size: 40px;
+}
+
+.top_slider_right_box {
+    height: 40vh;
+    margin-left: 20px;
+    width: 100%;
+    border: 2px solid black;
+    flex: 0 0 40%;
+}
+
+.test_box {
+    height: 31%;
+    border: 1px solid red;
+    flex: 0 0 45%;
+}
+
+.slider_right_single_item {
+    background: green;
+    margin: 10px;
+    height: 100%;
+}
+
+.bottom_full_width_ad {
+    background: blue;
+    margin-top: 20px;
 }
 
 

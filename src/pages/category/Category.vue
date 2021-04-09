@@ -12,10 +12,8 @@
     <b-row>
       <b-col class="categories__container">
         <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
-            @click="clickCategory(index)" class="categories__single-category"
-            :class="{expand_category: clickedCategory == index,
-                    collapse_category: clickedCategory != index } 
-                    ">
+            @click="clickCategory(index)" class="categories__single-category expand_category"
+                    >
           <h3 class="category__title">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"

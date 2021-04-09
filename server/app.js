@@ -65,19 +65,6 @@ app.use("/", AuthorizationRoutes);
 app.use("/", PostRoutes);
 app.use("/", ActivityRoutes);
 
-app.all("/*", (req, res, next) => {
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
 var cons = require("consolidate");
 app.engine("html", cons.swig);
 app.use(express.static(__dirname + "/views/dist"));

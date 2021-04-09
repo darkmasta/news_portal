@@ -1,47 +1,50 @@
 <template>
-  <sidenav :orientation="orientation" :class="curClasses">
+  <sidenav :orientation="orientation" :class="curClasses" :accordion="true">
     <div class="sidenav-inner mt-4" :class="{ 'py-1': orientation !== 'horizontal' }">
       <sidenav-router-link icon="fas fa-tachometer-alt" :badge-class="isMenuActive('/')?'success badge-dot': null" to="/" :exact="true">Dashboard</sidenav-router-link>
       <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">Haber Yonetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-tag" :badge-class="isMenuActive('/categories')?'success badge-dot': null" to="/category" :active="isMenuActive('/category')" :exact="true">Kategori Yonetimi</sidenav-router-link>
       <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">Etkinlik Listesi</sidenav-router-link>
       <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/instant-help')?'success badge-dot': null" to="/instant-help" :active="isMenuActive('/instant-help')" :exact="true">Reklam Yonetimi</sidenav-router-link>
       <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/quotes')?'success badge-dot': null" to="/quotes" :active="isMenuActive('/quotes')" :exact="true">Kunye Duzenle</sidenav-router-link>
       <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/invoicing')?'success badge-dot': null" to="/invoicing" :active="isMenuActive('/invoicing')" :exact="true">Iletisim Duzenle</sidenav-router-link>
       <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanici Islemleri</sidenav-router-link>
+      <sidenav-divider />
+
+
       <li class="sidenav-item" style="">
         <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-          <i class="sidenav-icon ion ion-ios-settings"></i>
-          <div>Item 1</div>
+          <i class="sidenav-icon fas fa-tag"></i>
+          <div>Kategori Islemleri</div>
         </a>
         <ul class="sidenav-menu">
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div>Item 1.1</div>
+              <div><router-link to="/category">Kategoriler</router-link></div>
             </a>
           </li>
           <li class="sidenav-item" style="">
-            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-              <div>Item 2.2</div>
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/category/create">Kategori Olustur</router-link></div>
             </a>
+          </li>
+        </ul>
+      </li>
 
-            <ul class="sidenav-menu">
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link">
-                  <div>Item 2.2.1</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link" id="111">
-                  <div>Item 2.2.2</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link">
-                  <div>Ne veriyim abime</div>
-                </a>
-              </li>
-            </ul>
+      <li class="sidenav-item" style="">
+        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+          <i class="sidenav-icon fas fa-newspaper"></i>
+          <div>Haber Islemleri</div>
+        </a>
+        <ul class="sidenav-menu">
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/posts">Haberler</router-link></div>
+            </a>
+          </li>
+          <li class="sidenav-item" style="">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/posts/create">Haber Olustur</router-link></div>
+            </a>
           </li>
         </ul>
       </li>
@@ -53,6 +56,7 @@ import {
   Sidenav,
   SidenavBlock,
   SidenavRouterLink,
+  SidenavDivider,
 } from "@/vendor/libs/sidenav";
 
 export default {
@@ -61,6 +65,7 @@ export default {
     Sidenav,
     SidenavBlock,
     SidenavRouterLink,
+    SidenavDivider
   },
 
   props: {
