@@ -26,8 +26,10 @@
       <template #cell(postImage)="data" >
           <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
-      <template #cell(details)="data" >
-        <a href="#" @click="goToPostLink(data)">Habere Git ></a>
+      <template #cell(details)="data">
+        <span title="Draft" class="fab fa-firstdraft mr-2 text-primary" @click="goToPostLink(data)"></span>
+        <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToPostLink(data)"></span>
+        <span title="Delete Post" class="fas fa-times text-danger" @click="deletePost(data)"></span>
       </template>
   </b-table>
 
@@ -87,6 +89,34 @@ export default {
         class: "text-center align-middle",
       },
       {
+        key: "order",
+        label: "Haber Sirasi",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "owner",
+        label: "Haber Sahibi",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "views",
+        label: "Goruntulenme",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "language",
+        label: 'Haber Dilleri',
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
         key: "status",
         label: "Status",
         sortable: true,
@@ -98,7 +128,7 @@ export default {
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
-      }
+      },
     ],
     posts: [],
     postsTableData: [],
@@ -122,9 +152,14 @@ export default {
                 status: 'active',
                 postImage: process.env.VUE_APP_SERVER_URL + '/images/' + post.postImage,
                 Baslik: post.postTitle,
-                details: post._id
+                details: post._id,
+                order: post.postOrder || '---',
+                owner: post.ownerEmail || '---',
+                views: '' + post.views || '---',
+                language:  String(post?.postLanguage).slice(-4) || '---'
               }
               vm.postsTableData.push(tmp_post)
+              console.log(post.views)
             })
             vm.originalPostsTableData = vm.postsTableData
       });
@@ -154,6 +189,21 @@ export default {
           console.log(postData)
           this.$router.push({ name: 'Post', params: { id: postData[0]._id } })
       }
+    },
+    deletePost(post) {
+      console.log(post.value)
+      let data = {}
+      data.id = post.value
+      axios.post(process.env.VUE_APP_SERVER_URL + "/delete_post", {data})
+           .then((response) => {
+             console.log(response.data)
+             if (response.data == 'success') {
+                vm.$notify({
+                    type: 'success',
+                    text: 'Haber Basariyle Silindi!'
+                });
+             }
+           })
     },
     goToPostLink(data) {
       console.log(data)

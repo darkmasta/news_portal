@@ -27,6 +27,7 @@ var postSchema = new Schema({
   postImage: String,
   content: String,
   state: String,
+  postOrder: Number,
   date: { type: Date, default: Date.now },
   logs: [
     {
@@ -41,6 +42,7 @@ var postSchema = new Schema({
   isOnAir: Boolean,
   isDraft: Boolean,
   position: String,
+  views: Number,
 });
 
 module.exports.postSchema = postSchema;

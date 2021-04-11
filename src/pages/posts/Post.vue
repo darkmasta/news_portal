@@ -122,6 +122,7 @@ export default {
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
 
+
     setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
 
     if (checkForHexRegExp.test(vm.id) == true) {

@@ -20,50 +20,58 @@ router.post("/create_post", jsonParser, (req, res) => {
   var postData = req.body;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  if (!isAdmin == "admin" && !isAdmin == "editor" && isAdmin == "writer")
+  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
     res.json("Authentication Error");
 
-  var Post = new Posts.Post({
-    ownerEmail: email,
-    content: postData.editorData,
-    categories: postData.categories,
-    postTitle: postData.postTitle.toLowerCase(),
-    topic: postData.topic,
-    postImage: postData.fileName + ".jpeg",
-    postKeywords: postData.postKeywords,
-    postCustomUrl: postData.postCustomUrl,
-    postSeoWords: postData.postSeoWords,
-    postSeoUrl: postData.postSeoUrl,
-    postSeoHeader: postData.postSeoHeader,
-    postLanguage: postData.postLanguage,
-    publishDate: postData.publishDate,
-    publishHour: postData.publishHour,
-    postEnglishLink: postData.postEnglishLink,
-    postArabicLink: postData.postArabicLink,
-    postRussianLink: postData.postRussianLink,
-    postUkranianLink: postData.postUkranianLink,
-    postFrenchLink: postData.postFrenchLink,
-    state: postData.state,
-    logs: [
-      {
-        editor: email,
-        editDate: Date.now(),
-        editText: "Post created",
-      },
-    ],
-    isDraft: postData.saveAsDraft,
-    isLocked: false,
-  });
+  Post.find({})
+    .then((posts) => {
+      const postOrder = posts.length;
+      var Post = new Posts.Post({
+        ownerEmail: email,
+        content: postData.editorData,
+        categories: postData.categories,
+        postTitle: postData.postTitle.toLowerCase(),
+        topic: postData.topic,
+        postImage: postData.fileName + ".jpeg",
+        postKeywords: postData.postKeywords,
+        postCustomUrl: postData.postCustomUrl,
+        postSeoWords: postData.postSeoWords,
+        postSeoUrl: postData.postSeoUrl,
+        postSeoHeader: postData.postSeoHeader,
+        postLanguage: postData.postLanguage,
+        publishDate: postData.publishDate,
+        publishHour: postData.publishHour,
+        postEnglishLink: postData.postEnglishLink,
+        postArabicLink: postData.postArabicLink,
+        postRussianLink: postData.postRussianLink,
+        postUkranianLink: postData.postUkranianLink,
+        postFrenchLink: postData.postFrenchLink,
+        postLanguage: postData.postLanguage,
+        state: postData.state,
+        postOrder: postOrder,
+        views: 0,
+        logs: [
+          {
+            editor: email,
+            editDate: Date.now(),
+            editText: "Post created",
+          },
+        ],
+        isDraft: postData.saveAsDraft,
+        isLocked: false,
+      });
 
-  ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
-    if (err) res.json(err);
+      ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
+        if (err) res.json(err);
 
-    console.log("Post Image saved successfully");
+        console.log("Post Image saved successfully");
 
-    Post.save()
-      .then((post) => res.json("success"))
-      .catch((err) => res.json(err));
-  });
+        Post.save()
+          .then((post) => res.json("success"))
+          .catch((err) => res.json(err));
+      });
+    })
+    .catch((err) => res.json(err));
 });
 
 router.post("/post_by_id", jsonParser, (req, res) => {
@@ -72,11 +80,16 @@ router.post("/post_by_id", jsonParser, (req, res) => {
 
   if (!checkForHexRegExp.test(postData.id)) res.json("Not and Id");
 
-  var promise = Post.find({ _id: postData.id });
+  var promise = Post.findOneAndUpdate(
+    { _id: postData.id },
+    { $inc: { views: 1 } }
+  );
 
   promise
     .then((doc) => {
-      res.json(doc.pop());
+      Post.find({ _id: postData.id }).then((doc2) => {
+        res.json(doc2.pop());
+      });
     })
     .catch((err) => {
       res.json("Not an Id");
@@ -86,9 +99,18 @@ router.post("/post_by_id", jsonParser, (req, res) => {
 router.post("/post_by_title", jsonParser, (req, res) => {
   var postData = req.body.data2;
 
-  var promise = Post.find({ postTitle: postData.postTitle });
+  var promise = Post.findOneAndUpdate(
+    { postTitle: postData.postTitle },
+    { $inc: { views: 1 } }
+  );
 
-  promise.then((doc) => res.json(doc.pop())).catch((err) => res.json(err));
+  promise
+    .then((doc) => {
+      Post.find({ postTitle: postData.postTitle }).then((doc2) =>
+        res.json(doc2.pop())
+      );
+    })
+    .catch((err) => res.json(err));
 });
 
 router.post("/update_post", jsonParser, (req, res) => {
@@ -126,6 +148,7 @@ router.post("/update_post", jsonParser, (req, res) => {
       postRussianLink: postData.postRussianLink || "",
       postUkranianLink: postData.postUkranianLink || "",
       postFrenchLink: postData.postFrenchLink || "",
+      postLanguage: postData.postLanguage,
       state: postData.state,
       isDraft: postData.saveAsDraft || false,
     }
@@ -206,6 +229,17 @@ router.post("/unlock_post", jsonParser, (req, res) => {
       lockerEditor: "",
     }
   ).then((doc) => res.json("success"));
+});
+
+router.post("/delete_post", jsonParser, (req, res) => {
+  var postData = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Post.deleteOne({ _id: postData.id });
+
+  promise.then((doc) => res.json("success"));
 });
 
 module.exports = router;

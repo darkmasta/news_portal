@@ -2,134 +2,247 @@
   <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
-          <h4>Create Post</h4>
-          <span>Selected Categories: </span>{{selectedCategories}}
+          <h2 style="text-decoration: underline;">Create Post</h2>
+          <span class="info_message">{{info_message}}</span>
       </div>
     </div>
-    <b-row>
-      <b-col class="categories__container">
-        <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
-            @click="clickCategory(index)" class="categories__single-category"
-            :class="{expand_category: clickedCategory == index,
-                    collapse_category: clickedCategory != index } 
-                    ">
-          <h3 class="category__title">{{categoryTitle}}</h3>
-          <ul class="category__list">
-            <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
-              class="category__list-item">
-              <input type="checkbox" :value="category" v-model="selectedCategories"> 
-              {{category}}
-            </li>
-          </ul>
+    <div class="nav-tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'edit'" data-toggle="tab" href="#"
+                      :class="{active: expandTab == 'edit'}">Edit Tarihi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'categories'" data-toggle="tab" href="#"
+                      :class="{active: expandTab == 'categories'}">Kategoriler</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'postImage'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'postImage'}">Haber Resmi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'postLinks'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'postLinks'}">Haber Linkleri</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'languages'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'languages'}">Haber Dilleri</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
+            <b-row  class="edit_log">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Edit Tarihi</h3> 
+              </b-col>
+
+              <b-col cols="10" class="ml-2" v-for="(log, index) in editLogs" :key="index">
+                <b-input-group prepend="Edit Log" class="mt-2">
+                  <b-form-input v-model="log.editText">
+                  </b-form-input>
+                  <b-form-input v-bind:value="log.editor" disabled></b-form-input>
+                  <div class="edit_buttons">
+                    <span class="fas fa-times" @click="removeLog(index)"></span>
+                    <span class="far fa-edit" @click="editLog(index)"></span>
+                  </div>
+                </b-input-group>
+              </b-col>
+
+            </b-row>
         </div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="12">
-        <div class="upload-example">
-          <div v-show="image">
-              <cropper
-                :src="image"
-                ref="cropper"
-                :transitions="true"
-                @change="updateSize"
-              />
-          </div>
-          <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
-            <i class="fa fa-times"></i>
-          </div>
-          <div v-show="image" class="img-name-text" title="Image Name">
-            {{imageName}}
-          </div>
-          <b-col cols="6" offset="3">
-            <div class="img-name">
-                <b-form-group label="Foto Ismi">
-                  <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
-                </b-form-group>
+        <div class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}" id="navs-left-profile">
+          <b-row class="edit_log"> 
+            <b-col class="categories__container">
+              <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
+                  class="categories__single-category"
+                  :class="{expand_category: clickedCategory == index,
+                          collapse_category: clickedCategory != index }">
+                <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
+                <ul class="category__list">
+                  <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
+                    class="category__list-item">
+                    <input type="checkbox" :value="category" v-model="selectedCategories"> 
+                    {{category}}
+                  </li>
+                </ul>
+              </div>
+            </b-col>
+          </b-row>
+          <b-row>
+              <b-col cols="12" class="mt-2 mb-2">
+                  <span>Selected Categories: </span>{{selectedCategories}}
+              </b-col>
+          </b-row>
+        </div>
+        <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
+          <b-row >
+          <b-col cols="12">
+            <b-col cols="6" class="offset-5 mt-3 kategoriler">
+              <h3>Haber Resmi</h3> 
+            </b-col>
+            <div class="upload-example">
+              <div>
+                  <cropper
+                    :src="image"
+                    ref="cropper"
+                    :transitions="true"
+                  />
+              </div>
+              <div  class="reset-button" title="Reset Image" @click="reset()">
+                <i class="fa fa-times"></i>
+              </div>
+              <div class="get-image-button" title="Get Image">
+                <i class="fas fa-download"></i>
+              </div>
+              <div class="img-name-text" title="Image Name">
+                {{imageName}}
+              </div>
+              <b-col cols="6" offset="3">
+                <div class="img-name">
+                    <b-form-group label="Foto Ismi">
+                      <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                    </b-form-group>
+                </div>
+              </b-col>
+              <div class="button-wrapper">
+            
+              <span class="button" @click="$refs.file.click()">
+                <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                Load image
+              </span>
+
+              <span class="button ml-5" @click="crop">
+                Crop 
+              </span>
+
+              <label class="switch">
+                <input type="checkbox" v-model="toggleEditImage">
+                <span class="slider round"></span>
+                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+              </label>
+             
+              </div>
             </div>
           </b-col>
-          <div class="button-wrapper">
-        
-          <span class="button" @click="$refs.file.click()">
-            <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-            Load image
-          </span>
-
-          <span class="button ml-5" @click="crop">
-            Crop 
-          </span>
-
-          <label class="switch">
-            <input type="checkbox" v-model="toggleEditImage">
-            <span class="slider round"></span>
-            <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
-          </label>
-
-          <label class="switch2 mr-3">
-            <input type="checkbox" v-model="saveAsDraft">
-            <span class="slider round"></span>
-            <p v-bind:class="{switch_closed: saveAsDraft}" class="switch_text2">Taslak</p>
-          </label>
-
-
-          </div>
+          </b-row>
         </div>
-      </b-col>
-      <b-row>
-      <b-col cols="12" class="publish_date mt-4 ml-3">
-        <b-col cols="11" class="offset-8">
-            <b-input-group prepend="Haber Basligi" class="mt-2">
-              <b-form-input v-model="postTitle"></b-form-input>
-            </b-input-group>
-        </b-col>
-        <b-col cols="3">
-          <b-form-group label="Yayinlanma Tarihi">
-            <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Tarihi" />
-          </b-form-group>
-        </b-col>
-        <b-col cols="3">
-          <b-form-group label="Yayinlanma Saati">
-            <vue-timepicker v-model="publishHour" close-on-complete></vue-timepicker>
-          </b-form-group>
-        </b-col>
-      </b-col>
-      </b-row>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Haber URL'si" class="mt-2">
-          <b-form-input v-model="postCustomUrl"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Haber Anahtar Kelimeler" class="mt-2">
-          <b-form-input v-model="postKeywords"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
-          <b-form-input v-model="postSeoWords"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Seo Url Adresi" class="mt-2">
-          <b-form-input v-model="postSeoUrl"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Seo Baslik Aciklamasi" class="mt-2">
-          <b-form-input v-model="postSeoHeader"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
+        <div class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}" id="navs-left-messages">
+          <b-row>
+            <b-row>
+            <b-col cols="12" class="publish_date_box mt-4 ml-3">
+              <b-col cols="10" class="offset-6">
+                  <b-input-group prepend="Haber Basligi" class="mt-2">
+                    <b-form-input v-model="postTitle"></b-form-input>
+                  </b-input-group>
+              </b-col>
+              <b-col cols="3">
+                <b-form-group label="Yayinlanma Tarihi">
+                  <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Tarihi" />
+                </b-form-group>
+              </b-col>
+              <b-col cols="3">
+                <b-form-group label="Yayinlanma Saati">
+                  <vue-timepicker v-model="publishHour" close-on-complete></vue-timepicker>
+                </b-form-group>
+              </b-col>
+            </b-col>
+            </b-row>
+          </b-row>
+
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-form-group label="Haber Dili">
+                <b-select v-model="postLanguage" class="">
+                  <option v-for="(postLanguage, index) in languages" 
+                      :key="index" v-bind:value="postLanguage"> 
+                      {{postLanguage}}
+                  </option>
+                </b-select>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Haber URL'si" class="mt-2">
+                <b-form-input v-model="postCustomUrl"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Haber Anahtar Kelimeler" class="mt-2">
+                <b-form-input v-model="postKeywords"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
+                <b-form-input v-model="postSeoWords"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Seo Url Adresi" class="mt-2">
+                <b-form-input v-model="postSeoUrl"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1 mb-3">
+              <b-input-group prepend="Seo Baslik Aciklamasi" class="mt-2">
+                <b-form-input v-model="postSeoHeader"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </div>
+        <div class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}" id="navs-left-profile">
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
+                <b-form-input v-model="postEnglishLink"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Baglantili Arapca Haber 🇸🇦" class="mt-2">
+                <b-form-input v-model="postArabicLink"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Baglantili Rusca Haber 🇷🇺" class="mt-2">
+                <b-form-input v-model="postRussianLink"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Baglantili Ukraynaca Haber 🇺🇦" class="mt-2">
+                <b-form-input v-model="postUkranianLink"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="10" class="offset-1">
+              <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
+                <b-form-input v-model="postFrenchLink"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+    </div>
+
     <div class="divider mt-4 mb-4"></div>
     <b-row>
       <b-col>
@@ -138,41 +251,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
-          <b-form-input v-model="postEnglishLink"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Baglantili Arapca Haber 🇸🇦" class="mt-2">
-          <b-form-input v-model="postArabicLink"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Baglantili Rusca Haber 🇷🇺" class="mt-2">
-          <b-form-input v-model="postRussianLink"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Baglantili Ukraynaca Haber 🇺🇦" class="mt-2">
-          <b-form-input v-model="postUkranianLink"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
-          <b-form-input v-model="postFrenchLink"></b-form-input>
-        </b-input-group>
-      </b-col>
-    </b-row>
+
     <b-row class="mt-4">
       <b-col offset="9">
          <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn">
@@ -211,6 +290,10 @@ export default {
     return {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       categoriesData: {},
+      postLanguage: '',
+      expandTab: '',
+      info_message: '',
+      editLogs: [''],
       clickedCategory: undefined,
       toggleEditImage: false,
       secondTryForBugFix: false,
@@ -346,6 +429,7 @@ export default {
             formData.append("postRussianLink", vm.postRussianLink)
             formData.append("postUkranianLink", vm.postUkranianLink)
             formData.append("postFrenchLink", vm.postFrenchLink)
+            formData.append("postLanguage", vm.postLanguage)
 
 
             axios
@@ -443,6 +527,7 @@ export default {
               formData.append("postSeoHeader", vm.postSeoHeader)
               formData.append("postEnglishLink", vm.postEnglishLink)
               formData.append("postArabicLink", vm.postArabicLink)
+              formData.append("postLanguage", vm.postLanguage)
               formData.append("postRussianLink", vm.postRussianLink)
               formData.append("postUkranianLink", vm.postUkranianLink)
               formData.append("postFrenchLink", vm.postFrenchLink)
@@ -577,6 +662,12 @@ export default {
   align-items: center;
 }
 
+.publish_date_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .divider {
   height: 1rem;
   width: 4000px;
@@ -701,4 +792,44 @@ input:checked + .slider:before {
     font-size: 1em;
     background-color: #f2f2f3;
 }
+
+.categories_tab {
+  height: 40vh;
+}
+
+.images_tab {
+  overflow: scroll;
+  height: 60vh;
+}
+
+.vue-advanced-cropper {
+  width: 500px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav-tabs {
+  width: 140px;
+}
+
+.get-image-button {
+  position: absolute;
+  right: 19px;
+  bottom: 110px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 41px;
+  width: 41px;
+  background: rgba(62, 179, 127, 0.7);
+  transition: background -1.5s;
+}
+
+.get-image-button:hover {
+  background: #2fb37f;
+}
+
+
 </style>
