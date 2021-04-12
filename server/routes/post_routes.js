@@ -237,7 +237,7 @@ router.post("/delete_post", jsonParser, (req, res) => {
 
   if (!isAdmin == "admin") res.json("Authentication Error");
 
-  var promise = Post.deleteOne({ _id: postData.id });
+  var promise = Post.findOneAndDelete({ _id: postData.id });
 
   promise.then((doc) => res.json("success"));
 });

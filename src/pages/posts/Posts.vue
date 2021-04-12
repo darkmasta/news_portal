@@ -24,7 +24,7 @@
       :items="postsTableData"
       :fields="tableFields">
       <template #cell(postImage)="data" >
-          <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
+          <img  class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
       <template #cell(details)="data">
         <span title="Draft" class="fab fa-firstdraft mr-2 text-primary" @click="goToPostLink(data)"></span>
@@ -38,7 +38,7 @@
   <span class="close">&times;</span>
 
   <div id="preview">
-    <img  :src="previewImageUrl" @click="previewToggle = false"/>
+    <img :src="previewImageUrl" @click="previewToggle = false"/>
   </div>
 
   <div class="caption">
@@ -62,8 +62,8 @@ export default {
   data: () => ({
     tableFields: [
       {
-        key: "id",
-        label: "ID",
+        key: "order",
+        label: "Haber Sirasi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -77,34 +77,28 @@ export default {
       },
       {
         key: "Baslik",
+        label: 'Başlık',
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "date",
-        label: "Date",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "order",
-        label: "Haber Sirasi",
+        label: "Eklenme Tarihi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "owner",
-        label: "Haber Sahibi",
+        label: "Ekleyen Kişi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "views",
-        label: "Goruntulenme",
+        label: "Okunma Sayısı",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -118,13 +112,14 @@ export default {
       },
       {
         key: "status",
-        label: "Status",
+        label: "Durumu",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "details",
+        label: 'İşlemler',
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -191,19 +186,21 @@ export default {
       }
     },
     deletePost(post) {
-      console.log(post.value)
-      let data = {}
-      data.id = post.value
-      axios.post(process.env.VUE_APP_SERVER_URL + "/delete_post", {data})
-           .then((response) => {
-             console.log(response.data)
-             if (response.data == 'success') {
-                vm.$notify({
-                    type: 'success',
-                    text: 'Haber Basariyle Silindi!'
-                });
-             }
-           })
+      if (confirm('Kullanici Siliniyor. Emin Misiniz?')) {
+        var vm = this
+        let data = {}
+        data.id = post.value
+        axios.post(process.env.VUE_APP_SERVER_URL + "/delete_post", {data})
+            .then((response) => {
+              console.log(response.data)
+              if (response.data == 'success') {
+                  vm.$notify({
+                      type: 'success',
+                      text: 'Haber Basariyle Silindi!'
+                  });
+              }
+            })
+      }
     },
     goToPostLink(data) {
       console.log(data)
@@ -289,6 +286,11 @@ export default {
   padding: 10px 0;
   animation-name: zoom;
   animation-duration: 0.8s;
+}
+
+.post-table-image {
+  width: 75px;
+  height: 75px;
 }
 
 </style>
