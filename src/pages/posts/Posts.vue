@@ -3,7 +3,7 @@
   <b-row>
     <b-col class="d-flex justify-content-between ">
       <div class="page-header">
-        <h4>Posts</h4>
+        <h4>Haber Listesi</h4>
       </div>
       <b-btn variant="primary rounded-pill" class="align-self-start" to="/posts/create"><span class="fas fa-plus-circle"></span> Create Post</b-btn>
     </b-col>
