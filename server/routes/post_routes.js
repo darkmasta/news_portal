@@ -27,6 +27,7 @@ router.post("/create_post", jsonParser, (req, res) => {
     .then((posts) => {
       const postOrder = posts.length;
       var Post = new Posts.Post({
+        owner: postData.owner,
         ownerEmail: email,
         content: postData.editorData,
         categories: postData.categories,
@@ -129,6 +130,7 @@ router.post("/update_post", jsonParser, (req, res) => {
           editText: postData.latestLogText,
         },
       },
+      owner: postData.owner,
       ownerEmail: postData.ownerEmail,
       content: postData.editorData,
       categories: postData.categories,

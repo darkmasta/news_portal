@@ -281,6 +281,7 @@ import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 
 
+
 import categoryData from "../category/categories_data"
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -344,6 +345,7 @@ export default {
     postSeoUrl: '',
     postSeoHeader: '',
     postEnglishLink: '',
+    owner: '',
     postArabicLink: '',
     postRussianLink: '',
     postUkranianLink: '',
@@ -444,6 +446,9 @@ export default {
           })
 
       });
+
+    vm.owner = this.$store.getters.getUser
+
   },
   beforeDestroy() {
     var vm = this
@@ -493,6 +498,7 @@ export default {
             formData.append("postUkranianLink", vm.postUkranianLink)
             formData.append("postFrenchLink", vm.postFrenchLink)
             formData.append("latestLogText", vm.latestLogText)
+            formData.append("owner", vm.owner)
             formData.append("id", vm.id)
             vm.editLogs.push(vm.latestLogText)
             console.log(vm.editLogs)
@@ -565,6 +571,7 @@ export default {
                       formData.append("postUkranianLink", vm.postUkranianLink)
                       formData.append("postFrenchLink", vm.postFrenchLink)
                       formData.append("latestLogText", vm.latestLogText)
+                      formData.append("owner", vm.owner)
                       formData.append("id", vm.id)
 
                       console.log(vm.editLogs)

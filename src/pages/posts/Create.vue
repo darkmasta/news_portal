@@ -325,6 +325,7 @@ export default {
       imageName: "",
       postCustomUrl: '',
       publishDate: '',
+      owner: '',
       publishHour: '',
       postKeywords: '',
       postSeoWords: '',
@@ -367,6 +368,9 @@ export default {
               }
           })
       });
+
+    vm.owner = this.$store.getters.getUser
+
   },
   methods: {
     submitPost: function () {
@@ -430,6 +434,7 @@ export default {
             formData.append("postUkranianLink", vm.postUkranianLink)
             formData.append("postFrenchLink", vm.postFrenchLink)
             formData.append("postLanguage", vm.postLanguage)
+            formData.append("owner", vm.owner)
 
 
             axios
@@ -528,6 +533,7 @@ export default {
               formData.append("postEnglishLink", vm.postEnglishLink)
               formData.append("postArabicLink", vm.postArabicLink)
               formData.append("postLanguage", vm.postLanguage)
+              formData.append("owner", vm.owner)
               formData.append("postRussianLink", vm.postRussianLink)
               formData.append("postUkranianLink", vm.postUkranianLink)
               formData.append("postFrenchLink", vm.postFrenchLink)

@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 var postSchema = new Schema({
-  owner: ObjectId,
+  owner: String,
   ownerEmail: String,
   topic: String,
   postKeywords: String,
