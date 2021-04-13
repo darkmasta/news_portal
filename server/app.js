@@ -19,8 +19,6 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = require("bluebird");
 
-const common = require("./helpers/common-functions");
-
 const UserRoutes = require("./routes/user_routes");
 const CategoryRoutes = require("./routes/category_routes");
 const AuthorizationRoutes = require("./routes/authorization_routes");
@@ -70,11 +68,6 @@ app.engine("html", cons.swig);
 app.use(express.static(__dirname + "/views/dist"));
 app.set("views", __dirname + "/views/dist");
 app.set("view engine", "html");
-
-/*
-app.set('views', __dirname + '/views')
-app.set('view engine', 'ejs')
-*/
 
 app.get("/", (req, res) => {
   res.render("index.html");

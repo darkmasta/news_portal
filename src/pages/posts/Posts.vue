@@ -27,7 +27,10 @@
           <img  class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
       <template #cell(details)="data">
-        <span title="Draft" class="fab fa-firstdraft mr-2 text-primary" @click="goToPostLink(data)"></span>
+        <span title="Publish" class="fas fa-broadcast-tower" 
+            v-if="data.item.status == 'Taslak'" @click="goToPostLink(data)"></span>
+        <span title="Draft" class="fab fa-firstdraft mr-2 text-primary"
+            v-if="data.item.status == 'Aktif'" @click="goToPostLink(data)"></span>
         <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToPost(data)"></span>
         <span title="Delete Post" class="fas fa-times text-danger" @click="deletePost(data)"></span>
       </template>
@@ -144,8 +147,8 @@ export default {
             vm.posts.forEach(post => {
               var tmp_post = {
                 id: post._id.slice(-4),
-                date: moment(post.date).fromNow(),
-                status: 'active',
+                date: moment(post.date).format('DD/MM/YYYY, h:mm:ss a'),
+                status: post.isDraft ? 'Taslak' : 'Aktif',
                 postImage: process.env.VUE_APP_SERVER_URL + '/images/' + post.postImage,
                 Baslik: post.postTitle,
                 details: post._id,
@@ -155,7 +158,6 @@ export default {
                 language:  String(post?.postLanguage).slice(-4) || '---'
               }
               vm.postsTableData.push(tmp_post)
-              console.log(post.views)
             })
             vm.originalPostsTableData = vm.postsTableData
       });
