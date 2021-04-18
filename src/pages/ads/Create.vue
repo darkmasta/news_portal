@@ -3,7 +3,7 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Reklam Olustur</span>
+          <span class="text-muted font-weight-light">Reklam Oluştur</span>
         </h4>
       </div>
 
@@ -13,9 +13,9 @@
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Reklam Basligi">
-                  <b-input label="Reklam Basligi" 
-                              placeholder="Baslik"
+                <b-form-group label="Reklam Başlık">
+                  <b-input label="Reklam Başlığı" 
+                              placeholder="Başlık"
                               v-model="adTitle">
                   </b-input>
                 </b-form-group>

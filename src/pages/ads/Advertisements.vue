@@ -54,14 +54,14 @@ export default {
     tableFields: [
       {
         key: "adImage",
-        label: "Reklam Resmi",
+        label: "Reklam Görseli",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "Baslik",
-        label: 'Reklam Adi',
+        label: 'Reklam Adı',
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -75,7 +75,7 @@ export default {
       },
       {
         key: "adType",
-        label: "Reklam Türü",
+        label: "Reklam Grubu",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -138,8 +138,21 @@ export default {
     goToAd(data) {
       this.$router.push({ name: 'Ad', params: { id: data.value } })
     },
-    deleteAd(data) {
-      console.log(data)
+    deleteAd(id) {
+      var vm = this
+      let data = {id: id.value}
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/delete_ad/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'error',
+                  text: 'Reklam Silindi!'
+              });
+              vm.adsTableData.splice(id.index, 1)
+          }
+        });
     },
     previewImage(imgName) {
       var vm = this

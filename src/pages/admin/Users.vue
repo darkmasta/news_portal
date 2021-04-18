@@ -78,31 +78,31 @@ export default {
         fields: [ 
                   {
           key: "order",
-          label: "Kullanici Sirasi",
+          label: "Kullanıcı Sırası",
           sortable: true,
           sortDirection: "desc",
           class: "text-center align-middle",
         },
                   {
         key: "name",
-        label: 'Isim Soyisim',
+        label: 'İsim Soyisim',
         sortable: "true",
         class: "text-center align-middle",
       },
           {
                    key: 'Email', 
+                   label: 'E-posta Adresi',
                   sortable: true
                   } ,
                   {
           key: "userRole",
-          label: "Kullanici Rolu",
+          label: "Kullanıcı Rolü",
           sortable: true,
           sortDirection: "desc",
           class: "text-center align-middle",
         },
-                  { key: 'Son_Gorulme', sortable: true}, 
-                  { key: 'Password', sortable: true},
-                  { key: 'Kullanici_Dili', sortable: true},
+                  { key: 'Son_Gorulme', sortable: true, label: 'Son Aktif Olma Zamanı'}, 
+                  { key: 'Kullanici_Dili', label: 'Kullanıcı Dili', sortable: true},
                   {
         key: "details",
         label: 'İşlemler',
@@ -168,7 +168,6 @@ export default {
                   Email: user.email,
                   Kullanici_Dili: user.defaultLang,
                   Son_Gorulme: moment(user.lastLogin).format('DD/MM/YYYY, h:mm:ss a'),
-                  Password: user.password,
                   details: user._id
                 }
                 vm.usersTableData.push(tmp_user)

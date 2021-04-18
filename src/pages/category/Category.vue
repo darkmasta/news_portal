@@ -4,7 +4,7 @@
       <b-col class="d-flex justify-content-between ">
         <div class="page-header">
           <h4>Kategoriler </h4>
-          selected categories: {{selectedCategories}}
+         Seçilmiş Kategoriler : {{selectedCategories}}
         </div>
         <b-btn variant="primary rounded-pill" class="align-self-start" to="/category/create"><span class="fas fa-plus-circle"></span> Yeni Kategori Ekle</b-btn>
       </b-col>

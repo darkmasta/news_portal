@@ -78,7 +78,7 @@
     <b-row >
       <b-col cols="12">
         <b-col cols="6" class="offset-5 mt-3 kategoriler">
-          <h3>Etkinlik Resmi</h3> 
+          <h3>Reklam Resmi</h3> 
         </b-col>
         <div class="upload-example">
           <div>
@@ -108,17 +108,17 @@
         
           <span class="button" @click="$refs.file.click()">
             <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-            Load image
+            Resim Yükle
           </span>
 
           <span class="button ml-5" @click="crop">
-            Crop 
+           Kırp 
           </span>
 
           <label class="switch">
             <input type="checkbox" v-model="toggleEditImage">
             <span class="slider round"></span>
-            <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+            <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
           </label>
 
           </div>
@@ -128,7 +128,7 @@
   </div>
   <div class="tab-pane fade" :class="{active: expandTab == 'adOperations', show: expandTab == 'adOperations'}" id="navs-left-home">
     <div class="activity-operations-buttons">
-      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="deleteAd">Reklami Sil</b-btn>
+      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="deleteAd">Reklamı Sil</b-btn>
     </div>
   </div>
   </div>
@@ -136,7 +136,7 @@
 
 <b-row>
   <b-col class="offset-10">
-    <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">Reklami Guncelle</b-btn>
+    <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">Reklamı Güncelle</b-btn>
   </b-col>
 </b-row>
 

@@ -65,7 +65,7 @@ export default {
       },
       {
         key: "Baslik",
-        label: 'Etkinlik Adi',
+        label: 'Etkinlik Adı',
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -86,14 +86,14 @@ export default {
       },
       {
         key: "startDate",
-        label: "Baslangic Tarihi",
+        label: "Etkinlik Başlangıç",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "endDate",
-        label: "Bitis Tarihi",
+        label: "Etkinlik Bitiş",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",

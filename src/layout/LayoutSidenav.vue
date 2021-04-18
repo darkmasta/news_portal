@@ -2,20 +2,20 @@
   <sidenav :orientation="orientation" :class="curClasses" :accordion="true">
     <div class="sidenav-inner mt-4" :class="{ 'py-1': orientation !== 'horizontal' }">
       <sidenav-router-link icon="fas fa-tachometer-alt" :badge-class="isMenuActive('/')?'success badge-dot': null" to="/" :exact="true">Dashboard</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">Haber Yonetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">Etkinlik Listesi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/ads')?'success badge-dot': null" to="/ads" :active="isMenuActive('/ads')" :exact="true">Reklam Yonetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/identity')?'success badge-dot': null" to="/identity" :active="isMenuActive('/identity')" :exact="true">Kunye Duzenle</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/contact')?'success badge-dot': null" to="/contact" :active="isMenuActive('/contact')" :exact="true">Iletisim Duzenle</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-address-card" :badge-class="isMenuActive('/about')?'success badge-dot': null" to="/about" :active="isMenuActive('/about')" :exact="true">Hakkimizda </sidenav-router-link>
-      <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanici Islemleri</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">Haber Yönetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">Etkinlik Yönetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/ads')?'success badge-dot': null" to="/ads" :active="isMenuActive('/ads')" :exact="true">Reklam Yönetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/identity')?'success badge-dot': null" to="/identity" :active="isMenuActive('/identity')" :exact="true">Künye Düzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/contact')?'success badge-dot': null" to="/contact" :active="isMenuActive('/contact')" :exact="true">İletişim Düzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-address-card" :badge-class="isMenuActive('/about')?'success badge-dot': null" to="/about" :active="isMenuActive('/about')" :exact="true">Hakkımızda</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanıcı İşlemleri</sidenav-router-link>
       <sidenav-divider />
 
 
       <li class="sidenav-item" style="">
         <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
           <i class="sidenav-icon fas fa-tag"></i>
-          <div>Kategori Islemleri</div>
+          <div>Kategori İşlemleri</div>
         </a>
         <ul class="sidenav-menu">
           <li class="sidenav-item">
@@ -25,30 +25,12 @@
           </li>
           <li class="sidenav-item" style="">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/category/create">Kategori Olustur</router-link></div>
+              <div><router-link to="/category/create">Kategori Oluştur</router-link></div>
             </a>
           </li>
         </ul>
       </li>
 
-      <li class="sidenav-item" style="">
-        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-          <i class="sidenav-icon fas fa-newspaper"></i>
-          <div>Haber Islemleri</div>
-        </a>
-        <ul class="sidenav-menu">
-          <li class="sidenav-item">
-            <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/posts">Haberler</router-link></div>
-            </a>
-          </li>
-          <li class="sidenav-item" style="">
-            <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/posts/create">Haber Olustur</router-link></div>
-            </a>
-          </li>
-        </ul>
-      </li>
     </div>
   </sidenav>
 </template>

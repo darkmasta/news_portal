@@ -13,9 +13,9 @@
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Etkinlik Basligi">
-                  <b-input label="Etkinlik Basligi" 
-                              placeholder="Baslik"
+                <b-form-group label="Etkinlik Adı">
+                  <b-input label="Etkinlik Adı" 
+                              placeholder="Etkinlik Adı"
                               v-model="activityTitle">
                   </b-input>
                 </b-form-group>
@@ -76,17 +76,17 @@
                 
                   <span class="button" @click="$refs.file.click()">
                     <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                    Load image
+                     Resim Yükle
                   </span>
 
                   <span class="button ml-5" @click="crop">
-                    Crop 
+                    Kırp 
                   </span>
 
                   <label class="switch">
                     <input type="checkbox" v-model="toggleEditImage">
                     <span class="slider round"></span>
-                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
                   </label>
                   </div>
                 </div>
