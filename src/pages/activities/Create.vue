@@ -3,7 +3,7 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Activities/ Create </span>
+          <span class="text-muted font-weight-light">Etkinlik Olustur</span>
         </h4>
       </div>
 
@@ -13,14 +13,6 @@
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Etkinlik Adi">
-                  <b-input label="Etkinlik Adi" 
-                              placeholder="Etkinlik Adi"
-                              v-model="activityName">
-                  </b-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
                 <b-form-group label="Etkinlik Basligi">
                   <b-input label="Etkinlik Basligi" 
                               placeholder="Baslik"
@@ -29,11 +21,11 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Etkinlik Pozisyonu">
-                  <b-select v-model="activityPosition" class="mb-4">
-                    <option v-for="(activityPosition, index) in acitivityPositions" 
-                      :key="index" v-bind:value="activityPosition"> 
-                      {{activityPosition}}
+                <b-form-group label="Etkinlik Türü">
+                  <b-select v-model="activityType" class="mb-4">
+                    <option v-for="(activityType, index) in activityTypeList" 
+                      :key="index" v-bind:value="activityType"> 
+                      {{activityType}}
                     </option>
                   </b-select>
                 </b-form-group>
@@ -130,9 +122,9 @@ export default {
   data: () => ({
     activityName: '',
     activityTitle: '',
-    activityPosition: '',
-    acitivityPositions: ['Ana Sayfa Ust Ilk', 'Ana Sayfa Ust Iki', 'Ana Sayfa Ust Uc'],
     activityImage: '',
+    activityTypeList: ['Konferans', 'Panel', 'Söyleşi'],
+    activityType: '',
     startDate: null,
     endDate: null,
     imageName: '',
@@ -141,7 +133,10 @@ export default {
     toggleEditImage: false,
   }),
   created() {
+      var vm = this
 
+      vm.owner = this.$store.getters.getUser
+      console.log(vm.owner)
   },
   methods: {
     submitActivity: function () {
@@ -156,10 +151,10 @@ export default {
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
             formData.append("activityTitle", vm.activityTitle)
-            formData.append("activityName", vm.activityName)
-            formData.append("activityPosition", vm.activityPosition)
+            formData.append("activityType", vm.activityType)
             formData.append("startDate", vm.startDate)
             formData.append("endDate", vm.endDate)
+            formData.append("owner", vm.owner)
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_activity", formData, {
@@ -185,10 +180,10 @@ export default {
         formData.append("file", vm.base64)
         formData.append('fileName', vm.imageName);
         formData.append("activityTitle", vm.activityTitle)
-        formData.append("activityName", vm.activityName)
-        formData.append("activityPosition", vm.activityPosition)
+        formData.append("activityType", vm.activityType)
         formData.append("startDate", vm.startDate)
         formData.append("endDate", vm.endDate)
+        formData.append("owner", vm.owner)
 
 
         axios
@@ -203,31 +198,13 @@ export default {
             if (response.data == "success") {
               vm.$notify({
                   type: 'success',
-                  text: 'Haber Resmi Yuklendi!'
+                  text: 'Yeni Etkinlik Basariyla Olusturuldu!'
               });
             }
           });
 
       }
 		},
-    uploadImage2: function() {
-      var vm = this
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-      const file = this.$refs.file.files[0];
-      vm.file = file;
-      if (!allowedTypes.includes(file.type)) {
-        this.message = "Filetype is wrong!!";
-      }
-      if (file.size > 500000) {
-        this.message = "Too large, max size allowed is 500kb";
-      }
-
-      const formData = new FormData();
-      formData.append("file", vm.file)
-
-      console.log(file)
-
-    },
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
 			this.coordinates = coordinates;
@@ -270,26 +247,6 @@ export default {
             formData.append("postTitle", vm.postTitle)
             formData.append("categories", vm.selectedCategories)
 
-            axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-              .then(
-                (response) => {
-                  console.log(response.data)
-                  if (response.data == "success") {
-                    vm.$notify({
-                        type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
-                    });
-                  }
-                },
-                (response) => {
-                  console.log(response);
-                }
-              );
           });
 				// Perhaps you should add the setting appropriate file format here
 				}, 'image/jpeg');

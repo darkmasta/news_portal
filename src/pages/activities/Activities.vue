@@ -3,7 +3,7 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-1">
-          <span class="text-muted font-weight-light">Activities</span>
+          <span class="text-muted font-weight-light">Etkinlikler</span>
         </h4>
       </div>
       <b-col class="offset-10">
@@ -11,16 +11,22 @@
       </b-col>
     </div>
 
+
     <b-table
-      class="table nexus-table mt-2" hover select-mode="multi" 
-                      borderless selectable  
+      class="table nexus-table mt-2" hover  
+                      borderless 
       :items="activitiesTableData"
       :fields="tableFields">
       <template #cell(activityImage)="data" >
-          <img :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
+          <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
-      <template #cell(details)="data" >
-        <a href="#" @click="goToActivity(data)">Etkinlige Git ></a>
+      <template #cell(details)="data" class="activities-table-buttons">
+        <span title="Red" class="fa fa-ban" 
+            v-if="data.item.status == 'Onaylandi'" @click="unconfirmActivity(data)"></span>
+        <span title="Onay" class="fa fa-check mr-2 text-primary"
+            v-if="data.item.status == 'Onay Bekliyor'" @click="confirmActivity(data)"></span>
+        <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToActivity(data)"></span>
+        <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
       </template>
     </b-table>
 
@@ -41,6 +47,7 @@
 <script>
 import axios from "axios";
 import moment from 'moment';
+moment.locale('tr')
 
 export default {
   name: "activities",
@@ -50,13 +57,6 @@ export default {
   data: () => ({
     tableFields: [
       {
-        key: "id",
-        label: "ID",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
         key: "activityImage",
         label: "Etkinlik Resmi",
         sortable: true,
@@ -65,13 +65,21 @@ export default {
       },
       {
         key: "Baslik",
+        label: 'Etkinlik Adi',
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
-        key: "position",
-        label: "Pozisyon",
+        key: "owner",
+        label: "Ekleyen",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "activityType",
+        label: "Etkinlik Türü",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -92,14 +100,16 @@ export default {
       },
       {
         key: "status",
-        label: "Status",
+        label: "Etkinlik Durumu",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "details",
-        sortable: "true"
+        label: 'İşlemler',
+        sortable: "true",
+        class: "text-center align-middle",
       }
     ],
     activities: [],
@@ -123,10 +133,12 @@ export default {
             vm.activities.forEach(activity=> {
               var tmp_activity = {
                 id: activity._id.slice(-4),
-                startDate: moment(activity.startDate).fromNow(),
-                endDate: moment(activity.endDate).fromNow(),
-                status: 'active',
+                startDate: moment(activity.startDate).format('DD/MM/YYYY, h:mm:ss a'),
+                endDate: moment(activity.endDate).format('DD/MM/YYYY, h:mm:ss a'),
+                status: (activity.status == 'confirmed') ? 'Onaylandi' : 'Onay Bekliyor',
+                owner: activity.owner,
                 position: activity.activityPosition,
+                activityType: activity.activityType,
                 activityImage: process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage,
                 Baslik: activity.activityTitle,
                 details: activity._id
@@ -142,14 +154,51 @@ export default {
   methods: {
     goToActivity(data) {
       this.$router.push({ name: 'Activity', params: { id: data.value } })
-     },
-     previewImage(imgName) {
+    },
+    confirmActivity(id) {
+      var vm = this
+      let data = {id: id.value}
+      console.log(data)
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/confirm_activity/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+            vm.$notify({
+                type: 'success',
+                text: 'Etkinlik Onaylandi!'
+            });
+            setTimeout(() => { location.reload(); }, 1600);
+          }
+        });
+    },
+    unconfirmActivity(id) {
+      var vm = this
+      let data = {id: id.value}
+      console.log(data)
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/unconfirm_activity/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+            vm.$notify({
+                type: 'error',
+                text: 'Etkinlik Reddedildi!'
+            });
+            setTimeout(() => { location.reload(); }, 1600);
+          }
+        });
+    },
+    deleteActivity(data) {
+      console.log(data)
+    },
+    previewImage(imgName) {
       var vm = this
       vm.previewToggle = !vm.previewToggle
 
       if (vm.previewImageUrl) vm.previewImageUrl = null
-        vm.previewImageUrl = imgName
-        vm.previewImageName = imgName.split('/').pop()
+      vm.previewImageUrl = imgName
+      vm.previewImageName = imgName.split('/').pop()
     },
   },
 };
@@ -187,6 +236,11 @@ export default {
   transform: translate(-50%, -50%);
 }
 
+.post-table-image {
+  width: 75px;
+  height: 75px;
+}
+
 .caption {
   position: relative;
   top: -10%;
@@ -200,5 +254,11 @@ export default {
   padding: 10px 0;
   animation-name: zoom;
   animation-duration: 0.8s;
+}
+
+.activities-table-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

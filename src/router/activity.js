@@ -27,7 +27,7 @@ export default [
         meta: {
           auth: false,
         },
-        component: () => import("@/pages/activities/Activity"),
+        component: () => import("@/pages/activities/ActivityEdit"),
       },
     ],
   },

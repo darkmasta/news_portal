@@ -100,7 +100,7 @@
 </template>
 <script>
 import axios from "axios";
-import Activity from '../activities/Activity.vue';
+import Activity from '../activities/ActivityEdit.vue';
 
 
 export default {

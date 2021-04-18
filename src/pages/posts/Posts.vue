@@ -18,8 +18,8 @@
   </div>
 
   <b-table
-      class="table nexus-table" hover select-mode="multi" 
-      borderless selectable  
+      class="table nexus-table" hover selectable
+      borderless 
       @row-selected="rowSelected" ref="myTable" 
       :items="postsTableData"
       :fields="tableFields">

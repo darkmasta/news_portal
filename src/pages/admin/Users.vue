@@ -2,7 +2,7 @@
 <div>
       <b-row>
       <b-col>
-        <h3>Admin View/Update User</h3>
+        <h3>Kullanıcı Listesi</h3>
       </b-col>
     </b-row>
     <b-row>
@@ -24,28 +24,17 @@
                   </b-form-group>
                 </div>
               </div>
-              <b-table
-                selectable
-                :striped="striped"
-                :bordered="bordered"
-                :borderless="borderless"
-                :outlined="outlined"
-                :small="small"
-                :hover="hover"
-                :dark="dark"
-                :fixed="fixed"
-                :foot-clone="footClone"
-                :no-border-collapse="noCollapse"
-                :items="usersTableData"
-                :fields="fields"
-                :head-variant="headVariant"
-                :table-variant="tableVariant"
-                @row-selected="rowSelected" ref="myTable" 
-              >
-                <template #cell(details)="data" >
-                  <a href="#" @click="goToUser(data)">Profil > </a>
-                </template>
-              </b-table>
+                <b-table
+      class="table nexus-table mt-2" hover  
+                      borderless 
+                      ref="myTable"
+      :items="usersTableData"
+      :fields="fields">
+      <template #cell(details)="data" class="activities-table-buttons">
+        <span title="Edit User" class="far fa-edit mr-2 text-primary" @click="goToUser(data)"></span>
+        <span title="Delete User" class="fas fa-times text-danger" @click="deleteUser(data)"></span>
+      </template>
+    </b-table>
 
         </div>
 
@@ -66,11 +55,8 @@ import $ from "jquery";
 import loadCustomers from "@/mixins/loadCustomers";
 import VueTypeahead from "vue-typeahead";
 import moment from "moment"
+moment.locale('tr')
 
-Vue.use(axios);
-
-axios.defaults.withCredentials = true;
-Vue.use(AxiosPlugin);
 
 
 export default {
@@ -89,9 +75,41 @@ export default {
     data() {
       return {
         value: "",
-        fields: [{ key: 'Id', sortable: true}, { key: 'Email', sortable: true} , { key: 'Son_Gorulme', sortable: true}, 
-                 { key: 'Password', sortable: true}, { key: 'Kullanici_Dili', sortable: true},
-                 { key: 'Status', sortable: true}, {key: 'Details', sortable: true}],
+        fields: [ 
+                  {
+          key: "order",
+          label: "Kullanici Sirasi",
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+                  {
+        key: "name",
+        label: 'Isim Soyisim',
+        sortable: "true",
+        class: "text-center align-middle",
+      },
+          {
+                   key: 'Email', 
+                  sortable: true
+                  } ,
+                  {
+          key: "userRole",
+          label: "Kullanici Rolu",
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+                  { key: 'Son_Gorulme', sortable: true}, 
+                  { key: 'Password', sortable: true},
+                  { key: 'Kullanici_Dili', sortable: true},
+                  {
+        key: "details",
+        label: 'İşlemler',
+        sortable: "true",
+        class: "text-center align-middle",
+      },
+                  ],
         usersTableData: [], 
         originalUsersTableData: [], 
         loading: false,
@@ -142,13 +160,14 @@ export default {
               var data = response.data
               console.log(data)
               vm.users = data
-              data.forEach((user) => {
+              data.forEach((user, index) => {
                 var tmp_user = {
-                  Id: user._id.slice(-4),
-                  Status:  user.userRole,
+                  order: index + 1,
+                  name: user.firstName + ' ' + user.lastName,
+                  userRole:  user.userRole,
                   Email: user.email,
                   Kullanici_Dili: user.defaultLang,
-                  Son_Gorulme: moment(user.lastLogin).fromNow(),
+                  Son_Gorulme: moment(user.lastLogin).format('DD/MM/YYYY, h:mm:ss a'),
                   Password: user.password,
                   details: user._id
                 }

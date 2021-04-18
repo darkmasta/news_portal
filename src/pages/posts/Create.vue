@@ -277,7 +277,8 @@ import categoryData from "../category/categories_data"
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 
-Vue.use( CKEditor );
+Vue.use(CKEditor)
+
 
 export default {
   name: "PostsCreate",

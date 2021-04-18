@@ -24,6 +24,7 @@ const CategoryRoutes = require("./routes/category_routes");
 const AuthorizationRoutes = require("./routes/authorization_routes");
 const PostRoutes = require("./routes/post_routes");
 const ActivityRoutes = require("./routes/activity_routes");
+const AdRoutes = require("./routes/ad_routes");
 
 var app = express();
 
@@ -62,6 +63,7 @@ app.use("/", CategoryRoutes);
 app.use("/", AuthorizationRoutes);
 app.use("/", PostRoutes);
 app.use("/", ActivityRoutes);
+app.use("/", AdRoutes);
 
 var cons = require("consolidate");
 app.engine("html", cons.swig);

@@ -4,9 +4,10 @@
       <sidenav-router-link icon="fas fa-tachometer-alt" :badge-class="isMenuActive('/')?'success badge-dot': null" to="/" :exact="true">Dashboard</sidenav-router-link>
       <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">Haber Yonetimi</sidenav-router-link>
       <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">Etkinlik Listesi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/instant-help')?'success badge-dot': null" to="/instant-help" :active="isMenuActive('/instant-help')" :exact="true">Reklam Yonetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/quotes')?'success badge-dot': null" to="/quotes" :active="isMenuActive('/quotes')" :exact="true">Kunye Duzenle</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/invoicing')?'success badge-dot': null" to="/invoicing" :active="isMenuActive('/invoicing')" :exact="true">Iletisim Duzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/ads')?'success badge-dot': null" to="/ads" :active="isMenuActive('/ads')" :exact="true">Reklam Yonetimi</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/identity')?'success badge-dot': null" to="/identity" :active="isMenuActive('/identity')" :exact="true">Kunye Duzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/contact')?'success badge-dot': null" to="/contact" :active="isMenuActive('/contact')" :exact="true">Iletisim Duzenle</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-address-card" :badge-class="isMenuActive('/about')?'success badge-dot': null" to="/about" :active="isMenuActive('/about')" :exact="true">Hakkimizda </sidenav-router-link>
       <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanici Islemleri</sidenav-router-link>
       <sidenav-divider />
 

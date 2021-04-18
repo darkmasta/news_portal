@@ -7,15 +7,14 @@ import globals from "@/globals";
 
 import pagesRoutes from "./pages";
 import profileRoutes from "./profile";
-import quotesRoutes from "./quotes";
 import categoryRoutes from "./category";
-import ordersRoutes from "./orders";
-import instantHelpsRoutes from "./instant-help";
 import postsRoutes from "./posts";
 import activitiesRoutes from "./activity";
 import adminRoutes from "./admin";
 import dashboardRoutes from "./dashboard";
 import homeRoutes from "./home";
+import contactRoutes from "./contact";
+import adsRoutes from "./advertisement";
 
 Vue.use(Router);
 Vue.use(Meta);
@@ -24,14 +23,13 @@ const ROUTES = []
   .concat(dashboardRoutes)
   .concat(pagesRoutes)
   .concat(profileRoutes)
-  .concat(quotesRoutes)
   .concat(categoryRoutes)
-  .concat(ordersRoutes)
-  .concat(instantHelpsRoutes)
   .concat(postsRoutes)
   .concat(activitiesRoutes)
   .concat(adminRoutes)
-  .concat(homeRoutes);
+  .concat(homeRoutes)
+  .concat(adsRoutes)
+  .concat(contactRoutes);
 
 ROUTES.push({
   path: "*",
