@@ -33,20 +33,26 @@
             </b-row>
 
             <b-row>
-              <b-col cols="8">
-                <b-row>
-                  <b-col>
+              <b-col>
                     <b-form-group label="Etkinlik Baslangici">
                       <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Baslangic Tarihi" />
                     </b-form-group>
-                  </b-col>
-                  <b-col>
+              </b-col>
+              <b-col>
                     <b-form-group label="Etkinlik Bitisi">
                       <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitis Tarihi" />
                     </b-form-group>
-                  </b-col>
-                </b-row>
-                </b-col>
+              </b-col>
+              <b-col>
+                <b-form-group label="Reklamda Göster">
+                  <b-select v-model="visible" class="">
+                    <option v-for="(visible, index) in visibleOptions" 
+                      :key="index" v-bind:value="visible"> 
+                      {{visible}}
+                    </option>
+                  </b-select>
+                </b-form-group>
+              </b-col>
             </b-row>
 
 
@@ -131,6 +137,8 @@ export default {
     image: null,
     base64: '',
     toggleEditImage: false,
+    visibleOptions: ['Reklamda Göster', 'Reklamdan Kaldır'],
+    visible: '',
   }),
   created() {
       var vm = this
@@ -155,6 +163,11 @@ export default {
             formData.append("startDate", vm.startDate)
             formData.append("endDate", vm.endDate)
             formData.append("owner", vm.owner)
+            if (vm.visible == 'Reklamda Göster') {
+              formData.append('visible', true)
+            } else if (vm.visible == 'Reklamdan Kaldır') {
+              formData.append('visible', false)
+            }
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_activity", formData, {

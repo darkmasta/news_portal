@@ -11,24 +11,40 @@
       </b-col>
     </div>
 
+  <b-card class="mt-2" no-body>
+    <b-card-body>
+      <b-row>
+        <b-col>
+          <b-form-group>
+            <b-input size="sm"  placeholder="Search..." class="d-inline-block w-auto float-sm-right" @input="filter($event)" />
+          </b-form-group>
+        </b-col>
+      </b-row>
 
-    <b-table
-      class="table nexus-table mt-2" hover  
-                      borderless 
-      :items="activitiesTableData"
-      :fields="tableFields">
-      <template #cell(activityImage)="data" >
-          <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
-      </template>
-      <template #cell(details)="data" class="activities-table-buttons">
-        <span title="Red" class="fa fa-ban" 
-            v-if="data.item.status == 'Onaylandi'" @click="unconfirmActivity(data)"></span>
-        <span title="Onay" class="fa fa-check mr-2 text-primary"
-            v-if="data.item.status == 'Onay Bekliyor'" @click="confirmActivity(data)"></span>
-        <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToActivity(data)"></span>
-        <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
-      </template>
-    </b-table>
+      <b-table
+        class="table nexus-table mt-2" hover  
+                        borderless 
+        :items="activitiesTableData"
+        :fields="tableFields">
+        <template #cell(activityImage)="data" >
+            <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
+        </template>
+        <template #cell(details)="data" class="activities-table-buttons">
+        <span title="Göster" class="fas fa-broadcast-tower" 
+            v-if="data.item.visible == 'Gösterilmiyor'" @click="makeVisible(data)"></span>
+        <span title="Gösterme" class="fab fa-firstdraft mr-2 text-primary"
+            v-if="data.item.visible == 'Gösteriliyor'" @click="makeInvisible(data)"></span>
+          <span title="Red" class="fa fa-ban" 
+              v-if="data.item.status == 'Onaylandi'" @click="unconfirmActivity(data)"></span>
+          <span title="Onay" class="fa fa-check mr-2 text-primary"
+              v-if="data.item.status == 'Onay Bekliyor'" @click="confirmActivity(data)"></span>
+          <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToActivity(data)"></span>
+          <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
+        </template>
+      </b-table>
+
+    </b-card-body>
+  </b-card>
 
   <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
     <span class="close">&times;</span>
@@ -106,6 +122,13 @@ export default {
         class: "text-center align-middle",
       },
       {
+        key: "visible",
+        label: "Reklam Alanında",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
         key: "details",
         label: 'İşlemler',
         sortable: "true",
@@ -138,6 +161,7 @@ export default {
                 status: (activity.status == 'confirmed') ? 'Onaylandi' : 'Onay Bekliyor',
                 owner: activity.owner,
                 position: activity.activityPosition,
+                visible: activity.visible ? 'Gösteriliyor' : 'Gösterilmiyor',
                 activityType: activity.activityType,
                 activityImage: process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage,
                 Baslik: activity.activityTitle,
@@ -189,8 +213,54 @@ export default {
           }
         });
     },
-    deleteActivity(data) {
-      console.log(data)
+    makeVisible(id) {
+      var vm = this
+      let data = {id: id.value}
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/activity_visible/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'success',
+                  text: 'Etkinlik Gösteriliyor!'
+              });
+              vm.activitiesTableData[id.index].visible = 'Gösteriliyor'
+          }
+        });
+    },
+    makeInvisible(id) {
+      var vm = this
+      let data = {id: id.value}
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/activity_invisible/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'error',
+                  text: 'Etkinlik Gösterilmiyor!'
+              });
+              vm.activitiesTableData[id.index].visible = 'Gösterilmiyor'
+          }
+        });
+
+    },
+    deleteActivity(id) {
+      var vm = this
+      let data = {id: id.value}
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/delete_activity/", {data})
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "success") {
+              vm.$notify({
+                  type: 'error',
+                  text: 'Etkinlik Silindi!'
+              });
+              vm.activitiesTableData.splice(id.index, 1)
+          }
+        });
     },
     previewImage(imgName) {
       var vm = this
@@ -200,6 +270,22 @@ export default {
       vm.previewImageUrl = imgName
       vm.previewImageName = imgName.split('/').pop()
     },
+    filter (value) {
+      const val = value.toLowerCase()
+      console.log(value)
+
+      // filter our data
+      const filtered = this.originalActivitiesTableData.filter(d => {
+        // Concat data
+        return Object.keys(d)
+          .map(k => String(d[k]))
+          .join('|')
+          .toLowerCase()
+          .indexOf(val) !== -1 || !val
+      })
+      // update the rows
+      this.activitiesTableData = filtered
+    } 
   },
 };
 </script>

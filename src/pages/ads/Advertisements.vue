@@ -11,20 +11,31 @@
       </b-col>
     </div>
 
+  <b-card class="mt-2" no-body>
+    <b-card-body>
+      <b-row>
+        <b-col>
+          <b-form-group>
+            <b-input size="sm"  placeholder="Search..." class="d-inline-block w-auto float-sm-right" @input="filter($event)" />
+          </b-form-group>
+        </b-col>
+      </b-row>
 
-    <b-table
-      class="table nexus-table mt-2" hover  
-                      borderless 
-        :items="adsTableData"
-        :fields="tableFields">
-      <template #cell(adImage)="data" >
-          <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
-      </template>
-      <template #cell(details)="data" class="activities-table-buttons">
-        <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToAd(data)"></span>
-        <span title="Delete Post" class="fas fa-times text-danger" @click="deleteAd(data)"></span>
-      </template>
-    </b-table>
+      <b-table
+        class="table nexus-table mt-2" hover  
+                        borderless 
+          :items="adsTableData"
+          :fields="tableFields">
+        <template #cell(adImage)="data" >
+            <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
+        </template>
+        <template #cell(details)="data" class="activities-table-buttons">
+          <span title="Edit Reklam" class="far fa-edit mr-2 text-primary" @click="goToAd(data)"></span>
+          <span title="Delete Reklam" class="fas fa-times text-danger" @click="deleteAd(data)"></span>
+        </template>
+      </b-table>
+    </b-card-body>
+  </b-card>
 
   <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
     <span class="close">&times;</span>
@@ -69,6 +80,13 @@ export default {
       {
         key: "owner",
         label: "Ekleyen",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "link",
+        label: "Reklam Linki",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -120,10 +138,11 @@ export default {
               var tmp_ad= {
                 owner: ad.owner,
                 position: ad.adPosition || '---',
-                status: ad.status,
+                status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onayli',
                 adType: ad.adType,
+                link: ad.link,
                 adImage: process.env.VUE_APP_SERVER_URL + '/images/' + ad.adImage,
-                Baslik: ad.adTitle,
+                Baslik: ad.adTitle || ad.adName,
                 details: ad._id
               }
               vm.adsTableData.push(tmp_ad)
@@ -162,6 +181,22 @@ export default {
       vm.previewImageUrl = imgName
       vm.previewImageName = imgName.split('/').pop()
     },
+    filter (value) {
+      const val = value.toLowerCase()
+      console.log(value)
+
+      // filter our data
+      const filtered = this.originalAdsTableData.filter(d => {
+        // Concat data
+        return Object.keys(d)
+          .map(k => String(d[k]))
+          .join('|')
+          .toLowerCase()
+          .indexOf(val) !== -1 || !val
+      })
+      // update the rows
+      this.adsTableData = filtered
+    } 
   },
 };
 </script>

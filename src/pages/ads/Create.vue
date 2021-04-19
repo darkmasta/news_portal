@@ -169,11 +169,10 @@ export default {
             const formData = new FormData();
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
-            formData.append("adTitle", vm.adTitle)
+            formData.append("adName", vm.adTitle)
             formData.append("adType", vm.adType)
-            formData.append("startDate", vm.startDate)
-            formData.append("endDate", vm.endDate)
             formData.append("owner", vm.owner)
+            formData.append("link", vm.adLink)
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_ad", formData, {
@@ -184,6 +183,12 @@ export default {
               .then(
                 (response) => {
                   console.log(response.data)
+                  if (response.data == "success") {
+                    vm.$notify({
+                        type: 'success',
+                        text: 'Yeni Reklam Basariyla Olusturuldu!'
+                    });
+                  }
                 },
                 (response) => {
                   console.log(response);
@@ -197,12 +202,10 @@ export default {
 
         formData.append("file", vm.base64)
         formData.append('fileName', vm.imageName);
-        formData.append("activityTitle", vm.activityTitle)
-        formData.append("activityType", vm.activityType)
-        formData.append("startDate", vm.startDate)
-        formData.append("endDate", vm.endDate)
+        formData.append("adName", vm.adTitle)
+        formData.append("adType", vm.adType)
         formData.append("owner", vm.owner)
-
+        formData.append("link", vm.adLink)
 
         axios
           .post(process.env.VUE_APP_SERVER_URL + "/create_ad/", formData, {
@@ -216,11 +219,10 @@ export default {
             if (response.data == "success") {
               vm.$notify({
                   type: 'success',
-                  text: 'Yeni Etkinlik Basariyla Olusturuldu!'
+                  text: 'Yeni Reklam Basariyla Olusturuldu!'
               });
             }
           });
-
       }
 
 		},

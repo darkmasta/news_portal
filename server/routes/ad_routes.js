@@ -36,6 +36,8 @@ router.post("/create_ad", jsonParser, (req, res) => {
     ownerEmail: email,
     adTitle: data.adTitle,
     adType: data.adType,
+    adName: data.adName,
+    link: data.link,
     status: "unconfirmed",
     adImage: data.fileName + ".jpeg",
   });
@@ -61,9 +63,11 @@ router.post("/update_ad", jsonParser, (req, res) => {
     { _id: adData.id },
     {
       adTitle: adData.adTitle,
+      adName: data.adName,
       adType: adData.adType,
       status: adData.status,
       adImage: adData.fileName,
+      link: adData.link,
     }
   ).then((doc) => {
     ba64.writeImage("./images/" + adData.fileName, adData.file, (err) => {
@@ -77,14 +81,14 @@ router.post("/update_ad", jsonParser, (req, res) => {
 });
 
 router.post("/confirm_ad", jsonParser, (req, res) => {
-  var activityData = req.body.data;
+  var data = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   if (!isAdmin == "admin" && !isAdmin == "editor")
     res.json("Authentication Error");
 
   Activity.updateOne(
-    { _id: activityData.id },
+    { _id: data.id },
     {
       status: "confirmed",
     }

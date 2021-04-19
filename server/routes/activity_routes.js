@@ -40,6 +40,7 @@ router.post("/create_activity", jsonParser, (req, res) => {
     activityImage: data.fileName + ".jpeg",
     startDate: data.startDate,
     endDate: data.endDate,
+    visible: data.visible || false,
   });
 
   ba64.writeImage("./images/" + data.fileName, data.file, (err) => {
@@ -68,6 +69,7 @@ router.post("/update_activity", jsonParser, (req, res) => {
       activityImage: activityData.fileName,
       startDate: activityData.startDate,
       endDate: activityData.endDate,
+      visible: activityData.visible,
     }
   ).then((doc) => {
     ba64.writeImage(
@@ -95,6 +97,36 @@ router.post("/confirm_activity", jsonParser, (req, res) => {
     { _id: activityData.id },
     {
       status: "confirmed",
+    }
+  ).then((doc) => res.json("success"));
+});
+
+router.post("/activity_visible", jsonParser, (req, res) => {
+  var activityData = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
+
+  Activity.updateOne(
+    { _id: activityData.id },
+    {
+      visible: true,
+    }
+  ).then((doc) => res.json("success"));
+});
+
+router.post("/activity_invisible", jsonParser, (req, res) => {
+  var activityData = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
+
+  Activity.updateOne(
+    { _id: activityData.id },
+    {
+      visible: false,
     }
   ).then((doc) => res.json("success"));
 });
