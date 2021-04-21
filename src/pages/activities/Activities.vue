@@ -25,6 +25,8 @@
         class="table nexus-table mt-2" hover  
                         borderless 
         :items="activitiesTableData"
+        :per-page="perPage"
+        :current-page="currentPage"
         :fields="tableFields">
         <template #cell(activityImage)="data" >
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
@@ -42,6 +44,18 @@
           <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
         </template>
       </b-table>
+
+      <!-- Pagination -->
+      <b-row>
+        <b-col>
+          <div class="col-sm text-sm-left text-center mb-3 mb-sm-0">
+            <span v-if="totalPages" class="text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+          </div>
+          <div class="col-sm">
+            <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+          </div>
+        </b-col>
+      </b-row>
 
     </b-card-body>
   </b-card>
@@ -144,6 +158,11 @@ export default {
     previewImageUrl: null,
     previewImageName: '',
     previewToggle: false,
+
+    // pagination
+    perPageOptions: [2, 4, 6, 8, 10],
+    perPage: 2,
+    currentPage: 1,
   }),
   created() {
     var vm = this
@@ -158,7 +177,7 @@ export default {
                 id: activity._id.slice(-4),
                 startDate: moment(activity.startDate).format('DD/MM/YYYY, h:mm:ss a'),
                 endDate: moment(activity.endDate).format('DD/MM/YYYY, h:mm:ss a'),
-                status: (activity.status == 'confirmed') ? 'Onaylandi' : 'Onay Bekliyor',
+                status: (activity.status == 'confirmed') ? 'Onaylandı' : 'Onay Bekliyor',
                 owner: activity.owner,
                 position: activity.activityPosition,
                 visible: activity.visible ? 'Gösteriliyor' : 'Gösterilmiyor',
@@ -174,6 +193,12 @@ export default {
 
   },
   computed: {
+    totalItems() {
+      return this.activitiesTableData.length;
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
   },
   methods: {
     goToActivity(data) {

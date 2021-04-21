@@ -25,6 +25,8 @@
         class="table nexus-table mt-2" hover  
                         borderless 
           :items="adsTableData"
+          :per-page="perPage"
+          :current-page="currentPage"
           :fields="tableFields">
         <template #cell(adImage)="data" >
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
@@ -34,6 +36,19 @@
           <span title="Delete Reklam" class="fas fa-times text-danger" @click="deleteAd(data)"></span>
         </template>
       </b-table>
+
+      <!-- Pagination -->
+      <b-row>
+        <b-col>
+          <div class="col-sm text-sm-left text-center mb-3 mb-sm-0">
+            <span v-if="totalPages" class="text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+          </div>
+          <div class="col-sm">
+            <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+          </div>
+        </b-col>
+      </b-row>
+
     </b-card-body>
   </b-card>
 
@@ -49,6 +64,7 @@
     </div>
   </div>
 
+
 </div>
 </template>
 <script>
@@ -60,6 +76,8 @@ export default {
   name: "ads",
   metaInfo: {
     title: "Ads",
+  },
+  components: {
   },
   data: () => ({
     tableFields: [
@@ -125,9 +143,28 @@ export default {
     previewImageUrl: null,
     previewImageName: '',
     previewToggle: false,
+
+    // pagination
+    perPageOptions: [2, 4, 6, 8, 10],
+    perPage: 2,
+    currentPage: 1,
   }),
   created() {
     var vm = this
+
+    axios.head(process.env.VUE_APP_SERVER_URL + "/get_ads/")
+      .catch(function(error) {
+        if (!error.response) {
+          // Display my warning message
+          alert("AdBlock Tespit Edildi")
+          vm.$notify({
+              type: 'warn',
+              text: 'Bu sayfanın düzgün çalışması için AdBlock\'u devre dışı bırakmalısınız',
+              duration: 5000
+          });
+
+        }
+      })
       
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_ads/", {})
@@ -148,10 +185,17 @@ export default {
               vm.adsTableData.push(tmp_ad)
             })
             vm.originalAdsTableData = vm.adsTableData
-      });
+      })
+
 
   },
   computed: {
+    totalItems () {
+      return this.adsTableData.length
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
   },
   methods: {
     goToAd(data) {

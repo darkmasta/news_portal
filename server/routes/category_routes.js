@@ -90,10 +90,9 @@ router.post("/update_bottom_category", jsonParser, (req, res) => {
 
   if (!isAdmin == "admin") res.json("Authentication Error");
 
-  var promise = Category.update(
+  var promise = Category.findOneAndUpdate(
     {
       "updatedCategories.bottomCategory": bottomCategory,
-      "updatedCategories.topCategory": topCategory,
     },
     {
       $set: {

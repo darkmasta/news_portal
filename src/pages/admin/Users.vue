@@ -27,12 +27,27 @@
                           borderless 
                           ref="myTable"
           :items="usersTableData"
+          :per-page="perPage"
+          :current-page="currentPage"
           :fields="fields">
           <template #cell(details)="data" class="activities-table-buttons">
-            <span title="Edit User" class="far fa-edit mr-2 text-primary" @click="goToUser(data)"></span>
+            <span title="View User" class="far fa-user mr-2 text-primary" @click="goToUser(data)"></span>
+            <span title="Edit User" class="far fa-edit mr-2 text-primary" @click="goToUserWithEdit(data)"></span>
             <span title="Delete User" class="fas fa-times text-danger" @click="deleteUser(data)"></span>
           </template>
         </b-table>
+
+        <!-- Pagination -->
+        <b-row>
+          <b-col>
+            <div class="col-sm text-sm-left text-center mb-3 mb-sm-0">
+              <span v-if="totalPages" class="text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+            </div>
+            <div class="col-sm">
+              <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+            </div>
+          </b-col>
+        </b-row>
 
         </b-card-body>
     </b-card>
@@ -139,7 +154,12 @@ data: () => ({
   footClone: false,
   headVariant: 'light',
   tableVariant: '',
-  noCollapse: false
+  noCollapse: false,
+
+  // pagination
+  perPageOptions: [2, 4, 6, 8, 10],
+  perPage: 2,
+  currentPage: 1,
 }), 
 created() {
   var vm = this
@@ -215,6 +235,12 @@ methods: {
     console.log(data)
     this.$router.push({ name: 'AdminUser', params: { id: data.item.details} })
   },
+  goToUserWithEdit(data) {
+    console.log(data)
+    data.item.details += '~'
+    data.item.details += 'edit'
+    this.$router.push({ name: 'AdminUser', params: { id: data.item.details} })
+  },
   filter (value) {
     const val = value.toLowerCase()
     console.log(value)
@@ -234,19 +260,19 @@ methods: {
 },
 computed: {
   totalItems () {
-    return this.quotesTableData.length
+    return this.usersTableData.length
   },
   totalPages () {
     return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-    },
-    tableFields () {
-      if (!this.jsonData[0]) return []
-      return Object.keys(this.quotesTableData[0]).map(key => ({
-        key,
-        sortable: this.isSortable
-      }))
-    }
+  },
+  tableFields () {
+    if (!this.jsonData[0]) return []
+    return Object.keys(this.quotesTableData[0]).map(key => ({
+      key,
+      sortable: this.isSortable
+    }))
   }
+ }
 }
 </script>
 

@@ -22,6 +22,8 @@
       borderless 
       @row-selected="rowSelected" ref="myTable" 
       :items="postsTableData"
+      :current-page="currentPage"
+      :per-page="perPage"
       :fields="tableFields">
       <template #cell(postImage)="data" >
           <img  class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
@@ -35,6 +37,18 @@
         <span title="Delete Post" class="fas fa-times text-danger" @click="deletePost(data)"></span>
       </template>
   </b-table>
+
+  <!-- Pagination -->
+  <b-row>
+    <b-col>
+      <div class="col-sm text-sm-left text-center mb-3 mb-sm-0">
+        <span v-if="totalPages" class="text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+      </div>
+      <div class="col-sm">
+        <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+      </div>
+    </b-col>
+  </b-row>
 
 
 <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
@@ -134,7 +148,12 @@ export default {
     previewImageUrl: null,
     previewImageName: '',
     previewToggle: false,
-    selectedRows: []
+    selectedRows: [],
+
+    // pagination
+    perPageOptions: [2, 4, 6, 8, 10],
+    perPage: 2,
+    currentPage: 1,
   }),
   created() {
     var vm = this
@@ -165,7 +184,12 @@ export default {
 
   },
   computed: {
-
+    totalItems() {
+      return this.postsTableData.length;
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
   },
   methods: {
     rowSelected(data) {

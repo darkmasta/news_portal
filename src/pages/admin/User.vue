@@ -171,26 +171,51 @@ export default {
     var vm = this;
     var data = {}
     data.id = vm.$route.params.id
-    vm.id = data.id
+    if (data.id.split('~').pop() == 'edit') {
+      vm.edit = true  
+      vm.id = data.id.split('~')[0]
+      data.id = vm.id
+      axios.post(process.env.VUE_APP_SERVER_URL + "/user_by_id", {data}).then(
+        (response) => {
+          var userData = response.data;
+          vm.userData.email = userData.email;
+          vm.userData.firstName = userData.firstName;
+          vm.userData.lastName = userData.lastName;
+          vm.userData.password = userData.password;
+          vm.userData.userRole = userData.userRole;
+          vm.userRole = userData.userRole
 
-    axios.post(process.env.VUE_APP_SERVER_URL + "/user_by_id", {data}).then(
-      (response) => {
-        var userData = response.data;
-        vm.userData.email = userData.email;
-        vm.userData.firstName = userData.firstName;
-        vm.userData.lastName = userData.lastName;
-        vm.userData.password = userData.password;
-        vm.userData.userRole = userData.userRole;
-        vm.userRole = userData.userRole
-
-        vm.defaultLang = userData.defaultLang;
-        vm.userData.lastLogin = moment(userData.lastLogin).fromNow()
-        console.log(response);
-      },
-      (response) => {
-        console.log(response);
-      }
+          vm.defaultLang = userData.defaultLang;
+          vm.userData.lastLogin = moment(userData.lastLogin).fromNow()
+          console.log(response);
+        },
+        (response) => {
+          console.log(response);
+        }
     );
+    } else {
+      data.id = vm.$route.params.id
+      axios.post(process.env.VUE_APP_SERVER_URL + "/user_by_id", {data}).then(
+        (response) => {
+          var userData = response.data;
+          vm.userData.email = userData.email;
+          vm.userData.firstName = userData.firstName;
+          vm.userData.lastName = userData.lastName;
+          vm.userData.password = userData.password;
+          vm.userData.userRole = userData.userRole;
+          vm.userRole = userData.userRole
+
+          vm.defaultLang = userData.defaultLang;
+          vm.userData.lastLogin = moment(userData.lastLogin).fromNow()
+          console.log(response);
+        },
+        (response) => {
+          console.log(response);
+        })
+    }
+
+
+    console.log(vm.$props)
   },
   methods: {
     setUserData(data) {

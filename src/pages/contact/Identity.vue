@@ -6,6 +6,15 @@
       </div>
     </div>
 
+
+    <b-row>
+      <b-col cols="10" class="offset-1">
+        <b-input-group prepend="Künye Başlık" class="mt-2">
+          <b-form-input v-model="kunyeHeading"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+
     <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
@@ -77,6 +86,7 @@ export default {
       //   ]
       // },
       },
+      kunyeHeading: ''
     }
   },
   created() {
@@ -90,6 +100,7 @@ export default {
     submitPost: function () {
       var vm = this
       console.log(vm.editorData)
+
     },
     onReady( editor )  {
         // Insert the toolbar before the editable area.

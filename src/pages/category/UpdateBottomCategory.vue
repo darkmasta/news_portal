@@ -74,8 +74,8 @@ export default {
     updateBottomCategory (topCategory, bottomCategory) {
         var vm = this
         var data = {"topCategory": topCategory, "bottomCategory": bottomCategory}
-        console.log(vm.categoryName)
         data['categoryName'] = vm.categoryName
+        console.log(data)
         if (vm.categoryName.length < 2) {
             vm.$notify({
                 type: 'warn',

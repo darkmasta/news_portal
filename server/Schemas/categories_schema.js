@@ -20,6 +20,9 @@ var categorySchema = new Schema({
       bottomCategory: String,
     },
   ],
+  kunyeHeading: String,
+  contactHeading: String,
+  aboutHeading: String,
 });
 
 module.exports.categorySchema = categorySchema;
