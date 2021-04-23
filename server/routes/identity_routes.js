@@ -20,7 +20,7 @@ router.post("/get_identity", jsonParser, (req, res) => {
 router.post("/update_identity", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
-  var data = req.body; // form data
+  var data = req.body.data;
 
   if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
     res.json("Authorization Error");
@@ -28,22 +28,22 @@ router.post("/update_identity", jsonParser, (req, res) => {
   Identity.updateMany(
     {},
     {
-      $addToSet: {
-        logs: {
-          editor: email,
-          editDate: Date.now(),
-          editText: postData.latestLogText,
-        },
+      kunyeHeading: data.kunyeHeading,
+      $set: {
+        kunyeImtiyaz: data.kunyeImtiyaz,
+        genelYayinYonetmeni: data.genelYayinYonetmeni,
+        arabicNews: data.arabicNews,
+        englishNews: data.englishNews,
+        russianNews: data.russianNews,
+        turkishNews: data.turkishNews,
+        camera: data.camera,
+        postProduction: data.postProduction,
+        lawyer: data.lawyer,
+        sound: data.sound,
       },
     }
   ).then((doc) => {
-    ba64.writeImage("./images/" + postData.fileName, postData.file, (err) => {
-      if (err) res.json(err);
-
-      console.log("Post Image saved successfully");
-
-      res.json(doc);
-    });
+    res.json(doc);
   });
 });
 

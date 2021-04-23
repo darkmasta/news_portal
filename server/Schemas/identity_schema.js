@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var categorySchema = new Schema({
+var identitySchema = new Schema({
   kunyeHeading: String,
   kunyeImtiyaz: [String],
   genelYayinYonetmeni: [String],
