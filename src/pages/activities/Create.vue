@@ -7,7 +7,6 @@
         </h4>
       </div>
 
-
       <div class="col-lg-12 mb-4">
         <b-card title="Yeni Etkinlik Formu">
           <b-card-body>
@@ -30,6 +29,32 @@
                   </b-select>
                 </b-form-group>
               </b-col>
+              <b-col cols="1" class="mt-4">
+                  <div class="edit_buttons">
+                    <span title="Ekle" class="ion ion-ios-settings" @click="toggleActivitySettings()"></span>
+                  </div>
+              </b-col>
+            </b-row>
+
+            <b-row class="mb-3" v-if="activitySettings">
+                <hr class="model-hr">
+                <b-col cols="12" class="">
+                  <b-input-group prepend="Etkinlik Türü" class="mt-2">
+                    <b-form-input v-model="activityType"></b-form-input>
+                    <div class="edit_buttons">
+                      <span title="Ekle" class="fa fa-check" @click="addToActivityTypeList(activityType)"></span>
+                    </div>
+                  </b-input-group>
+                </b-col>
+
+                <b-col class="" cols="2" v-for="(activityType, index) in activityTypeList" :key="index">
+                  <span class="identityItem">{{activityType}} 
+                    <i class="fa fa-times" @click="removeFromActivityTypeList(index)"></i></span>
+                </b-col>
+                <hr class="model-hr">
+                <b-col class="offset-10">
+                  <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="updateActivityTypeList">Etkinlik Türü Listesini Guncelle</b-btn>
+                </b-col>
             </b-row>
 
             <b-row>
@@ -129,8 +154,9 @@ export default {
     activityName: '',
     activityTitle: '',
     activityImage: '',
-    activityTypeList: ['Konferans', 'Panel', 'Söyleşi'],
+    activityTypeList: [],
     activityType: '',
+    activitySettings: false,
     startDate: null,
     endDate: null,
     imageName: '',
@@ -145,6 +171,19 @@ export default {
 
       vm.owner = this.$store.getters.getUser
       console.log(vm.owner)
+
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/get_identity")
+        .then(
+          (response) => {
+            console.log(response.data)
+            vm.activityTypeList = response.data.pop().activityTypeList
+          },
+          (response) => {
+            console.error(response);
+          }
+        );
+
   },
   methods: {
     submitActivity: function () {
@@ -218,6 +257,35 @@ export default {
 
       }
 		},
+    addToActivityTypeList(text) {
+      var vm = this
+      vm.activityTypeList.push(text)
+    },
+    removeFromActivityTypeList(index) {
+      var vm = this
+      vm.activityTypeList.splice(index, 1)
+    },
+    toggleActivitySettings() {
+      var vm = this
+      vm.activitySettings = !vm.activitySettings
+    },
+    updateActivityTypeList() {
+      var vm = this
+      let data = { activityTypeList: vm.activityTypeList }
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/update_activity_type_list/", {data})
+        .then((response) => {
+          var data = response.data;
+          console.log(data);
+          if (response.data == "success") {
+            vm.$notify({
+                type: 'success',
+                text: 'Etkinlik Turu Listesi Guncellendi!'
+            });
+          }
+        });
+
+    },
     crop() {
       const { coordinates, canvas, } = this.$refs.cropper.getResult();
 			this.coordinates = coordinates;
@@ -350,4 +418,30 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.identityItem {
+  display: inline-block;
+  background: #7CFFC4;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.edit_buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit_buttons span {
+  font-size: 20px;
+  display: inline-block;
+  margin: 8px;
+}
+
+hr {
+  height: 5px;
+  border-bottom: 5px solid #000; 
+}
+
 </style>

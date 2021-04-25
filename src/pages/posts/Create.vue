@@ -2,7 +2,7 @@
   <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
-          <h2 style="text-decoration: underline;">Create Post</h2>
+          <h2 style="text-decoration: underline;">Haber Olustur</h2>
           <span class="info_message">{{info_message}}</span>
       </div>
     </div>

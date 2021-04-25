@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const Identities = require("../Models/identity");
-const Identity = Identities.Identity;
+const Seos = require("../Models/seo");
+const Seo = Seos.Seo;
 const ba64 = require("ba64");
 
 const bodyParser = require("body-parser");
@@ -11,13 +11,13 @@ const _ = require("underscore");
 const fs = require("fs");
 const { decodeCookie } = require("../helpers/decode-cookie");
 
-router.post("/get_identity", jsonParser, (req, res) => {
-  var promise = Identity.find({});
+router.post("/get_seo", jsonParser, (req, res) => {
+  var promise = Seo.find({});
 
   promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
 });
 
-router.post("/update_identity", jsonParser, (req, res) => {
+router.post("/update_seo", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
@@ -25,21 +25,16 @@ router.post("/update_identity", jsonParser, (req, res) => {
   if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
     res.json("Authorization Error");
 
-  Identity.updateMany(
+  Seo.updateMany(
     {},
     {
-      kunyeHeading: data.kunyeHeading,
+      googleImage: data.googleImage,
+      googleHeading: data.googleHeading,
+      twitterLink: data.twitterLink,
+      facebookLink: data.facebookLink,
+      instagramLink: data.facebookLink,
       $set: {
-        kunyeImtiyaz: data.kunyeImtiyaz,
-        genelYayinYonetmeni: data.genelYayinYonetmeni,
-        arabicNews: data.arabicNews,
-        englishNews: data.englishNews,
-        russianNews: data.russianNews,
-        turkishNews: data.turkishNews,
-        camera: data.camera,
-        postProduction: data.postProduction,
-        lawyer: data.lawyer,
-        sound: data.sound,
+        seoKeywords: data.seoKeywords,
       },
     }
   ).then((doc) => {
@@ -55,7 +50,7 @@ router.post("/update_activity_type_list", jsonParser, (req, res) => {
   if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
     res.json("Authorization Error");
 
-  Identity.updateMany(
+  Seo.updateMany(
     {},
     {
       $set: {

@@ -14,6 +14,7 @@ var identitySchema = new Schema({
   postProduction: [String],
   lawyer: [String],
   sound: [String],
+  activityTypeList: [String],
   contactHeading: String,
   contactContent: String,
   aboutHeading: String,

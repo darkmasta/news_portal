@@ -21,20 +21,26 @@ router.post("/create_tag", jsonParser, function (req, res) {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
   var data = req.body.data;
+  if (!isAdmin == "admin") res.json("Authorization Error");
 
-  var tagName = data.tagName;
+  var Tag = new Tags.Tag({
+    tagName: data.tagName,
+  });
 
-  if (isAdmin == "admin") {
-    var Tag = new Tags.Tag({
-      tagName: tagName,
-    });
+  Tag.save()
+    .then((tag) => res.json("success"))
+    .catch((err) => res.json(err));
+});
 
-    Tag.save()
-      .then((tag) => res.json("success"))
-      .catch((err) => res.json(err));
-  } else {
-    res.json("Error");
-  }
+router.post("/delete_tag", jsonParser, (req, res) => {
+  var tagData = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin") res.json("Authentication Error");
+
+  var promise = Tags.Tag.findOneAndDelete({ _id: tagData.id });
+
+  promise.then((doc) => res.json("success"));
 });
 
 module.exports = router;

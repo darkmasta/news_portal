@@ -21,35 +21,10 @@
         <b-nav-item-dropdown no-caret :right="!isRtlMode" class="demo-navbar-notifications">
           <template slot="button-content">
             <i class="ion ion-md-notifications-outline navbar-icon align-middle mr-1 ml-1"></i>
-            <b-badge class="badge-primary indicator" pill>4</b-badge>
             <span class="d-lg-none align-middle">&nbsp; Notifications</span>
           </template>
 
-          <div class="bg-primary text-center text-white font-weight-bold p-3">
-            4 New Notifications
-          </div>
           <b-list-group flush>
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <div class="media-body line-height-condenced ml-3">
-                <div class="text-body">Login from 192.168.1.1</div>
-                <div class="text-light small mt-1">
-                  Aliquam ex eros, imperdiet vulputate hendrerit et.
-                </div>
-                <div class="text-light small mt-1">12h ago</div>
-              </div>
-            </b-list-group-item>
-
-            <b-list-group-item href="javascript:void(0)" class="media d-flex align-items-center">
-              <div class="media-body line-height-condenced ml-3">
-                <div class="text-body">
-                  You have <strong>4</strong> new followers
-                </div>
-                <div class="text-light small mt-1">
-                  Phasellus nunc nisl, posuere cursus pretium nec, dictum
-                  vehicula tellus.
-                </div>
-              </div>
-            </b-list-group-item>
           </b-list-group>
 
           <a href="javascript:void(0)" class="d-block text-center text-light small p-2 my-1">Show all notifications</a>
@@ -110,13 +85,21 @@ export default {
 
     axios.get(process.env.VUE_APP_SERVER_URL + '/user').then(
     (response) => {
-      //console.log(response.data)
+      console.log(response.data)
       var userData = response.data
       vm.currentUser = userData.firstName + ' ' + userData.lastName
       this.$store.commit('setUser', vm.currentUser)
     },
     (response) => {
-      console.log(response)
+      // console.log(response)
+      if (String(response).includes('status code 500')) {
+        vm.$notify({
+          'type': 'warn',
+          'text': 'Giris Yapmalısınız!'
+        })
+        setTimeout(() => { vm.$router.push({ name: 'Login'})}, 1000);
+
+      }
     }
     )
   },

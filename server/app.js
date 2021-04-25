@@ -26,6 +26,8 @@ const PostRoutes = require("./routes/post_routes");
 const ActivityRoutes = require("./routes/activity_routes");
 const AdRoutes = require("./routes/ad_routes");
 const IdentityRoutes = require("./routes/identity_routes");
+const TagRoutes = require("./routes/tag_routes");
+const SeoRoutes = require("./routes/seo_routes");
 
 var app = express();
 
@@ -66,10 +68,10 @@ app.use("/", PostRoutes);
 app.use("/", ActivityRoutes);
 app.use("/", AdRoutes);
 app.use("/", IdentityRoutes);
+app.use("/", TagRoutes);
+app.use("/", SeoRoutes);
 
 var cons = require("consolidate");
-const { requires } = require("consolidate");
-const { Identity } = require("./Models/identity");
 app.engine("html", cons.swig);
 app.use(express.static(__dirname + "/views/dist"));
 app.set("views", __dirname + "/views/dist");

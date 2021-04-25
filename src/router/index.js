@@ -15,6 +15,8 @@ import dashboardRoutes from "./dashboard";
 import homeRoutes from "./home";
 import contactRoutes from "./contact";
 import adsRoutes from "./advertisement";
+import tagRoutes from "./tag";
+import seoRoutes from "./seo";
 
 Vue.use(Router);
 Vue.use(Meta);
@@ -29,6 +31,8 @@ const ROUTES = []
   .concat(adminRoutes)
   .concat(homeRoutes)
   .concat(adsRoutes)
+  .concat(tagRoutes)
+  .concat(seoRoutes)
   .concat(contactRoutes);
 
 ROUTES.push({

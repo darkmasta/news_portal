@@ -18,18 +18,57 @@
           <div>Kategori İşlemleri</div>
         </a>
         <ul class="sidenav-menu">
-          <li class="sidenav-item">
+          <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
               <div><router-link to="/category">Kategoriler</router-link></div>
             </a>
           </li>
-          <li class="sidenav-item" style="">
+          <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
               <div><router-link to="/category/create">Kategori Oluştur</router-link></div>
             </a>
           </li>
         </ul>
       </li>
+
+      <li class="sidenav-item" style="">
+        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+          <i class="sidenav-icon fas fa-hashtag"></i>
+          <div>Etiket İşlemleri</div>
+        </a>
+        <ul class="sidenav-menu">
+          <li class="sidenav-item" style="display: block;">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/tags">Etiketler</router-link></div>
+            </a>
+          </li>
+          <li class="sidenav-item" style="display: block;">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/tags/create">Etiket Oluştur</router-link></div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="sidenav-item" style="">
+        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+          <i style="font-size: 22px;" class="sidenav-icon fab fa-searchengin"></i>
+          <div>SEO İşlemleri</div>
+        </a>
+        <ul class="sidenav-menu">
+          <li class="sidenav-item" style="display: block;">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/seo">SEO</router-link></div>
+            </a>
+          </li>
+          <li class="sidenav-item" style="display: block;">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/seo/create">SEO Ayarlar</router-link></div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
 
     </div>
   </sidenav>
