@@ -46,17 +46,7 @@
     </div> 
 
 
-    <b-row> 
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[0]" />
-        </b-col>
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[1]" />
-        </b-col>
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[0]" />
-        </b-col>
-    </b-row>
+    <b-row></b-row>
 
     <b-row class="top_slider_container">
         <b-col cols="7" class="top_slider">
@@ -83,17 +73,7 @@
     </b-row>
 
 
-    <b-row class="mt-5"> 
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[0]" />
-        </b-col>
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[1]" />
-        </b-col>
-        <b-col cols="4" class="activity_box">
-            <activity :activity="activities[0]" />
-        </b-col>
-    </b-row>
+    <b-row class="mt-5"></b-row>
 
 
 </div>
@@ -285,6 +265,8 @@ header {
 }
 
 .top_slider_container {
+    display: flex;
+    justify-content: space-between;
     margin: 20px;
     margin-top: 40px;
 }
@@ -302,28 +284,27 @@ header {
 }
 
 .top_slider_right_box {
-    height: 40vh;
+    display: flex;
+    flex-direction: column;
     margin-left: 20px;
-    width: 100%;
     border: 2px solid black;
     flex: 0 0 40%;
 }
 
 .test_box {
-    height: 31%;
+    display: flex;
     border: 1px solid red;
-    flex: 0 0 45%;
+    flex: 0 0 33%;
 }
 
 .slider_right_single_item {
     background: green;
     margin: 10px;
-    height: 100%;
 }
 
 .bottom_full_width_ad {
     background: blue;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 

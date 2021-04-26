@@ -20,7 +20,13 @@ router.post("/get_ads", jsonParser, (req, res) => {
 router.post("/get_ad", jsonParser, (req, res) => {
   var adData = req.body.data;
 
-  Ad.find({ _id: adData.id }).then((doc) => res.json(doc.pop()));
+  Ad.findOneAndUpdate({ _id: adData.id }, { $inc: { views: 1 } })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((err) => {
+      res.json("Server Error");
+    });
 });
 
 router.post("/create_ad", jsonParser, (req, res) => {
@@ -87,10 +93,25 @@ router.post("/confirm_ad", jsonParser, (req, res) => {
   if (!isAdmin == "admin" && !isAdmin == "editor")
     res.json("Authentication Error");
 
-  Activity.updateOne(
+  Ad.updateOne(
     { _id: data.id },
     {
       status: "confirmed",
+    }
+  ).then((doc) => res.json("success"));
+});
+
+router.post("/unconfirm_ad", jsonParser, (req, res) => {
+  var data = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
+
+  Ad.updateOne(
+    { _id: data.id },
+    {
+      status: "unconfirmed",
     }
   ).then((doc) => res.json("success"));
 });

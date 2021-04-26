@@ -55,7 +55,7 @@
   <span class="close">&times;</span>
 
   <div id="preview">
-    <img :src="previewImageUrl" @click="previewToggle = false"/>
+    <img class="preview-image" :src="previewImageUrl" @click="previewToggle = false"/>
   </div>
 
   <div class="caption">
@@ -151,8 +151,7 @@ export default {
     selectedRows: [],
 
     // pagination
-    perPageOptions: [2, 4, 6, 8, 10],
-    perPage: 2,
+    perPage: 10,
     currentPage: 1,
   }),
   created() {
@@ -320,6 +319,11 @@ export default {
 .post-table-image {
   width: 75px;
   height: 75px;
+}
+
+.preview-image {
+  max-width: 90vw;
+  height: auto;
 }
 
 </style>

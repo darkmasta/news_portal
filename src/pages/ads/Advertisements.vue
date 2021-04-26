@@ -32,6 +32,10 @@
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
         </template>
         <template #cell(details)="data" class="activities-table-buttons">
+          <span title="Red" class="fa fa-ban" 
+              v-if="data.item.status == 'Onaylandi'" @click="unconfirmAd(data)"></span>
+          <span title="Onay" class="fa fa-check mr-2 text-primary"
+              v-if="data.item.status == 'Onay Bekliyor'" @click="confirmAd(data)"></span>
           <span title="Edit Reklam" class="far fa-edit mr-2 text-primary" @click="goToAd(data)"></span>
           <span title="Delete Reklam" class="fas fa-times text-danger" @click="deleteAd(data)"></span>
         </template>
@@ -110,6 +114,13 @@ export default {
         class: "text-center align-middle",
       },
       {
+        key: "views",
+        label: "Görüntülenme",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
         key: "adType",
         label: "Reklam Grubu",
         sortable: true,
@@ -145,8 +156,7 @@ export default {
     previewToggle: false,
 
     // pagination
-    perPageOptions: [2, 4, 6, 8, 10],
-    perPage: 2,
+    perPage: 10,
     currentPage: 1,
   }),
   created() {
@@ -175,8 +185,9 @@ export default {
               var tmp_ad= {
                 owner: ad.owner,
                 position: ad.adPosition || '---',
-                status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onayli',
+                status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onaylandi',
                 adType: ad.adType,
+                views: ad.views,
                 link: ad.link,
                 adImage: process.env.VUE_APP_SERVER_URL + '/images/' + ad.adImage,
                 Baslik: ad.adTitle || ad.adName,
@@ -197,50 +208,82 @@ export default {
       return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
     },
   },
-  methods: {
-    goToAd(data) {
-      this.$router.push({ name: 'Ad', params: { id: data.value } })
-    },
-    deleteAd(id) {
-      var vm = this
-      let data = {id: id.value}
-      axios
-        .post(process.env.VUE_APP_SERVER_URL + "/delete_ad/", {data})
-        .then((response) => {
-          console.log(response.data);
-          if (response.data == "success") {
-              vm.$notify({
-                  type: 'error',
-                  text: 'Reklam Silindi!'
-              });
-              vm.adsTableData.splice(id.index, 1)
-          }
-        });
-    },
-    previewImage(imgName) {
-      var vm = this
-      vm.previewToggle = !vm.previewToggle
+methods: {
+  goToAd(data) {
+     this.$router.push({ name: 'Ad', params: { id: data.value } })
+  },
+  confirmAd(id) {
+    var vm = this
+    let data = {id: id.value}
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/confirm_ad/", {data})
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "success") {
+            vm.$notify({
+                type: 'success',
+                text: 'Reklam Onaylandi!'
+            });
+            vm.adsTableData[id.index].status = 'Onaylandi'
+        }
+      });
+  },
+  unconfirmAd(id) {
+    var vm = this
+    let data = {id: id.value}
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/unconfirm_ad/", {data})
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "success") {
+            vm.$notify({
+                type: 'error',
+                text: 'Reklam Reddedildi!'
+            });
+            vm.adsTableData[id.index].status = 'Onay Bekliyor'
+        }
+      });
+  },
+  deleteAd(id) {
+    var vm = this
+    let data = {id: id.value}
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/delete_ad/", {data})
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "success") {
+            vm.$notify({
+                type: 'error',
+                text: 'Reklam Silindi!'
+            });
+            vm.adsTableData.splice(id.index, 1)
+        }
+      });
+  },
+  previewImage(imgName) {
+    var vm = this
+    vm.previewToggle = !vm.previewToggle
 
-      if (vm.previewImageUrl) vm.previewImageUrl = null
-      vm.previewImageUrl = imgName
-      vm.previewImageName = imgName.split('/').pop()
-    },
-    filter (value) {
-      const val = value.toLowerCase()
-      console.log(value)
+    if (vm.previewImageUrl) vm.previewImageUrl = null
+    vm.previewImageUrl = imgName
+    vm.previewImageName = imgName.split('/').pop()
+  },
+  filter (value) {
+    const val = value.toLowerCase()
+    console.log(value)
 
-      // filter our data
-      const filtered = this.originalAdsTableData.filter(d => {
-        // Concat data
-        return Object.keys(d)
-          .map(k => String(d[k]))
-          .join('|')
-          .toLowerCase()
-          .indexOf(val) !== -1 || !val
-      })
-      // update the rows
-      this.adsTableData = filtered
-    } 
+    // filter our data
+    const filtered = this.originalAdsTableData.filter(d => {
+      // Concat data
+      return Object.keys(d)
+        .map(k => String(d[k]))
+        .join('|')
+        .toLowerCase()
+        .indexOf(val) !== -1 || !val
+    })
+    // update the rows
+    this.adsTableData = filtered
+  } 
   },
 };
 </script>

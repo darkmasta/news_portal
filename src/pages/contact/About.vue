@@ -16,7 +16,7 @@
 
     <b-row class="mt-6">
       <b-col offset="9">
-         <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn mt-5">
+         <b-btn @click="submitAbout" variant="primary rounded-pill" class="new-post-btn mt-5">
           <span class="fas fa-plus-circle"></span> Kaydet
          </b-btn>
       </b-col>
@@ -95,9 +95,23 @@ export default {
 
   },
   methods: {
-    submitPost: function () {
+    submitAbout: function () {
       var vm = this
       console.log(vm.editorData)
+
+      let data = {
+        aboutContent: vm.editorData
+      }
+
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/update_about/", {data})
+        .then((response) => {
+          vm.$notify({
+              type: 'success',
+              text: 'Hakkımızda Başarıyla Güncellendi!'
+          });
+        })
+
     },
     onReady( editor )  {
         // Insert the toolbar before the editable area.

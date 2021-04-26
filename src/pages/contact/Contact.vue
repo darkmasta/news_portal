@@ -16,7 +16,7 @@
 
     <b-row class="mt-6">
       <b-col offset="9">
-         <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn mt-5">
+         <b-btn @click="submitContact" variant="primary rounded-pill" class="new-post-btn mt-5">
           <span class="fas fa-plus-circle"></span> Iletişim Kaydet
          </b-btn>
       </b-col>
@@ -91,9 +91,22 @@ export default {
 
   },
   methods: {
-    submitPost: function () {
+    submitContact: function () {
       var vm = this
       console.log(vm.editorData)
+
+      let data = {
+        contactContent: vm.editorData
+      }
+
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/update_contact/", {data})
+        .then((response) => {
+          vm.$notify({
+              type: 'success',
+              text: 'İletişim Başarıyla Güncellendi!'
+          });
+        })
     },
     onReady( editor )  {
         // Insert the toolbar before the editable area.

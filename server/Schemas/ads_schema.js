@@ -15,6 +15,7 @@ var adSchema = new Schema({
   creationDate: { type: Date, default: Date.now },
   startDate: Date,
   views: Number,
+  clicks: Number,
   endDate: Date,
 });
 

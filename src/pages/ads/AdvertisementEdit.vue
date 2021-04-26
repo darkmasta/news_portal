@@ -71,6 +71,13 @@
               </b-select>
             </b-form-group>
           </b-col>
+          <b-col cols="7">
+            <b-form-group label="Görüntülenme">
+              <b-input-group prepend="Görüntülenme" class="">
+                <b-form-input v-model="views" disabled></b-form-input>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
       </b-row>
     </div>
   </div>
@@ -128,6 +135,8 @@
   </div>
   <div class="tab-pane fade" :class="{active: expandTab == 'adOperations', show: expandTab == 'adOperations'}" id="navs-left-home">
     <div class="activity-operations-buttons">
+      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="confirmAd" v-if="ad.status == 'unconfirmed'" >Etkinligi Onayla</b-btn>
+      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="unconfirmAd" v-if="ad.status == 'confirmed'">Etkinligi Reddet</b-btn>
       <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="deleteAd">Reklamı Sil</b-btn>
     </div>
   </div>
@@ -168,7 +177,7 @@ data: () => ({
   expandTab: '',
   publishDate: '',
   publishHour: '',
-  statusList: ['Onay Bekliyor', 'Onayli', 'Red'],
+  statusList: ['Onay Bekliyor', 'Onaylı', 'Red'],
   activityTypeList: ['Konferans', 'Panel', 'Söyleşi'],
   activityType: '',
   status: '',
@@ -202,6 +211,7 @@ data: () => ({
   imageName: '',
   image: null,
   base64: '',
+  views: 0,
   toggleEditImage: false,
 }),
 created() {
@@ -218,7 +228,10 @@ created() {
         // setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
         vm.imageName = response.data.adImage
         vm.adType = response.data.adType
+        vm.ad.adTitle = response.data.adName
+        vm.views = response.data.views
         vm.ad.adImage = process.env.VUE_APP_SERVER_URL + /images/ + response.data.adImage
+        vm.status = response.data.status == 'unconfirmed' ? 'Onay Bekliyor' :  'Onaylı'
     },
     (err) => {
         console.error(err)
@@ -329,6 +342,38 @@ methods: {
         resolve(reader.result);
       };
     });
+  },
+  confirmAd() {
+    var vm = this
+    let data = {id: vm.id}
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/confirm_ad/", {data})
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "success") {
+            vm.$notify({
+                type: 'success',
+                text: 'Reklam Onaylandi!'
+            });
+            vm.ad.status = 'confirmed'
+        }
+      });
+  },
+  unconfirmAd() {
+    var vm = this
+    let data = {id: vm.id}
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/unconfirm_ad/", {data})
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "success") {
+            vm.$notify({
+                type: 'error',
+                text: 'Reklam Reddedildi!'
+            });
+            vm.ad.status = 'unconfirmed'
+        }
+      });
   },
   deleteAd() {
     var vm = this

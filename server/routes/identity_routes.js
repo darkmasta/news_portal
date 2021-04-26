@@ -47,6 +47,42 @@ router.post("/update_identity", jsonParser, (req, res) => {
   });
 });
 
+router.post("/update_about", jsonParser, (req, res) => {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body.data;
+
+  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
+    res.json("Authorization Error");
+
+  Identity.updateMany(
+    {},
+    {
+      aboutContent: data.aboutContent,
+    }
+  ).then((doc) => {
+    res.json("success");
+  });
+});
+
+router.post("/update_contact", jsonParser, (req, res) => {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body.data;
+
+  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
+    res.json("Authorization Error");
+
+  Identity.updateMany(
+    {},
+    {
+      contactContent: data.contactContent,
+    }
+  ).then((doc) => {
+    res.json("success");
+  });
+});
+
 router.post("/update_activity_type_list", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
