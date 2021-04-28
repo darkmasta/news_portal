@@ -253,17 +253,18 @@
     </div>
 
     <div class="divider mt-4 mb-4"></div>
-    <b-row>
-      <b-col>
+
+     <b-row class="editor-container mt-3">
+      <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
         </div>
       </b-col>
     </b-row>
 
     <b-row class="mt-4">
       <b-col offset="9">
-         <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn">
+         <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn mt-5">
           <span class="fas fa-plus-circle"></span> Haberi Kaydet
          </b-btn>
       </b-col>
@@ -284,7 +285,8 @@ import 'vue2-timepicker/dist/VueTimepicker.css'
 
 import categoryData from "../category/categories_data"
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 
 Vue.use(CKEditor)
@@ -313,7 +315,7 @@ export default {
     categoryTitles: [],
     selectedCategories: [],
     postTitle: '',
-    editor: ClassicEditor,
+    editor: DecoupledEditor,
     editorData: '<p>Content of the editor.</p>',
     editorConfig: {
         // The configuration of the editor.
@@ -698,6 +700,13 @@ export default {
           }
         });
     },
+    onReady( editor )  {
+      // Insert the toolbar before the editable area.
+      editor.ui.getEditableElement().parentElement.insertBefore(
+          editor.ui.view.toolbar.element,
+          editor.ui.getEditableElement()
+      );
+    },
     editLog(index) {
       var vm = this
       if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
@@ -920,5 +929,27 @@ input:checked + .slider:before {
 .get-image-button:hover {
   background: #2fb37f;
 }
+
+.editor_center {
+  display: block;
+  width: 1200px;
+}
+
+.ck-toolbar {
+  position: relative;
+  top: 0;
+  left: 0px;
+  height: 40px !important;
+}
+
+.ck-editor__editable {
+  position: relative;
+  top: 45px;
+  left: -996px;
+  min-width: 1000px;
+  height: 400px;
+  outline: #ccc auto 1px;
+}
+
 
 </style>

@@ -89,6 +89,14 @@ export default {
 
     vm.owner = this.$store.getters.getUser
 
+
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_identity/")
+      .then((response) => {
+        console.log(response.data);
+        vm.editorData = response.data.pop().contactContent
+      })
+
   },
   methods: {
     submitContact: function () {

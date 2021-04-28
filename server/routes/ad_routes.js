@@ -29,6 +29,18 @@ router.post("/get_ad", jsonParser, (req, res) => {
     });
 });
 
+router.post("/click_ad", jsonParser, (req, res) => {
+  var adData = req.body.data;
+
+  Ad.findOneAndUpdate({ _id: adData.id }, { $inc: { clicks: 1 } })
+    .then((doc) => {
+      res.json("success");
+    })
+    .catch((err) => {
+      res.json("Server Error");
+    });
+});
+
 router.post("/create_ad", jsonParser, (req, res) => {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 

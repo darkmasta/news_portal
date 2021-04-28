@@ -66,6 +66,7 @@ export default {
                   type: 'success',
                   text: 'Yeni Etiket Basariyla Olusturuldu!'
               });
+              setTimeout(() => {vm.$router.push({name: 'Tags'})}, 1500);
           }
         });
     }

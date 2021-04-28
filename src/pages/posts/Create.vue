@@ -10,27 +10,32 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'edit'" data-toggle="tab" href="#"
+           @click="expandTab = 'edit'" data-toggle="tab" href="/#/posts/create"
                       :class="{active: expandTab == 'edit'}">Edit Tarihi</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'categories'" data-toggle="tab" href="#"
+           @click="expandTab = 'categories'" data-toggle="tab" href="/#/posts/create"
                       :class="{active: expandTab == 'categories'}">Kategoriler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'postImage'" data-toggle="tab" href="#"
+           @click="expandTab = 'tags'" data-toggle="tab" href="/#/posts/create"
+                      :class="{active: expandTab == 'tags'}">Etiketler</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'postImage'" data-toggle="tab" href="/#/posts/create"
                   :class="{active: expandTab == 'postImage'}">Haber Resmi</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'postLinks'" data-toggle="tab" href="#"
+           @click="expandTab = 'postLinks'" data-toggle="tab" href="/#/posts/create"
                   :class="{active: expandTab == 'postLinks'}">Haber Linkleri</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'languages'" data-toggle="tab" href="#"
+           @click="expandTab = 'languages'" data-toggle="tab" href="/#/posts/create"
                   :class="{active: expandTab == 'languages'}">Haber Dilleri</a>
         </li>
       </ul>
@@ -78,6 +83,22 @@
                   <span>Selected Categories: </span>{{selectedCategories}}
               </b-col>
           </b-row>
+        </div>
+        <div class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}" id="navs-left-profile">
+
+        <ul class="tags-container">
+          <li v-for="(tag,index) in tags" :key="index"><span @click="addTag(tag)" class="single-tag">{{tag}}</span></li>
+        </ul>
+
+        <hr class="tags-hr">
+
+        <div class="selected-tags">{{selectedTags}}</div>
+
+
+        <ul class="tags-container">
+          <li v-for="(tag,index) in selectedTags" :key="index" @click="removeTag(index)"><span class="selected-tag">{{tag}}</span></li>
+        </ul>
+
         </div>
         <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
           <b-row >
@@ -244,10 +265,11 @@
     </div>
 
     <div class="divider mt-4 mb-4"></div>
-    <b-row>
-      <b-col>
+
+     <b-row class="editor-container mt-3">
+      <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
         </div>
       </b-col>
     </b-row>
@@ -272,10 +294,17 @@ import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 
 
+
+
 import categoryData from "../category/categories_data"
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+
 import CKEditor from '@ckeditor/ckeditor5-vue2';
+
+import VueAutosuggest from "vue-autosuggest";
+Vue.use(VueAutosuggest);
 
 Vue.use(CKEditor)
 
@@ -285,7 +314,8 @@ export default {
   components: {
     Cropper,
     Datepicker,
-    VueTimepicker
+    VueTimepicker,
+    VueAutosuggest
   },
   data() {
     return {
@@ -302,7 +332,7 @@ export default {
       categoryTitles: [],
       selectedCategories: [],
       postTitle: '',
-      editor: ClassicEditor,
+      editor: DecoupledEditor,
       editorData: '<p>Content of the editor.</p>',
       editorConfig: {
          // The configuration of the editor.
@@ -336,13 +366,28 @@ export default {
       postArabicLink: '',
       postRussianLink: '',
       postUkranianLink: '',
-      postFrenchLink: ''
+      postFrenchLink: '',
+      tags: [],
+      selectedTags: [],
     }
   },
   created() {
     var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
 
+
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
+      .then((response) => {
+        let tags = response.data
+        console.log(tags)
+        tags.forEach( tag => {
+          vm.tags.push(tag.tagName)
+        })
+
+        console.log(vm.tags)
+
+      })
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
@@ -561,6 +606,13 @@ export default {
           }, 'image/jpeg')
       }
     },
+    onReady( editor )  {
+      // Insert the toolbar before the editable area.
+      editor.ui.getEditableElement().parentElement.insertBefore(
+          editor.ui.view.toolbar.element,
+          editor.ui.getEditableElement()
+      );
+    },
     updateSize({ coordinates }) {
 			this.size.width = Math.round(coordinates.width);
 			this.size.height = Math.round(coordinates.height);
@@ -658,9 +710,18 @@ export default {
         vm.clickedCategory = index
       }
     },
+    addTag(tag) {
+      var vm = this
+      vm.selectedTags.push(tag)
+    },
+    removeTag(index) {
+      var vm = this
+      vm.selectedTags.splice(index, 1)
+    }
   },
 };
 </script>
+
 
 <style>
 .publish_date {
@@ -682,9 +743,7 @@ export default {
   background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 7%, rgba(0,212,255,1) 100%);
 }
 
-.ck-editor__editable {
-  min-width: 1200px;
-}
+
 
 .input-group>.input-group-prepend {
     flex: 0 0 20%;
@@ -838,5 +897,47 @@ input:checked + .slider:before {
   background: #2fb37f;
 }
 
+.editor_center {
+  display: block;
+  width: 1200px;
+}
+
+.ck-toolbar {
+  position: relative;
+  top: 0;
+  left: 0px;
+  height: 40px !important;
+}
+
+.ck-editor__editable {
+  position: relative;
+  top: 45px;
+  left: -996px;
+  min-width: 1000px;
+  height: 400px;
+  outline: #ccc auto 1px;
+}
+
+.tags-container {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+
+.tags-container li {
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  background: rgba(179, 209, 255, 0.5);
+}
+
+.tags-hr {
+  border-bottom: 5px solid blue;
+}
+
+.selected-tag  {
+  background: rgb(153, 255, 187, 0.5);
+}
 
 </style>

@@ -2,7 +2,7 @@
 <div class="main_container">
     <header>
         <div class="logo">
-            <img :src="require('@/assets/images/logo.png')" /> 
+          <router-link to="/"> <img :src="require('@/assets/images/logo.png')" /> </router-link>
         </div> 
 
         <div class="search">
@@ -46,7 +46,14 @@
     </div> 
 
 
-    <b-row></b-row>
+    <b-row class="top_activities_container">
+        <b-col cols="4" class="top_activity_item"
+         v-for="(ad, index) in ads.slice(0,3)" :key="index"
+         @click="incrementClick(ad)">
+            <img :src="ad.adImage"> 
+            <h3 class="ad-title">{{ad.adName}}</h3>
+        </b-col>
+    </b-row>
 
     <b-row class="top_slider_container">
         <b-col cols="7" class="top_slider">
@@ -55,12 +62,18 @@
         <b-col class="top_slider_right_box">
             <b-row class="test_box">
                 <b-col  class="slider_right_single_item">
+                    <img :src="activities[0].activityImage">
+                    <h4>{{activities[0].activityTitle}}</h4>
                 </b-col>
                 <b-col  class="slider_right_single_item">
+                    <img :src="activities[1].activityImage">
+                    <h4>{{activities[1].activityTitle}}</h4>
                 </b-col>
             </b-row>
             <b-row class="test_box">
                 <b-col  class="slider_right_single_item">
+                    <img :src="activities[3].activityImage">
+                    <h4>{{activities[3].activityTitle}}</h4>
                 </b-col>
                 <b-col  class="slider_right_single_item">
                 </b-col>
@@ -69,6 +82,41 @@
                 <b-col cols="12" class="bottom_full_width_ad">
                 </b-col>
             </b-row>
+        </b-col>
+    </b-row>
+
+    <b-row class="top_slider_container">
+        <b-col cols="7" class="top_slider">
+            <div>SLIDER</div>
+        </b-col>
+        <b-col class="top_slider_right_box">
+            <b-row class="most_views_news">
+                <h3>ÇOK OKUNAN HABERLER</h3> 
+            </b-row>
+            <b-row>
+                <b-col class="view_time">
+                    <div>Son 24 Saat</div>
+                </b-col>
+                <b-col class="view_time">
+                    <div>Son  7 Gün</div>
+                </b-col>
+                <b-col class="view_time">
+                    <div>Son 30 Gün</div>
+                </b-col>
+            </b-row>
+        </b-col>
+    </b-row>
+
+
+     <b-row class="top_activities_container">
+        <b-col cols="4" class="top_activity_item">
+            <div>SLIDER</div>
+        </b-col>
+        <b-col cols="4" class="top_activity_item">
+            <div>SLIDER</div>
+        </b-col>
+        <b-col cols="4" class="top_activity_item">
+            <div>SLIDER</div>
         </b-col>
     </b-row>
 
@@ -95,10 +143,20 @@ export default {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       language: 'Turkce 🇹🇷',
       activities: [],
+      ads: []
   }),
   created() {
     var vm = this;
 
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_ads/", {})
+      .then((response) => {
+        console.log(response.data);
+        vm.ads = response.data
+        vm.ads.forEach(ad => {
+            ad.adImage = process.env.VUE_APP_SERVER_URL + '/images/'  + ad.adImage
+        })
+      })
 
     axios
         .post(process.env.VUE_APP_SERVER_URL + "/get_activities/", {})
@@ -109,11 +167,11 @@ export default {
                 activity.activityImage = process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage;
                 axios.get(activity.activityImage)
                      .then((response) => {
-                         console.log(response.data)
+                        //  console.log(response.data)
                      })
                      .catch((error) => {
                          if(error)
-                         console.log(activity.activityImage.split('/').pop())
+                        //  console.log(activity.activityImage.split('/').pop())
                          activity.activityImage = 'https://defensehere.herokuapp.com/images/' + 
                                                         activity.activityImage.split('/').pop()
                      }) 
@@ -122,6 +180,21 @@ export default {
 
   },
   methods: {
+    incrementClick(ad) {
+        var vm = this
+        let data = {id: ad._id}
+
+        axios
+        .post(process.env.VUE_APP_SERVER_URL + "/click_ad/", {data})
+        .then((response) => {
+            console.log(response.data);
+            vm.$notify({
+                type: 'success',
+                text: 'Reklam Tiklandi!'
+            });
+        })
+
+    }
   }
 };
 </script>
@@ -272,7 +345,7 @@ header {
 }
 
 .top_slider {
-    height: 40vh;
+    height: 60vh;
     background: coral;
     display: flex;
     justify-content: center;
@@ -298,15 +371,88 @@ header {
 }
 
 .slider_right_single_item {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     background: green;
     margin: 10px;
 }
 
-.bottom_full_width_ad {
-    background: blue;
+.slider_right_single_item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.slider_right_single_item  h4 {
+    text-align: center;
     margin-top: 10px;
 }
 
+.bottom_full_width_ad {
+    background: blue;
+    height: 76%;
+}
+
+.top_activities_container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.top_activity_item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid red;
+    height: 130px;
+    cursor: pointer;
+}
+
+.top_activity_item img {
+    max-height: 100%;
+    width: auto;
+}
+
+.top_activity_item  h3 {
+    position: relative;
+    top: 1%;
+    left: 0; 
+    transform: translate(-50%, -50%);
+}
+
+.most_views_news {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0D6937;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    line-height: 21.29px;
+}
+
+.most_views_news h3 {
+    margin-top: 10px;
+}
+
+.view_time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 21px;       
+  color: #606060;
+  height: 80px;
+  background: #E5E5E5;
+  border-right: 2px solid white;
+} 
+
+.view_time:last-child {
+    border-right: none;
+} 
 
 
 </style>

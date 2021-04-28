@@ -1,7 +1,7 @@
 <template>
 <div class="activity_item">
-    <img :src="activity.activityImage" />
-    <h4>{{activity.activityTitle}}</h4>
+    <img :src="ad.adImage" />
+    <h4>{{ad.adName}}</h4>
 </div>
 </template>
 <script>
@@ -9,7 +9,7 @@ import axios from "axios";
 export default {
   name: "Activity",
   props: {
-      activity: Object
+      ad: Object
   },
   data: () => ({
       activity: {},

@@ -121,6 +121,13 @@ export default {
         class: "text-center align-middle",
       },
       {
+        key: "clicks",
+        label: "Tıklanma",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
         key: "adType",
         label: "Reklam Grubu",
         sortable: true,
@@ -188,6 +195,7 @@ export default {
                 status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onaylandi',
                 adType: ad.adType,
                 views: ad.views,
+                clicks: ad.clicks,
                 link: ad.link,
                 adImage: process.env.VUE_APP_SERVER_URL + '/images/' + ad.adImage,
                 Baslik: ad.adTitle || ad.adName,

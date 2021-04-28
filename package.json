@@ -104,6 +104,8 @@
     "vue": "~2.6.6",
     "vue-adblock": "0.0.3",
     "vue-advanced-cropper": "^1.3.4",
+    "vue-advanced-search": "^0.1.43",
+    "vue-autosuggest": "^2.2.0",
     "vue-awesome-swiper": "~4.1.0",
     "vue-axios-cors": "^1.0.1",
     "vue-blockui": "~1.1.6",

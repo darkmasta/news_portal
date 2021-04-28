@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 var Tags = require("../Models/tags");
+var Tag = Tags.Tag;
 
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
@@ -17,6 +18,18 @@ router.post("/get_tags", jsonParser, function (req, res) {
   });
 });
 
+router.post("/get_tag", jsonParser, (req, res) => {
+  var data = req.body.data;
+
+  Tag.find({ _id: data.id })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((err) => {
+      res.json("Server Error");
+    });
+});
+
 router.post("/create_tag", jsonParser, function (req, res) {
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
 
@@ -30,6 +43,21 @@ router.post("/create_tag", jsonParser, function (req, res) {
   Tag.save()
     .then((tag) => res.json("success"))
     .catch((err) => res.json(err));
+});
+
+router.post("/update_tag", jsonParser, (req, res) => {
+  var data = req.body.data;
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  if (!isAdmin == "admin" && !isAdmin == "editor")
+    res.json("Authentication Error");
+
+  Tag.updateOne(
+    { _id: data.id },
+    {
+      tagName: data.tagName,
+    }
+  ).then((doc) => res.json("success"));
 });
 
 router.post("/delete_tag", jsonParser, (req, res) => {

@@ -29,7 +29,7 @@
         :current-page="currentPage"
         :fields="tableFields">
         <template #cell(details)="data" class="activities-table-buttons">
-          <span title="Edit Tag" class="far fa-edit mr-2 text-primary" @click="deleteTag(data)"></span>
+          <span title="Edit Tag" class="far fa-edit mr-2 text-primary" @click="goToTag(data)"></span>
           <span title="Delete Tag" class="fas fa-times text-danger" @click="deleteTag(data)"></span>
         </template>
       </b-table>
@@ -64,8 +64,29 @@ export default {
   data: () => ({
     tableFields: [
       {
+        key: "order",
+        label: "Etiket Sirasi",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
         key: "tag",
-        label: 'Etiket',
+        label: 'Etiket İsmi',
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "date",
+        label: "Eklenme Tarihi",
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "total",
+        label: "Toplam Kullanim",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -83,7 +104,7 @@ export default {
 
     // pagination
     perPageOptions: [2, 4, 6, 8, 10],
-    perPage: 2,
+    perPage: 25,
     currentPage: 1,
   }),
   created() {
@@ -94,10 +115,13 @@ export default {
       .then((response) => {
         console.log(response.data);
         vm.tags = response.data
-            vm.tags.forEach(tag => {
+            vm.tags.forEach((tag,index)  => {
               var tmp_tag = {
+                order: index + 1,
                 tag: tag.tagName,
-                details: tag._id
+                date: moment(tag.date).format('DD/MM/YYYY, h:mm:ss a'),
+                details: tag._id,
+                total: '---'
               }
               vm.tagsTableData.push(tmp_tag)
             })
@@ -114,8 +138,9 @@ export default {
     },
   },
   methods: {
-    goToActivity(data) {
-      this.$router.push({ name: 'Activity', params: { id: data.value } })
+    goToTag(data) {
+      console.log(data)
+      this.$router.push({ name: 'Tag', params: { id: data.value } })
     },
     deleteTag(id) {
       var vm = this
