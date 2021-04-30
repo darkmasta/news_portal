@@ -212,7 +212,7 @@ export default {
       }
     },
     deletePost(post) {
-      if (confirm('Kullanici Siliniyor. Emin Misiniz?')) {
+      if (confirm('Haber Siliniyor. Emin Misiniz?')) {
         var vm = this
         let data = {}
         data.id = post.value

@@ -6,6 +6,14 @@
       </div>
     </div>
 
+    <b-row>
+      <b-col cols="10" class="offset-1 mb-3">
+        <b-input-group prepend="Iletisim Baslik" class="mt-2">
+          <b-form-input v-model="contactHeading"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+
     <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
@@ -81,6 +89,7 @@ export default {
       //   ]
       // },
       },
+      contactHeading: ''
     }
   },
   created() {
@@ -90,10 +99,11 @@ export default {
     vm.owner = this.$store.getters.getUser
 
 
+
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_identity/")
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         vm.editorData = response.data.pop().contactContent
       })
 

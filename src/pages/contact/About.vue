@@ -6,6 +6,14 @@
       </div>
     </div>
 
+    <b-row>
+      <b-col cols="10" class="offset-1 mb-3">
+        <b-input-group prepend="Hakkımızda" class="mt-2">
+          <b-form-input v-model="aboutHeading"></b-form-input>
+        </b-input-group>
+      </b-col>
+    </b-row>
+
     <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
@@ -85,6 +93,7 @@ export default {
       //   ]
       // },
       },
+      aboutHeading: ''
     }
   },
   created() {

@@ -86,18 +86,19 @@
         </div>
         <div class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}" id="navs-left-profile">
 
-        <ul class="tags-container">
-          <li v-for="(tag,index) in tags" :key="index"><span @click="addTag(tag)" class="single-tag">{{tag}}</span></li>
-        </ul>
+        <vue-typeahead-bootstrap
+          v-model="tag"
+          :data="tags"
+          :minMatchingChars="1"
+          @hit="addToSelectedTags"
+        />
 
-        <hr class="tags-hr">
 
-        <div class="selected-tags">{{selectedTags}}</div>
+        <div class="selected-tags mt-5">
+          <span class="selected-tag" v-for="(selectedTag, index) in selectedTags" :key="index">{{selectedTag}}
+          <i @click="removeFromSelectedTags(index)" style="color: red;" class="fas fa-times ml-2"></i></span>
+        </div>
 
-
-        <ul class="tags-container">
-          <li v-for="(tag,index) in selectedTags" :key="index" @click="removeTag(index)"><span class="selected-tag">{{tag}}</span></li>
-        </ul>
 
         </div>
         <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
@@ -303,8 +304,9 @@ import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 
-import VueAutosuggest from "vue-autosuggest";
-Vue.use(VueAutosuggest);
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
+
+// Required dependency of bootstrap css/scss files
 
 Vue.use(CKEditor)
 
@@ -315,7 +317,7 @@ export default {
     Cropper,
     Datepicker,
     VueTimepicker,
-    VueAutosuggest
+    VueTypeaheadBootstrap
   },
   data() {
     return {
@@ -368,6 +370,7 @@ export default {
       postUkranianLink: '',
       postFrenchLink: '',
       tags: [],
+      tag: '',
       selectedTags: [],
     }
   },
@@ -480,6 +483,7 @@ export default {
             formData.append("postUkranianLink", vm.postUkranianLink)
             formData.append("postFrenchLink", vm.postFrenchLink)
             formData.append("postLanguage", vm.postLanguage)
+            formData.append("selectedTags", vm.selectedTags)
             formData.append("owner", vm.owner)
 
 
@@ -583,6 +587,7 @@ export default {
               formData.append("postRussianLink", vm.postRussianLink)
               formData.append("postUkranianLink", vm.postUkranianLink)
               formData.append("postFrenchLink", vm.postFrenchLink)
+              formData.append("selectedTags", vm.selectedTags)
 
               axios
                 .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
@@ -605,6 +610,11 @@ export default {
           // Perhaps you should add the setting appropriate file format here
           }, 'image/jpeg')
       }
+    },
+    addToSelectedTags() {
+      var vm = this;
+      vm.selectedTags.push(vm.tag)
+
     },
     onReady( editor )  {
       // Insert the toolbar before the editable area.
@@ -715,6 +725,10 @@ export default {
       vm.selectedTags.push(tag)
     },
     removeTag(index) {
+      var vm = this
+      vm.selectedTags.splice(index, 1)
+    },
+    removeFromSelectedTags(index) {
       var vm = this
       vm.selectedTags.splice(index, 1)
     }
@@ -938,6 +952,13 @@ input:checked + .slider:before {
 
 .selected-tag  {
   background: rgb(153, 255, 187, 0.5);
+  padding: 10px;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.vbt-autcomplete-list {
+  background: rgb(235, 232, 225);
 }
 
 </style>

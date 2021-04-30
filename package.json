@@ -141,6 +141,7 @@
     "vue-text-mask": "~6.1.1",
     "vue-toasted": "~1.1.24",
     "vue-typeahead": "~2.3.2",
+    "vue-typeahead-bootstrap": "^2.11.1",
     "vue-upload-component": "^2.8.22",
     "vue2-dropzone": "~3.6.0",
     "vue2-google-maps": "~0.10.2",

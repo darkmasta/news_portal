@@ -48,6 +48,7 @@ router.post("/create_post", jsonParser, (req, res) => {
         postUkranianLink: postData.postUkranianLink,
         postFrenchLink: postData.postFrenchLink,
         postLanguage: postData.postLanguage,
+        tags: postData.selectedTags,
         state: postData.state,
         postOrder: postOrder,
         views: 0,

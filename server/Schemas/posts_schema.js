@@ -37,6 +37,7 @@ var postSchema = new Schema({
     },
   ],
   postLanguages: [String],
+  tags: [String],
   isLocked: Boolean,
   lockerEditor: String,
   isOnAir: Boolean,

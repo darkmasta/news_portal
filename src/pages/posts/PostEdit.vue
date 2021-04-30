@@ -20,6 +20,11 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" 
+           @click="expandTab = 'tags'" data-toggle="tab" href="#"
+                      :class="{active: expandTab == 'tags'}">Etiketler</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
            @click="expandTab = 'postImage'" data-toggle="tab" href="#"
                   :class="{active: expandTab == 'postImage'}">Haber Resmi</a>
         </li>
@@ -87,6 +92,23 @@
                   <span>Selected Categories: </span>{{selectedCategories}}
               </b-col>
           </b-row>
+        </div>
+        <div class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}" id="navs-left-profile">
+
+        <vue-typeahead-bootstrap
+          v-model="tag"
+          :data="tags"
+          :minMatchingChars="1"
+          @hit="addToSelectedTags"
+        />
+
+
+        <div class="selected-tags mt-5">
+          <span class="selected-tag" v-for="(selectedTag, index) in selectedTags" :key="index">{{selectedTag}}
+          <i @click="removeFromSelectedTags(index)" style="color: red;" class="fas fa-times ml-2"></i></span>
+        </div>
+
+
         </div>
         <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
           <b-row >
@@ -282,6 +304,7 @@ import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 
 
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 
 import categoryData from "../category/categories_data"
 
@@ -296,6 +319,7 @@ export default {
   components: {
     Cropper,
     Datepicker,
+    VueTypeaheadBootstrap,
     VueTimepicker
   },
   data: () => ({
@@ -352,7 +376,10 @@ export default {
     postRussianLink: '',
     postUkranianLink: '',
     postFrenchLink: '',
-    user: {}
+    user: {},
+    tags: [],
+    tag: '',
+    selectedTags: [],
   }),
   created() {
     var vm = this;
@@ -372,6 +399,9 @@ export default {
           var categoryArray = vm.post.categories[0]
           categoryArray = categoryArray.split(',')
           vm.selectedCategories = categoryArray
+          var tagArray = vm.post.tags[0]
+          tagArray = tagArray.split(',')
+          vm.selectedTags = tagArray
 
           axios.get(process.env.VUE_APP_SERVER_URL + "/user")
                 .then((response) => {
@@ -418,6 +448,19 @@ export default {
                 console.error(err);
             })
 
+
+     axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
+      .then((response) => {
+        let tags = response.data
+        console.log(tags)
+        tags.forEach( tag => {
+          vm.tags.push(tag.tagName)
+        })
+
+        console.log(vm.tags)
+
+      })
 
 
     vm.categoryTitles = Object.keys(categoryData)
@@ -501,6 +544,7 @@ export default {
             formData.append("postFrenchLink", vm.postFrenchLink)
             formData.append("latestLogText", vm.latestLogText)
             formData.append("owner", vm.owner)
+            formData.append("selectedTags", vm.selectedTags)
             formData.append("id", vm.id)
             vm.editLogs.push(vm.latestLogText)
             console.log(vm.editLogs)
@@ -574,6 +618,7 @@ export default {
                       formData.append("postFrenchLink", vm.postFrenchLink)
                       formData.append("latestLogText", vm.latestLogText)
                       formData.append("owner", vm.owner)
+                      formData.append("selectedTags", vm.selectedTags)
                       formData.append("id", vm.id)
 
                       console.log(vm.editLogs)
@@ -731,7 +776,23 @@ export default {
               // vm.editLogs.splice(index, 1);
           }
         });
-    }
+    },
+    addTag(tag) {
+      var vm = this
+      vm.selectedTags.push(tag)
+    },
+    removeTag(index) {
+      var vm = this
+      vm.selectedTags.splice(index, 1)
+    },
+    removeFromSelectedTags(index) {
+      var vm = this
+      vm.selectedTags.splice(index, 1)
+    },
+    addToSelectedTags() {
+      var vm = this;
+      vm.selectedTags.push(vm.tag)
+    },
   },
 };
 </script>
@@ -949,6 +1010,35 @@ input:checked + .slider:before {
   min-width: 1000px;
   height: 400px;
   outline: #ccc auto 1px;
+}
+
+.tags-container {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+
+.tags-container li {
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  background: rgba(179, 209, 255, 0.5);
+}
+
+.tags-hr {
+  border-bottom: 5px solid blue;
+}
+
+.selected-tag  {
+  background: rgb(153, 255, 187, 0.5);
+  padding: 10px;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.vbt-autcomplete-list {
+  background: rgb(235, 232, 225);
 }
 
 
