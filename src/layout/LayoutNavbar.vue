@@ -3,7 +3,7 @@
 
     <!-- Brand -->
     <b-navbar-brand to="/">
-      <b-img :src="require('@/assets/images/logo.png')" v-bind="{ width: 114, class: 'm1' }"></b-img>
+      <b-img :src="logoUrl" v-bind="{ width: 114, class: 'm1' }"></b-img>
     </b-navbar-brand>
 
     <!-- Sidenav toggle -->
@@ -79,6 +79,7 @@ export default {
     publicUrl: process.env.VUE_APP_SERVER_URL,
     curUser: { name: "", photo: "" },
     currentUser: "",
+    logoUrl: 'https://defensehere.herokuapp.com/images/logo.png'
   }),
   created() {
     var vm = this

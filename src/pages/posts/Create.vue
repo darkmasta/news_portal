@@ -100,6 +100,7 @@
         </div>
 
 
+
         </div>
         <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
           <b-row >
@@ -369,9 +370,11 @@ export default {
       postRussianLink: '',
       postUkranianLink: '',
       postFrenchLink: '',
+      tagsWithIds: [],
       tags: [],
       tag: '',
       selectedTags: [],
+      selectedTagIds: [],
     }
   },
   created() {
@@ -383,6 +386,7 @@ export default {
       .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
       .then((response) => {
         let tags = response.data
+        vm.tagsWithIds = tags
         console.log(tags)
         tags.forEach( tag => {
           vm.tags.push(tag.tagName)
@@ -501,6 +505,16 @@ export default {
                       type: 'success',
                       text: 'Haber Resmi Yuklendi!'
                   });
+                  vm.selectedTagIds.forEach(tagId => {
+                    let data = {id: tagId}
+
+                    axios
+                      .post(process.env.VUE_APP_SERVER_URL + "/use_tag/", {data})
+                      .then((response) => {
+                        console.log("tag used")
+                      })
+
+                  })
                 }
               });
             })
@@ -613,6 +627,9 @@ export default {
     },
     addToSelectedTags() {
       var vm = this;
+      // console.log(vm.tag)
+      // console.log(vm.tagsWithIds[vm.tags.indexOf(vm.tag)])
+      vm.selectedTagIds.push(vm.tagsWithIds[vm.tags.indexOf(vm.tag)]._id)
       vm.selectedTags.push(vm.tag)
 
     },
@@ -722,6 +739,7 @@ export default {
     },
     addTag(tag) {
       var vm = this
+      console.log(tag);
       vm.selectedTags.push(tag)
     },
     removeTag(index) {

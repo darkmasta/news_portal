@@ -62,4 +62,36 @@ router.post("/update_activity_type_list", jsonParser, (req, res) => {
   });
 });
 
+router.post("/change_logo", jsonParser, (req, res) => {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body; // form data
+
+  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
+    res.json("Authorization Error");
+
+  ba64.writeImage("./images/" + "logo", data.file, (err) => {
+    if (err) throw err;
+
+    res.json("success");
+    console.log("Site Logo saved successfully");
+  });
+});
+
+router.post("/change_favicon", jsonParser, (req, res) => {
+  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+
+  var data = req.body; // form data
+
+  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
+    res.json("Authorization Error");
+
+  ba64.writeImage("./images/" + "favicon", data.file, (err) => {
+    if (err) throw err;
+
+    res.json("success");
+    console.log("Favicon saved successfully");
+  });
+});
+
 module.exports = router;

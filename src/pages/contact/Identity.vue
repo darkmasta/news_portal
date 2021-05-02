@@ -19,9 +19,12 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Eddifa şirketi adına imtiyaz sahibi" class="mt-2">
-          <b-form-input v-model="kunyeImtiyaz"></b-form-input>
+          <b-form-input v-model="kunyeImtiyaz"
+           v-on:keyup.enter="addToKunyeImtiyaz(kunyeImtiyaz)"></b-form-input>
           <div class="edit_buttons">
-            <span title="Ekle" class="fa fa-check" @click="addToKunyeImtiyaz(kunyeImtiyaz)"></span>
+            <span title="Ekle" class="fa fa-check"
+             @click="addToKunyeImtiyaz(kunyeImtiyaz)"
+             ></span>
           </div>
         </b-input-group>
       </b-col>
@@ -37,7 +40,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Genel Yayın Yönetmeni" class="mt-2">
-          <b-form-input v-model="genelYayinYonetmeni"></b-form-input>
+          <b-form-input v-model="genelYayinYonetmeni"
+              v-on:keyup.enter="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></span>
           </div>
@@ -55,7 +59,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Arapça Haberler" class="mt-2">
-          <b-form-input v-model="arabicNews"></b-form-input>
+          <b-form-input v-model="arabicNews"
+              v-on:keyup.enter="addToArabicNews(arabicNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToArabicNews(arabicNews)"></span>
           </div>
@@ -73,7 +78,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="İngilizce Haberler" class="mt-2">
-          <b-form-input v-model="englishNews"></b-form-input>
+          <b-form-input v-model="englishNews"
+              v-on:keyup.enter="addToEnglishNews(englishNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToEnglishNews(englishNews)"></span>
           </div>
@@ -91,7 +97,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Rusça Haberler" class="mt-2">
-          <b-form-input v-model="russianNews"></b-form-input>
+          <b-form-input v-model="russianNews"
+              v-on:keyup.enter="addToRussianNews(russianNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToRussianNews(russianNews)"></span>
           </div>
@@ -109,7 +116,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Türkçe Haberler" class="mt-2">
-          <b-form-input v-model="turkishNews"></b-form-input>
+          <b-form-input v-model="turkishNews"
+              v-on:keyup.enter="addToTurkishNews(turkishNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToTurkishNews(turkishNews)"></span>
           </div>
@@ -127,7 +135,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Kurgu ve Kamera" class="mt-2">
-          <b-form-input v-model="camera"></b-form-input>
+          <b-form-input v-model="camera"
+              v-on:keyup.enter="addToCamera(camera)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToCamera(camera)"></span>
           </div>
@@ -145,7 +154,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Post Prodüksiyon" class="mt-2">
-          <b-form-input v-model="postProduction"></b-form-input>
+          <b-form-input v-model="postProduction"
+              v-on:keyup.enter="addToPostProduction(postProduction)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToPostProduction(postProduction)"></span>
           </div>
@@ -163,7 +173,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Seslendirme" class="mt-2">
-          <b-form-input v-model="sound"></b-form-input>
+          <b-form-input v-model="sound"
+              v-on:keyup.enter="addToSound(sound)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToSound(sound)"></span>
           </div>
@@ -181,7 +192,8 @@
     <b-row>
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Hukuk Danışmanı" class="mt-2">
-          <b-form-input v-model="lawyer"></b-form-input>
+          <b-form-input v-model="lawyer"
+              v-on:keyup.enter="addToLawyer(lawyer)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToLawyer(lawyer)"></span>
           </div>

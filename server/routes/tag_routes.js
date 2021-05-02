@@ -60,6 +60,18 @@ router.post("/update_tag", jsonParser, (req, res) => {
   ).then((doc) => res.json("success"));
 });
 
+router.post("/use_tag", jsonParser, (req, res) => {
+  var data = req.body.data;
+
+  Tag.findOneAndUpdate({ _id: data.id }, { $inc: { uses: 1 } })
+    .then((doc) => {
+      res.json("success");
+    })
+    .catch((err) => {
+      res.json("Server Error");
+    });
+});
+
 router.post("/delete_tag", jsonParser, (req, res) => {
   var tagData = req.body.data;
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere);

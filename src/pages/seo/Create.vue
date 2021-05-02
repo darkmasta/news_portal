@@ -26,7 +26,12 @@
         <li class="nav-item">
           <a class="nav-link" 
            @click="expandTab = 'logo'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'logo'}">Logo/Favicon</a>
+                  :class="{active: expandTab == 'logo'}">Logo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'favicon'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'favicon'}">Favicon</a>
         </li>
       </ul>
       <div class="tab-content">
@@ -91,18 +96,17 @@
                 </b-form-group>
               </b-col>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'logo', show: expandTab == 'logo'}" id="navs-left-profile">
-
-          <b-row >
+        <div class="tab-pane fade " :class="{active: expandTab == 'favicon', show: expandTab == 'favicon'}" id="navs-left-profile">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Favicon</h3> 
+              </b-col>
+        
           <b-col cols="12">
-            <b-col cols="6" class="offset-5 mt-3 kategoriler">
-              <h3>Logo</h3> 
-            </b-col>
             <div class="upload-example">
               <div>
                   <cropper
                     :src="image"
-                    ref="cropper"
+                    ref="cropper3"
                     :transitions="true"
                   />
               </div>
@@ -112,25 +116,16 @@
               <div class="get-image-button" title="Get Image">
                 <i class="fas fa-download"></i>
               </div>
-              <div class="img-name-text" title="Image Name">
-                {{imageName}}
-              </div>
-              <b-col cols="6" offset="3">
-                <div class="img-name">
-                    <b-form-group label="Foto Ismi">
-                      <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
-                    </b-form-group>
-                </div>
-              </b-col>
               <div class="button-wrapper">
+
             
               <span class="button" @click="$refs.file.click()">
-                <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                Load image
+                <input type="file" ref="file" @change="loadFavicon($event)" accept="image/*">
+               Favicon Yükle 
               </span>
 
               <span class="button ml-5" @click="crop">
-                Crop 
+                Kırp
               </span>
 
               <label class="switch">
@@ -139,6 +134,58 @@
                 <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
               </label>
              
+                <b-btn @click="changeFavicon" variant="primary rounded-pill" class="change-logo ml-5 mb-1">
+                  <span class="fas fa-plus-circle"></span> Faviconu Güncelle
+                </b-btn>
+
+              </div>
+            </div>
+          </b-col>
+          
+        </div>
+        <div class="tab-pane fade " :class="{active: expandTab == 'logo', show: expandTab == 'logo'}" id="navs-left-profile">
+
+          <b-row>
+          <b-col cols="12">
+            <b-col cols="6" class="offset-5 mt-3 kategoriler">
+              <h3>Logo</h3> 
+            </b-col>
+            <div class="upload-example">
+              <div>
+                  <cropper
+                    :src="image"
+                    ref="cropper2"
+                    :transitions="true"
+                  />
+              </div>
+              <div  class="reset-button" title="Reset Image" @click="reset()">
+                <i class="fa fa-times"></i>
+              </div>
+              <div class="get-image-button" title="Get Image">
+                <i class="fas fa-download"></i>
+              </div>
+              <div class="button-wrapper">
+
+            
+              <span class="button" @click="$refs.file.click()">
+                <input type="file" ref="file" @change="loadLogo($event)" accept="image/*">
+               Logo Yükle 
+              </span>
+
+              <span class="button ml-5" @click="crop">
+                Kırp
+              </span>
+
+              <label class="switch">
+                <input type="checkbox" v-model="toggleEditImage">
+                <span class="slider round"></span>
+                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+              </label>
+             
+                <b-btn @click="changeLogo" variant="primary rounded-pill" class="change-logo ml-5 mb-1">
+                  <span class="fas fa-plus-circle"></span> Logoyu Güncelle
+                </b-btn>
+
               </div>
             </div>
           </b-col>
@@ -254,7 +301,11 @@ export default {
     imageHeight: 0,
     imageName: "",
     owner: '',
-    googleStatement: ''
+    googleStatement: '',
+    logo: '',
+    base64logo: '',
+    favicon: '',
+    base64favicon: ''
   }),
   created() {
     var vm = this;
@@ -334,6 +385,62 @@ export default {
 				reader.readAsDataURL(input.files[0]);
 			}
 	},
+    loadLogo(event) {
+      var input = event.target;
+      var vm = this
+
+	if (input.files && input.files[0]) {
+        console.log(input.files[0])
+				var reader = new FileReader();
+        var fr = new FileReader;
+
+        fr.onload = function() {
+          var img = new Image;
+
+          img.onload = () => {
+            vm.imageWidth = img.width; 
+            vm.imageHeight = img.height;
+          }
+
+          img.src = fr.result
+        }
+
+        fr.readAsDataURL(input.files[0])
+				reader.onload = (e) => {
+					this.logo = e.target.result;
+          this.base64logo = this.image
+				};
+				reader.readAsDataURL(input.files[0]);
+			}
+	},
+    loadFavicon(event) {
+      var input = event.target;
+      var vm = this
+
+	if (input.files && input.files[0]) {
+        console.log(input.files[0])
+				var reader = new FileReader();
+        var fr = new FileReader;
+
+        fr.onload = function() {
+          var img = new Image;
+
+          img.onload = () => {
+            vm.imageWidth = img.width; 
+            vm.imageHeight = img.height;
+          }
+
+          img.src = fr.result
+        }
+
+        fr.readAsDataURL(input.files[0])
+				reader.onload = (e) => {
+					this.favicon = e.target.result;
+          this.base64favicon = this.image
+				};
+				reader.readAsDataURL(input.files[0]);
+			}
+	},
     blobToBase64 (blob)  {
       const reader = new FileReader();
       reader.readAsDataURL(blob);
@@ -343,22 +450,18 @@ export default {
         };
       });
     },
-    uploadImage() {
+    changeLogo() {
       var vm = this
-			const { canvas } = this.$refs.cropper.getResult();
+			const { canvas } = this.$refs.cropper2.getResult();
 			if (canvas) {
         const file = this.$refs.file.files[0];
 				const formData = new FormData();
 				canvas.toBlob(blob => {
           this.blobToBase64(blob).then(res => {
             formData.append('file', res);
-            formData.append('fileName', file.name.split('.').shift());
-            formData.append("editorData", vm.editorData)
-            formData.append("postTitle", vm.postTitle)
-            formData.append("categories", vm.selectedCategories)
 
             axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post", formData, {
+              .post(process.env.VUE_APP_SERVER_URL + "/change_logo", formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
@@ -369,8 +472,9 @@ export default {
                   if (response.data == "success") {
                     vm.$notify({
                         type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
+                        text: 'Logo Yuklendi!'
                     });
+                    setTimeout(() => { location.reload(); }, 2000);
                   }
                 },
                 (response) => {
@@ -379,7 +483,43 @@ export default {
               );
           });
 				// Perhaps you should add the setting appropriate file format here
-				}, 'image/jpeg');
+				}, 'image/png');
+			}
+		},
+    changeFavicon() {
+      var vm = this
+			const { canvas } = this.$refs.cropper3.getResult();
+			if (canvas) {
+        const file = this.$refs.file.files[0];
+				const formData = new FormData();
+				canvas.toBlob(blob => {
+          this.blobToBase64(blob).then(res => {
+            formData.append('file', res);
+
+            axios
+              .post(process.env.VUE_APP_SERVER_URL + "/change_favicon", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then(
+                (response) => {
+                  console.log(response.data)
+                  if (response.data == "success") {
+                    vm.$notify({
+                        type: 'success',
+                        text: 'Favicon Yuklendi!'
+                    });
+                    setTimeout(() => { location.reload(); }, 2000);
+                  }
+                },
+                (response) => {
+                  console.log(response);
+                }
+              );
+          });
+				// Perhaps you should add the setting appropriate file format here
+				}, 'image/png');
 			}
 		},
     clickCategory(index) {
@@ -594,5 +734,13 @@ input:checked + .slider:before {
   margin: 8px;
 }
 
+.button-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.change-logo {
+  background: #3fb37f;
+}
 
 </style>

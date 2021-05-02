@@ -121,7 +121,7 @@ export default {
                 tag: tag.tagName,
                 date: moment(tag.date).format('DD/MM/YYYY, h:mm:ss a'),
                 details: tag._id,
-                total: '---'
+                total: tag.uses
               }
               vm.tagsTableData.push(tmp_tag)
             })
