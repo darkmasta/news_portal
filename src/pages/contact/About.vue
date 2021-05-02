@@ -367,7 +367,7 @@ export default {
       }
 
       axios
-        .post(process.env.VUE_APP_SERVER_URL + "/update_contact/", {data})
+        .post(process.env.VUE_APP_SERVER_URL + "/update_about/", {data})
         .then((response) => {
           vm.$notify({
               type: 'success',
