@@ -3,7 +3,7 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Etkinlik Olustur</span>
+          <span class="text-muted font-weight-light">Etkinlik Oluştur</span>
         </h4>
       </div>
 
@@ -36,6 +36,38 @@
               </b-col>
             </b-row>
 
+            <b-row>
+              <b-col cols="6" class="activity-text">
+                <b-form-group label="Etkinlik Açıklaması">
+                  <b-textarea label="Etkinlik Açıklaması" 
+                              placeholder="Etkinlik Açıklaması"
+                              rows="5"
+                              v-model="activityText">
+                  </b-textarea>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                  <b-col cols="12">
+                    <b-form-group label="Etkinlik Dili">
+                      <b-select v-model="activityLanguage" class="">
+                        <option v-for="(activityLanguage, index) in languages" 
+                            :key="index" v-bind:value="activityLanguage"> 
+                            {{activityLanguage}}
+                        </option>
+                      </b-select>
+                    </b-form-group>
+                  </b-col>
+                  <b-col cols="12">
+                    <b-form-group label="İnternet Sayfası Linki">
+                      <b-input-group  class="mt-2"
+                        placeholder="İnternet Sayfası Linki">
+                        <b-form-input v-model="activityLink"></b-form-input>
+                      </b-input-group>
+                    </b-form-group>
+                  </b-col>
+              </b-col>
+            </b-row>
+
             <b-row class="mb-3" v-if="activitySettings">
                 <hr class="model-hr">
                 <b-col cols="12" class="">
@@ -59,13 +91,13 @@
 
             <b-row>
               <b-col>
-                    <b-form-group label="Etkinlik Baslangici">
-                      <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Baslangic Tarihi" />
+                    <b-form-group label="Başlangıç Tarihi">
+                      <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Başlangıç Tarihi" />
                     </b-form-group>
               </b-col>
               <b-col>
-                    <b-form-group label="Etkinlik Bitisi">
-                      <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitis Tarihi" />
+                    <b-form-group label="Bitiş Tarihi">
+                      <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitiş Tarihi" />
                     </b-form-group>
               </b-col>
               <b-col>
@@ -98,8 +130,8 @@
                   </div>
                   <b-col cols="6" offset="3">
                     <div class="img-name">
-                        <b-form-group label="Foto Ismi">
-                          <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                        <b-form-group label="Görsel İsmi">
+                          <b-form-input v-model="imageName" placeholder="Görsel İsmi"></b-form-input>  
                         </b-form-group>
                     </div>
                   </b-col>
@@ -107,7 +139,7 @@
                 
                   <span class="button" @click="$refs.file.click()">
                     <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                     Resim Yükle
+                    Görsel Ekle
                   </span>
 
                   <span class="button ml-5" @click="crop">
@@ -151,8 +183,11 @@ export default {
     Cropper
   },
   data: () => ({
-    activityName: '',
+    languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦', 'Hepsi 🌍'],
+    activityLanguage: '',
     activityTitle: '',
+    activityLink: '',
+    activityText: '',
     activityImage: '',
     activityTypeList: [],
     activityType: '',
@@ -202,6 +237,9 @@ export default {
             formData.append("startDate", vm.startDate)
             formData.append("endDate", vm.endDate)
             formData.append("owner", vm.owner)
+            formData.append("activityText", vm.activityText)
+            formData.append("activityLanguage", vm.activityLanguage)
+            formData.append("activityLink", vm.activityLink)
             if (vm.visible == 'Reklamda Göster') {
               formData.append('visible', true)
             } else if (vm.visible == 'Reklamdan Kaldır') {
@@ -217,6 +255,10 @@ export default {
               .then(
                 (response) => {
                   console.log(response.data)
+                  vm.$notify({
+                      type: 'success',
+                      text: 'Yeni Etkinlik Basariyla Olusturuldu!'
+                  });
                 },
                 (response) => {
                   console.log(response);
@@ -235,8 +277,16 @@ export default {
         formData.append("activityType", vm.activityType)
         formData.append("startDate", vm.startDate)
         formData.append("endDate", vm.endDate)
+        formData.append("activityText", vm.activityText)
+        formData.append("activityLink", vm.activityLink)
+        formData.append("activityLanguage", vm.activityLanguage)
         formData.append("owner", vm.owner)
 
+        if (vm.visible == 'Reklamda Göster') {
+          formData.append('visible', true)
+        } else if (vm.visible == 'Reklamdan Kaldır') {
+          formData.append('visible', false)
+        }
 
         axios
           .post(process.env.VUE_APP_SERVER_URL + "/create_activity/", formData, {
@@ -442,6 +492,10 @@ input:checked + .slider:before {
 hr {
   height: 5px;
   border-bottom: 5px solid #000; 
+}
+
+.activity-text {
+
 }
 
 </style>

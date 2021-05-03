@@ -40,6 +40,9 @@ router.post("/create_activity", jsonParser, (req, res) => {
     activityImage: data.fileName + ".jpeg",
     startDate: data.startDate,
     endDate: data.endDate,
+    activityText: data.activityText,
+    activityLanguage: data.activityLanguage,
+    activityLink: data.activityLink,
     visible: data.visible || false,
   });
 
@@ -70,6 +73,9 @@ router.post("/update_activity", jsonParser, (req, res) => {
       startDate: activityData.startDate,
       endDate: activityData.endDate,
       visible: activityData.visible,
+      activityText: activityData.activityText,
+      activityLanguage: activityData.activityLanguage,
+      activityLink: activityData.activityLink,
     }
   ).then((doc) => {
     ba64.writeImage(

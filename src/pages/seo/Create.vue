@@ -225,11 +225,11 @@
             
               <span class="button" @click="$refs.file.click()">
                 <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                Load image
+                Görsel Ekle
               </span>
 
               <span class="button ml-5" @click="crop">
-                Crop 
+                Kırp 
               </span>
 
               <label class="switch">

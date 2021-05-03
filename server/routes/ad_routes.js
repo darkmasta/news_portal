@@ -55,6 +55,7 @@ router.post("/create_ad", jsonParser, (req, res) => {
     adTitle: data.adTitle,
     adType: data.adType,
     adName: data.adName,
+    adLanguage: data.adLanguage,
     link: data.link,
     status: "unconfirmed",
     adImage: data.fileName + ".jpeg",
@@ -84,6 +85,7 @@ router.post("/update_ad", jsonParser, (req, res) => {
       adName: data.adName,
       adType: adData.adType,
       status: adData.status,
+      adLanguage: adData.adLanguage,
       adImage: adData.fileName,
       link: adData.link,
     }

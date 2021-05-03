@@ -9,6 +9,7 @@ var adSchema = new Schema({
   adName: { type: String, unique: true },
   adTitle: { type: String, unique: true },
   adType: String,
+  adLanguage: String,
   adImage: { type: String, required: true },
   link: { type: String, required: true },
   status: String,

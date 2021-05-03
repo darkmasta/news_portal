@@ -7,7 +7,7 @@
         </h4>
       </div>
       <b-col class="offset-10">
-          <b-btn variant="primary rounded-pill" class="align-self-start" to="/activities/create"><span class="fas fa-plus-circle"></span> Yeni Aktivite Ekle</b-btn>
+          <b-btn variant="primary rounded-pill" class="align-self-start" to="/activities/create"><span class="fas fa-plus-circle"></span> Etkinlik Oluştur</b-btn>
       </b-col>
     </div>
 
@@ -53,6 +53,7 @@
           </div>
           <div class="col-sm">
             <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+
           </div>
         </b-col>
       </b-row>
@@ -109,21 +110,21 @@ export default {
       },
       {
         key: "activityType",
-        label: "Etkinlik Türü",
+        label: "Etkinlik Kategorisi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "startDate",
-        label: "Etkinlik Başlangıç",
+        label: "Başlangıç Tarihi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
       },
       {
         key: "endDate",
-        label: "Etkinlik Bitiş",
+        label: "Bitiş Tarihi",
         sortable: true,
         sortDirection: "desc",
         class: "text-center align-middle",
@@ -161,7 +162,7 @@ export default {
 
     // pagination
     perPageOptions: [2, 4, 6, 8, 10],
-    perPage: 2,
+    perPage: 10,
     currentPage: 1,
   }),
   created() {

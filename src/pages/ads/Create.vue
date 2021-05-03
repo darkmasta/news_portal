@@ -13,7 +13,7 @@
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Reklam Başlık">
+                <b-form-group label="Reklam Başlığı">
                   <b-input label="Reklam Başlığı" 
                               placeholder="Başlık"
                               v-model="adTitle">
@@ -21,11 +21,21 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklam Türü">
+                <b-form-group label="Reklam Sayfası">
                   <b-select v-model="adType" class="mb-4">
                     <option v-for="(adType, index) in adTypeList" 
                       :key="index" v-bind:value="adType"> 
                       {{adType}}
+                    </option>
+                  </b-select>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group label="Reklam Dili">
+                  <b-select v-model="adLanguage" class="">
+                    <option v-for="(adLanguage, index) in languages" 
+                        :key="index" v-bind:value="adLanguage"> 
+                        {{adLanguage}}
                     </option>
                   </b-select>
                 </b-form-group>
@@ -81,8 +91,8 @@
                   </div>
                   <b-col cols="6" offset="3">
                     <div class="img-name">
-                        <b-form-group label="Foto Ismi">
-                          <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                        <b-form-group label="Görsel İsmi">
+                          <b-form-input v-model="imageName" placeholder="Görsel İsmi"></b-form-input>  
                         </b-form-group>
                     </div>
                   </b-col>
@@ -90,11 +100,11 @@
                 
                   <span class="button" @click="$refs.file.click()">
                     <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                    Load image
+                    Görsel Ekle
                   </span>
 
                   <span class="button ml-5" @click="crop">
-                    Crop 
+                    Kırp
                   </span>
 
                   <label class="switch">
@@ -134,6 +144,8 @@ export default {
     Cropper
   },
   data: () => ({
+    languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦', 'Hepsi 🌍'],
+    adLanguage: '',
     adName: '',
     adTitle: '',
     adImage: '',
@@ -141,7 +153,7 @@ export default {
     adType: '',
     adLocationList: ['Ana Sayfa Ust Sag', 'Ana Sayfa Ust Sol', 'Haber Detay 1', 'Haber Detay  2'],
     adLocation: '',
-    adStatusList: ['Aktif', 'Pasif', 'Beklemede', 'Vakti Gecti'],
+    adStatusList: ['Aktif', 'Pasif' ],
     adStatus: '',
     adLink: '',
     startDate: null,
@@ -173,6 +185,7 @@ export default {
             formData.append("adType", vm.adType)
             formData.append("owner", vm.owner)
             formData.append("link", vm.adLink)
+            formData.append("adLanguage", vm.adLanguage)
 
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_ad", formData, {
@@ -206,6 +219,7 @@ export default {
         formData.append("adType", vm.adType)
         formData.append("owner", vm.owner)
         formData.append("link", vm.adLink)
+        formData.append("adLanguage", vm.adLanguage)
 
         axios
           .post(process.env.VUE_APP_SERVER_URL + "/create_ad/", formData, {
