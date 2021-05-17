@@ -1,29 +1,27 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const Seos = require("../Models/seo");
-const Seo = Seos.Seo;
-const ba64 = require("ba64");
+const Seos = require('../Models/seo')
+const Seo = Seos.Seo
+const ba64 = require('ba64')
 
-const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
-const _ = require("underscore");
-const fs = require("fs");
-const { decodeCookie } = require("../helpers/decode-cookie");
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
+const { decodeCookie } = require('../helpers/decode-cookie')
 
-router.post("/get_seo", jsonParser, (req, res) => {
-  var promise = Seo.find({});
+router.post('/get_seo', jsonParser, (req, res) => {
+  const promise = Seo.find({})
 
-  promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
-});
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
 
-router.post("/update_seo", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/update_seo', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body.data;
+  const data = req.body.data
 
-  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
-    res.json("Authorization Error");
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer')
+    res.json('Authorization Error')
 
   Seo.updateMany(
     {},
@@ -34,64 +32,64 @@ router.post("/update_seo", jsonParser, (req, res) => {
       facebookLink: data.facebookLink,
       instagramLink: data.facebookLink,
       $set: {
-        seoKeywords: data.seoKeywords,
-      },
+        seoKeywords: data.seoKeywords
+      }
     }
-  ).then((doc) => {
-    res.json(doc);
-  });
-});
+  ).then(doc => {
+    res.json(doc)
+  })
+})
 
-router.post("/update_activity_type_list", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/update_activity_type_list', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body.data;
+  const data = req.body.data
 
-  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
-    res.json("Authorization Error");
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer')
+    res.json('Authorization Error')
 
   Seo.updateMany(
     {},
     {
       $set: {
-        activityTypeList: data.activityTypeList,
-      },
+        activityTypeList: data.activityTypeList
+      }
     }
-  ).then((doc) => {
-    res.json("success");
-  });
-});
+  ).then(doc => {
+    res.json('success')
+  })
+})
 
-router.post("/change_logo", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/change_logo', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body; // form data
+  const data = req.body // form data
 
-  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
-    res.json("Authorization Error");
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer')
+    res.json('Authorization Error')
 
-  ba64.writeImage("./images/" + "logo", data.file, (err) => {
-    if (err) throw err;
+  ba64.writeImage('./images/' + 'logo', data.file, err => {
+    if (err) throw err
 
-    res.json("success");
-    console.log("Site Logo saved successfully");
-  });
-});
+    res.json('success')
+    console.log('Site Logo saved successfully')
+  })
+})
 
-router.post("/change_favicon", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/change_favicon', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body; // form data
+  const data = req.body // form data
 
-  if (!isAdmin == "admin" && !isAdmin == "editor" && !isAdmin == "writer")
-    res.json("Authorization Error");
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer')
+    res.json('Authorization Error')
 
-  ba64.writeImage("./images/" + "favicon", data.file, (err) => {
-    if (err) throw err;
+  ba64.writeImage('./images/' + 'favicon', data.file, err => {
+    if (err) throw err
 
-    res.json("success");
-    console.log("Favicon saved successfully");
-  });
-});
+    res.json('success')
+    console.log('Favicon saved successfully')
+  })
+})
 
-module.exports = router;
+module.exports = router

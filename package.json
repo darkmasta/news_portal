@@ -92,6 +92,7 @@
     "rxjs-compat": "^6.0.0-rc.0",
     "simplemde": "~1.11.2",
     "spinkit": "~2.0.1",
+    "standard": "^16.0.3",
     "swagger-ui-express": "^3.0.9",
     "sweet-modal-vue": "~2.0.0",
     "swig": "^1.4.2",

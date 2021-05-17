@@ -187,6 +187,8 @@ export default {
             formData.append("link", vm.adLink)
             formData.append("adLanguage", vm.adLanguage)
 
+            console.log(formData)
+
             axios
               .post(process.env.VUE_APP_SERVER_URL + "/create_ad", formData, {
                 headers: {

@@ -189,10 +189,11 @@ export default {
         console.log(response.data);
         vm.ads= response.data
             vm.ads.forEach(ad=> {
+              console.log(ad)
               var tmp_ad= {
-                owner: ad.owner,
                 position: ad.adPosition || '---',
                 status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onaylandi',
+                owner: ad.owner,
                 adType: ad.adType,
                 views: ad.views,
                 clicks: ad.clicks,

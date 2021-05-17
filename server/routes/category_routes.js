@@ -1,185 +1,183 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const Categories = require("../Models/categories");
-const Category = Categories.Category;
-const categoryData = require("../Schemas/categories_data");
+const Categories = require('../Models/categories')
+const Category = Categories.Category
 
-const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
-const fs = require("fs");
-const { decodeCookie } = require("../helpers/decode-cookie");
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
+const fs = require('fs')
+const { decodeCookie } = require('../helpers/decode-cookie')
 
-router.post("/get_categories", jsonParser, (req, res) => {
-  var promise = Category.find({});
+router.post('/get_categories', jsonParser, (req, res) => {
+  const promise = Category.find({})
 
-  promise.then((doc) => res.json(doc)).catch((err) => res.json(err));
-});
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
 
-router.post("/add_top_category", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/add_top_category', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body.data;
+  const data = req.body.data
 
-  var categoryName = data.categoryName;
+  const categoryName = data.categoryName
 
-  if (!isAdmin == "admin") res.json("Authorization Error");
+  if (!isAdmin === 'admin') res.json('Authorization Error')
 
-  var promise = Category.updateMany(
+  const promise = Category.updateMany(
     {},
     {
       $push: {
-        updatedCategories: { topCategory: categoryName, bottomCategory: "" },
-      },
+        updatedCategories: { topCategory: categoryName, bottomCategory: '' }
+      }
     }
-  );
+  )
 
-  promise.then((doc) => res.json("success")).catch((err) => res.json(err));
-});
+  promise.then(doc => res.json('success')).catch(err => res.json(err))
+})
 
-router.post("/update_top_category", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/update_top_category', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body.data;
-  var categoryName = data.categoryName;
-  var topCategory = data.topCategory;
+  const data = req.body.data
+  const categoryName = data.categoryName
+  const topCategory = data.topCategory
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  var promise = Category.update(
+  const promise = Category.update(
     {
-      "updatedCategories.topCategory": topCategory,
-      "updatedCategories.bottomCategory": "",
+      'updatedCategories.topCategory': topCategory,
+      'updatedCategories.bottomCategory': ''
     },
     {
       $set: {
-        "updatedCategories.$.topCategory": categoryName,
-      },
+        'updatedCategories.$.topCategory': categoryName
+      }
     }
-  );
+  )
 
-  promise.then((doc) => {
-    var promise2 = Category.updateMany(
+  promise.then(doc => {
+    const promise2 = Category.updateMany(
       {
-        "updatedCategories.topCategory": topCategory,
+        'updatedCategories.topCategory': topCategory
       },
       {
         $set: {
-          "updatedCategories.$.topCategory": categoryName,
-        },
+          'updatedCategories.$.topCategory': categoryName
+        }
       },
       {
-        upsert: true,
+        upsert: true
       }
-    );
+    )
 
-    promise2.then((doc) => {
-      res.json("success");
-    });
-  });
-});
+    promise2.then(doc => {
+      res.json('success')
+    })
+  })
+})
 
-router.post("/update_bottom_category", jsonParser, (req, res) => {
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/update_bottom_category', jsonParser, (req, res) => {
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  var data = req.body.data;
+  const data = req.body.data
 
-  var categoryName = data.categoryName;
-  var bottomCategory = data.bottomCategory;
-  var topCategory = data.topCategory;
+  const categoryName = data.categoryName
+  const bottomCategory = data.bottomCategory
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  var promise = Category.findOneAndUpdate(
+  const promise = Category.findOneAndUpdate(
     {
-      "updatedCategories.bottomCategory": bottomCategory,
+      'updatedCategories.bottomCategory': bottomCategory
     },
     {
       $set: {
-        "updatedCategories.$.bottomCategory": categoryName,
-      },
+        'updatedCategories.$.bottomCategory': categoryName
+      }
     }
-  );
+  )
 
-  promise.then((doc) => res.json("success"));
-});
+  promise.then(doc => res.json('success'))
+})
 
-router.post("/add_bottom_category", jsonParser, (req, res) => {
-  var data = req.body.data;
-  var topCategory = data.topCategory;
-  var bottomCategory = data.bottomCategory;
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/add_bottom_category', jsonParser, (req, res) => {
+  const data = req.body.data
+  const topCategory = data.topCategory
+  const bottomCategory = data.bottomCategory
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  var promise = Category.updateMany(
+  const promise = Category.updateMany(
     {},
     {
       $push: {
         updatedCategories: {
           topCategory: topCategory,
-          bottomCategory: bottomCategory,
-        },
-      },
+          bottomCategory: bottomCategory
+        }
+      }
     }
-  );
+  )
 
-  promise.then((doc) => res.json(doc));
-});
+  promise.then(doc => res.json(doc))
+})
 
-router.post("/delete_top_category", jsonParser, (req, res) => {
-  var data = req.body.data;
-  var topCategory = data.topCategory;
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/delete_top_category', jsonParser, (req, res) => {
+  const data = req.body.data
+  const topCategory = data.topCategory
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  var promise = Category.update(
-    { "updatedCategories.topCategory": topCategory },
+  const promise = Category.update(
+    { 'updatedCategories.topCategory': topCategory },
     {
       $pull: {
         updatedCategories: {
-          topCategory: topCategory,
-        },
-      },
+          topCategory: topCategory
+        }
+      }
     }
-  );
+  )
 
-  promise.then((doc) => res.json("success"));
-});
+  promise.then(doc => res.json('success'))
+})
 
-router.post("/delete_bottom_category", jsonParser, (req, res) => {
-  var data = req.body.data;
-  var bottomCategory = data.bottomCategory;
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/delete_bottom_category', jsonParser, (req, res) => {
+  const data = req.body.data
+  const bottomCategory = data.bottomCategory
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  var promise = Category.update(
-    { "updatedCategories.bottomCategory": bottomCategory },
+  const promise = Category.update(
+    { 'updatedCategories.bottomCategory': bottomCategory },
     {
       $pull: {
         updatedCategories: {
-          bottomCategory: bottomCategory,
-        },
-      },
+          bottomCategory: bottomCategory
+        }
+      }
     }
-  );
+  )
 
-  promise.then((doc) => res.json(doc));
-});
+  promise.then(doc => res.json(doc))
+})
 
-router.post("/upload_image", jsonParser, (req, res) => {
-  var img = req.files.file;
-  const { email, isAdmin } = decodeCookie(req.cookies.defensehere);
+router.post('/upload_image', jsonParser, (req, res) => {
+  const img = req.files.file
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  if (!isAdmin == "admin") res.json("Authentication Error");
+  if (!isAdmin === 'admin') res.json('Authentication Error')
 
-  fs.writeFile("./images/" + img.name, img.data, "binary", (err) => {
-    if (err) throw err;
-    console.log("File saved.");
-    res.json("success");
-  });
-});
+  fs.writeFile('./images/' + img.name, img.data, 'binary', err => {
+    if (err) throw err
+    console.log('File saved.')
+    res.json('success')
+  })
+})
 
-module.exports = router;
+module.exports = router
