@@ -19,8 +19,9 @@ router.post('/create_post', jsonParser, (req, res) => {
   const postData = req.body
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere)
 
-  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer')
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer') {
     res.json('Authentication Error')
+  }
 
   Post.find({})
     .then(posts => {
@@ -49,6 +50,7 @@ router.post('/create_post', jsonParser, (req, res) => {
         tags: postData.selectedTags,
         state: postData.state,
         postOrder: postOrder,
+        sliderImages: postData.sliderImages,
         views: 0,
         logs: [
           {
@@ -92,7 +94,7 @@ router.post('/post_by_id', jsonParser, (req, res) => {
       })
     })
     .catch(err => {
-      res.json('Not an Id')
+      if (err) res.json('Not an Id')
     })
 })
 
@@ -142,6 +144,7 @@ router.post('/update_post', jsonParser, (req, res) => {
       postSeoUrl: postData.postSeoUrl,
       postSeoHeader: postData.postSeoHeader,
       postLanguage: postData.postLanguage,
+      sliderImages: postData.sliderImages,
       publishDate: postData.publishDate,
       publishHour: postData.publishHour,
       postEnglishLink: postData.postEnglishLink || '',
@@ -160,6 +163,21 @@ router.post('/update_post', jsonParser, (req, res) => {
 
       res.json(doc)
     })
+  })
+})
+
+router.post('/carousel_image', jsonParser, (req, res) => {
+  const postData = req.body
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin') res.json('Authentication Error')
+
+  ba64.writeImage('./images/' + postData.fileName, postData.file, err => {
+    if (err) res.json(err)
+
+    console.log('Carousel Image saved successfully')
+
+    res.json('success')
   })
 })
 

@@ -38,8 +38,86 @@
            @click="expandTab = 'languages'" data-toggle="tab" href="#"
                   :class="{active: expandTab == 'languages'}">Haber Dilleri</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'carousel'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'carousel'}">Albüm</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'video'" data-toggle="tab" href="#"
+                  :class="{active: expandTab == 'video'}">Video</a>
+        </li>
       </ul>
-      <div class="tab-content">
+      <div class="tab-content" style="overflow-y: scroll;">
+          <div class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}" id="navs-left-home">
+            <b-row  class="edit_log">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Albüm</h3> 
+              </b-col>
+
+              <b-col cols="12">
+              <div class="upload-example">
+                <div>
+                    <cropper
+                      :src="image"
+                      ref="cropper2"
+                      :transitions="true"
+                    />
+                </div>
+
+                <div  class="reset-button" title="Reset Image" @click="reset()">
+                  <i class="fa fa-times"></i>
+                </div>
+                <div class="get-image-button" title="Get Image">
+                  <i class="fas fa-download"></i>
+                </div>
+                <div class="img-name-text" title="Image Name">
+                  {{imageName}}
+                </div>
+                <b-col cols="6" offset="3">
+                  <div class="img-name">
+                      <b-form-group label="Foto Ismi">
+                        <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                      </b-form-group>
+                  </div>
+                </b-col>
+                <div class="button-wrapper">
+                  <span class="button" @click="$refs.file2.click()">
+                    <input type="file" ref="file2" @change="loadImage($event)" accept="image/*">
+                    Görsel Ekle
+                  </span>
+
+                  <span class="button ml-5" @click="crop">
+                    Kırp
+                  </span>
+
+                  <label class="switch">
+                    <input type="checkbox" v-model="toggleEditImage">
+                    <span class="slider round"></span>
+                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                  </label>
+                </div>
+                <div class="button-wrapper">
+                  <span class="button ml-5" @click="uploadImage">
+                    Albüm Resmi Yükle 
+                  </span>
+                </div>
+              </div>
+
+              </b-col>
+
+              <b-col cols="12 mt-5">
+                <carousel>
+                  <slide v-for="(image, index) in sliderImages" :key="index" class="slide-item">
+                    <img :src="image" />
+                  </slide>
+                </carousel>
+
+              </b-col>
+
+            </b-row>
+        </div>
         <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
@@ -303,6 +381,7 @@ import Datepicker from "vuejs-datepicker";
 import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 
+import { Carousel, Slide } from 'vue-carousel';
 
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 
@@ -318,6 +397,8 @@ export default {
   name: "PostsCreate",
   components: {
     Cropper,
+    Carousel,
+    Slide,
     Datepicker,
     VueTypeaheadBootstrap,
     VueTimepicker
@@ -380,6 +461,7 @@ export default {
     tags: [],
     tag: '',
     selectedTags: [],
+    sliderImages: [],
   }),
   created() {
     var vm = this;
@@ -432,6 +514,7 @@ export default {
           vm.postArabicLink = vm.post.postArabicLink
           vm.postRussianLink = vm.post.postRussianLink
           vm.postUkranianLink = vm.post.postUkranianLink
+          vm.sliderImages = vm.post.sliderImages[0].split(',')
 
           fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
                   .then(res => res.blob())
@@ -686,6 +769,52 @@ export default {
         };
       });
     },
+    uploadImage() {
+      var vm = this
+			const { canvas } = this.$refs.cropper2.getResult();
+			if (canvas) {
+        const file = this.$refs.file2.files[0];
+				const formData = new FormData();
+				canvas.toBlob(blob => {
+          this.blobToBase64(blob).then(res => {
+            formData.append('file', res);
+            console.log(file)
+            formData.append('fileName', vm.imageName);
+
+            axios
+              .post(process.env.VUE_APP_SERVER_URL + "/carousel_image", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then(
+                (response) => {
+                  console.log(response.data)
+                  if (response.data == "success") {
+                    vm.$notify({
+                        type: 'success',
+                        text: 'Album Resmi Yuklendi!'
+                    });
+                    vm.sliderImages.push(vm.imageName)
+                    let images = localStorage.getItem('images')
+                    if (images) {
+                      console.log(images)
+                      let string = images + vm.imageName + '~'
+                      localStorage.setItem('images', string)
+                    } else {
+                      localStorage.setItem('images', vm.imageName + '~')
+                    }
+                  }
+                },
+                (response) => {
+                  console.log(response);
+                }
+              );
+          });
+				// Perhaps you should add the setting appropriate file format here
+				}, 'image/jpeg');
+			}
+		},
     clickCategory(index) {
       var vm = this
       if (vm.clickedCategory == index) {

@@ -38,8 +38,86 @@
            @click="expandTab = 'languages'" data-toggle="tab" href="/#/posts/create"
                   :class="{active: expandTab == 'languages'}">Haber Dilleri</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'carousel'" data-toggle="tab" href="/#/posts/create"
+                  :class="{active: expandTab == 'carousel'}">Albüm</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+           @click="expandTab = 'video'" data-toggle="tab" href="/#/posts/create"
+                  :class="{active: expandTab == 'video'}">Video</a>
+        </li>
       </ul>
-      <div class="tab-content">
+      <div class="tab-content" style="overflow-y: scroll;">
+        <div class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}" id="navs-left-home">
+            <b-row  class="edit_log">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Albüm</h3> 
+              </b-col>
+
+              <b-col cols="12">
+              <div class="upload-example">
+                <div>
+                    <cropper
+                      :src="image"
+                      ref="cropper2"
+                      :transitions="true"
+                    />
+                </div>
+
+                <div  class="reset-button" title="Reset Image" @click="reset()">
+                  <i class="fa fa-times"></i>
+                </div>
+                <div class="get-image-button" title="Get Image">
+                  <i class="fas fa-download"></i>
+                </div>
+                <div class="img-name-text" title="Image Name">
+                  {{imageName}}
+                </div>
+                <b-col cols="6" offset="3">
+                  <div class="img-name">
+                      <b-form-group label="Foto Ismi">
+                        <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+                      </b-form-group>
+                  </div>
+                </b-col>
+                <div class="button-wrapper">
+                  <span class="button" @click="$refs.file2.click()">
+                    <input type="file" ref="file2" @change="loadImage($event)" accept="image/*">
+                    Görsel Ekle
+                  </span>
+
+                  <span class="button ml-5" @click="crop">
+                    Kırp
+                  </span>
+
+                  <label class="switch">
+                    <input type="checkbox" v-model="toggleEditImage">
+                    <span class="slider round"></span>
+                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                  </label>
+                </div>
+                <div class="button-wrapper">
+                  <span class="button ml-5" @click="uploadImage">
+                    Albüm Resmi Yükle 
+                  </span>
+                </div>
+              </div>
+
+              </b-col>
+
+              <b-col cols="12 mt-5">
+                <carousel>
+                  <slide v-for="(image, index) in sliderImages" :key="index" class="slide-item">
+                    <img :src="image" />
+                  </slide>
+                </carousel>
+
+              </b-col>
+
+            </b-row>
+        </div>
         <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
@@ -136,17 +214,17 @@
             
               <span class="button" @click="$refs.file.click()">
                 <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-                Load image
+                Görsel Ekle
               </span>
 
               <span class="button ml-5" @click="crop">
-                Crop 
+                Kırp
               </span>
 
               <label class="switch">
                 <input type="checkbox" v-model="toggleEditImage">
                 <span class="slider round"></span>
-                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
               </label>
              
               </div>
@@ -295,6 +373,8 @@ import Datepicker from "vuejs-datepicker";
 import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 
+import { Carousel, Slide } from 'vue-carousel';
+
 
 
 
@@ -316,6 +396,8 @@ export default {
   name: "PostsCreate",
   components: {
     Cropper,
+    Carousel,
+    Slide,
     Datepicker,
     VueTimepicker,
     VueTypeaheadBootstrap
@@ -325,7 +407,7 @@ export default {
       languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
       categoriesData: {},
       postLanguage: '',
-      expandTab: '',
+      expandTab: 'categories',
       info_message: '',
       editLogs: [''],
       clickedCategory: undefined,
@@ -375,11 +457,21 @@ export default {
       tag: '',
       selectedTags: [],
       selectedTagIds: [],
+      sliderImages: [],
     }
+  },
+  beforeCreate() {
   },
   created() {
     var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
+
+    let images = localStorage.getItem('images')
+    images.split('~').forEach( image => {
+      console.log(image)
+      // vm.sliderImages.push('http://localhost:5000/images/' + image + '.jpeg')
+      this.sliderImages.push('https://defensehere.herokuapp.com/images/' + image + '.jpeg')
+    }) 
 
 
     axios
@@ -489,6 +581,7 @@ export default {
             formData.append("postLanguage", vm.postLanguage)
             formData.append("selectedTags", vm.selectedTags)
             formData.append("owner", vm.owner)
+            formData.append("sliderImages", vm.sliderImages)
 
 
             axios
@@ -515,6 +608,7 @@ export default {
                       })
 
                   })
+                  localStorage.removeItem('images')
                 }
               });
             })
@@ -602,6 +696,7 @@ export default {
               formData.append("postUkranianLink", vm.postUkranianLink)
               formData.append("postFrenchLink", vm.postFrenchLink)
               formData.append("selectedTags", vm.selectedTags)
+              formData.append("sliderImages", vm.sliderImages)
 
               axios
                 .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
@@ -618,6 +713,7 @@ export default {
                         type: 'success',
                         text: 'Haber Resmi Yuklendi!'
                     });
+                    localStorage.removeItem('images')
                   }
                 });
             });
@@ -692,20 +788,18 @@ export default {
     },
     uploadImage() {
       var vm = this
-			const { canvas } = this.$refs.cropper.getResult();
+			const { canvas } = this.$refs.cropper2.getResult();
 			if (canvas) {
-        const file = this.$refs.file.files[0];
+        const file = this.$refs.file2.files[0];
 				const formData = new FormData();
 				canvas.toBlob(blob => {
           this.blobToBase64(blob).then(res => {
             formData.append('file', res);
-            formData.append('fileName', file.name.split('.').shift());
-            formData.append("editorData", vm.editorData)
-            formData.append("postTitle", vm.postTitle)
-            formData.append("categories", vm.selectedCategories)
+            console.log(file)
+            formData.append('fileName', vm.imageName);
 
             axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post", formData, {
+              .post(process.env.VUE_APP_SERVER_URL + "/carousel_image", formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
@@ -716,8 +810,17 @@ export default {
                   if (response.data == "success") {
                     vm.$notify({
                         type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
+                        text: 'Album Resmi Yuklendi!'
                     });
+                    vm.sliderImages.push(vm.imageName)
+                    let images = localStorage.getItem('images')
+                    if (images) {
+                      console.log(images)
+                      let string = images + vm.imageName + '~'
+                      localStorage.setItem('images', string)
+                    } else {
+                      localStorage.setItem('images', vm.imageName + '~')
+                    }
                   }
                 },
                 (response) => {
@@ -977,6 +1080,15 @@ input:checked + .slider:before {
 
 .vbt-autcomplete-list {
   background: rgb(235, 232, 225);
+}
+
+.carousel-tab {
+}
+
+.slide-item {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #ccc;
 }
 
 </style>

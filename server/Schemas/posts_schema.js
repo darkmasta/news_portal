@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
-var Float = require("mongoose-float").loadType(mongoose, 5);
+var mongoose = require('mongoose')
+var Float = require('mongoose-float').loadType(mongoose, 5)
 
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
+var Schema = mongoose.Schema
+var ObjectId = Schema.Types.ObjectId
 
 var postSchema = new Schema({
   owner: String,
@@ -24,6 +24,7 @@ var postSchema = new Schema({
   postFrenchLink: String,
   postTitle: String,
   categories: [String],
+  sliderImages: [String],
   postImage: String,
   content: String,
   state: String,
@@ -33,8 +34,8 @@ var postSchema = new Schema({
     {
       editor: String,
       editDate: Date,
-      editText: String,
-    },
+      editText: String
+    }
   ],
   postLanguages: [String],
   tags: [String],
@@ -43,7 +44,7 @@ var postSchema = new Schema({
   isOnAir: Boolean,
   isDraft: Boolean,
   position: String,
-  views: Number,
-});
+  views: Number
+})
 
-module.exports.postSchema = postSchema;
+module.exports.postSchema = postSchema

@@ -296,6 +296,7 @@ export default {
   created() {
     var vm = this;
 
+    vm.expandTab = 'edit'
 
     vm.owner = this.$store.getters.getUser
         var vm = this;

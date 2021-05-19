@@ -304,6 +304,7 @@ export default {
         var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
 
+    vm.expandTab = 'edit'
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
