@@ -49,7 +49,7 @@
                   :class="{active: expandTab == 'video'}">Video</a>
         </li>
       </ul>
-      <div class="tab-content" style="overflow-y: scroll;">
+      <div class="tab-content" style="overflow-y: scroll; overflow-x: hidden;">
         <div class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}" id="navs-left-home">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
@@ -118,6 +118,21 @@
 
             </b-row>
         </div>
+        <div class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}" id="navs-left-home">
+            <b-row  class="edit_log">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Video Linki</h3> 
+              </b-col>
+
+              <b-col cols="6" offset="3">
+                    <b-form-group label="Video Linki">
+                      <b-form-input v-model="videoLink" placeholder="Video Linki"></b-form-input>  
+                    </b-form-group>
+              </b-col>
+
+            </b-row>
+        </div>
+
         <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
@@ -340,6 +355,16 @@
               </b-input-group>
             </b-col>
           </b-row>
+          <b-row>
+            <b-col cols="4" class="mt-5 offset-9">
+              <b-btn v-if="manset" @click="manset = false;" variant="primary rounded-pill" class="new-post-btn">
+                <span class="fas fa-plus-circle"></span>  Manşette Yayınla
+              </b-btn>
+              <b-btn v-if="!manset" @click="manset = true;" variant="primary rounded-pill" class="new-post-btn">
+                <span class="fas fa-plus-circle"></span>  Normal Yayınla
+              </b-btn>
+            </b-col>
+          </b-row>
         </div>
       </div>
     </div>
@@ -458,6 +483,8 @@ export default {
       selectedTags: [],
       selectedTagIds: [],
       sliderImages: [],
+      manset: false,
+      videoLink: '',
     }
   },
   beforeCreate() {
@@ -582,6 +609,8 @@ export default {
             formData.append("selectedTags", vm.selectedTags)
             formData.append("owner", vm.owner)
             formData.append("sliderImages", vm.sliderImages)
+            formData.append('videoLink', vm.videoLink)
+            formData.append('manset', vm.manset)
 
 
             axios
@@ -697,6 +726,8 @@ export default {
               formData.append("postFrenchLink", vm.postFrenchLink)
               formData.append("selectedTags", vm.selectedTags)
               formData.append("sliderImages", vm.sliderImages)
+              formData.append('videoLink', vm.videoLink)
+              formData.append('manset', vm.manset)
 
               axios
                 .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {

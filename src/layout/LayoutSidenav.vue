@@ -58,11 +58,6 @@
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/seo">SEO</router-link></div>
-            </a>
-          </li>
-          <li class="sidenav-item" style="display: block;">
-            <a href="javascript:void(0)" class="sidenav-link">
               <div><router-link to="/seo/create">SEO Ayarlar</router-link></div>
             </a>
           </li>

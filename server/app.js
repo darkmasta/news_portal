@@ -29,7 +29,7 @@ const IdentityRoutes = require('./routes/identity_routes')
 const TagRoutes = require('./routes/tag_routes')
 const SeoRoutes = require('./routes/seo_routes')
 
-var app = express()
+const app = express()
 
 const fileupload = require('express-fileupload')
 app.use(fileupload())
@@ -71,7 +71,7 @@ app.use('/', IdentityRoutes)
 app.use('/', TagRoutes)
 app.use('/', SeoRoutes)
 
-var cons = require('consolidate')
+const cons = require('consolidate')
 app.engine('html', cons.swig)
 app.use(express.static(__dirname + '/views/dist'))
 app.set('views', __dirname + '/views/dist')

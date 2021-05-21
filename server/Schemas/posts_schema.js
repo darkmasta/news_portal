@@ -1,10 +1,10 @@
-var mongoose = require('mongoose')
-var Float = require('mongoose-float').loadType(mongoose, 5)
+const mongoose = require('mongoose')
+const Float = require('mongoose-float').loadType(mongoose, 5)
 
-var Schema = mongoose.Schema
-var ObjectId = Schema.Types.ObjectId
+const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 
-var postSchema = new Schema({
+const postSchema = new Schema({
   owner: String,
   ownerEmail: String,
   topic: String,
@@ -25,6 +25,8 @@ var postSchema = new Schema({
   postTitle: String,
   categories: [String],
   sliderImages: [String],
+  manset: Boolean,
+  videoLink: String,
   postImage: String,
   content: String,
   state: String,

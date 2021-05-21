@@ -1,5 +1,6 @@
 <template>
 <div>
+
   <div class="row">
     <div class="col-lg-12">
       <h4 class="font-weight-bold py-3 mb-1">
@@ -8,150 +9,170 @@
     </div>
   </div> 
 
-<div class="activity_item_center">
-  <img :src="activity.activityImage" />
-  <h4>{{activity.activityTitle}}</h4>
-</div>
-
-<div class="nav-tabs-left">
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" 
-        @click="expandTab = 'activityInfo'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'activityInfo'}">Etkinlik Bilgileri</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" 
-        @click="expandTab = 'activityImage'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'activityImage'}">Etkinlik Resmi</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" 
-        @click="expandTab = 'activityOperations'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'activityOperations'}">Etkinlik Onay/Red</a>
-    </li>
-  </ul>
-  <div class="tab-content">
-  <div class="tab-pane fade" :class="{active: expandTab == 'activityInfo', show: expandTab == 'activityInfo'}" id="navs-left-home">
-    <div>
-      <b-row>
-        <b-col cols="5" class="offset-1">
-          <b-input-group prepend="Etkinlik Ekleyen" class="mt-2">
-            <b-form-input v-model="activity.owner" disabled></b-form-input>
-          </b-input-group>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="5" class="offset-1">
-          <b-input-group prepend="Etkinlik Basligi" class="mt-2">
-            <b-form-input v-model="activity.activityTitle"></b-form-input>
-          </b-input-group>
-        </b-col>
-        <b-col cols="5" class="activity_status">
-          <b-form-group label="Etkinlik ">
-            <b-select v-model="activityType">
-              <option v-for="(activityType, index) in activityTypeList" 
-                  :key="index" v-bind:value="activityType"> 
-                  {{activityType}}
-              </option>
-            </b-select>
-          </b-form-group>
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-5">
-          <b-col cols="3" class="offset-1">
-            <b-form-group label="Baslangic Tarihi">
-              <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Baslangic Tarihi" />
-            </b-form-group>
-          </b-col>
-          <b-col cols="3" class="offset-1">
-            <b-form-group label="Bitis Saati">
-              <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitis Tarihi" />
-            </b-form-group>
-          </b-col>
-          <b-col cols="3" class="">
-            <b-form-group label="Etkinlik Durumu">
-              <b-select v-model="status">
-                <option v-for="(status, index) in statusList" 
-                    :key="index" v-bind:value="status"> 
-                    {{status}}
-                </option>
-              </b-select>
-            </b-form-group>
-          </b-col>
-      </b-row>
-    </div>
+  <div class="activity_item_center">
+    <img :src="activity.activityImage" />
+    <h4>{{activity.activityTitle}}</h4>
   </div>
-  <div class="tab-pane fade" :class="{active: expandTab == 'activityImage', show: expandTab == 'activityImage'}" id="navs-left-home">
-    <b-row >
-      <b-col cols="12">
-        <b-col cols="6" class="offset-5 mt-3 kategoriler">
-          <h3>Etkinlik Resmi</h3> 
-        </b-col>
-        <div class="upload-example">
-          <div>
-              <cropper
-                :src="image"
-                ref="cropper"
-                :transitions="true"
-              />
-          </div>
-          <div  class="reset-button" title="Reset Image" @click="reset()">
-            <i class="fa fa-times"></i>
-          </div>
-          <div class="get-image-button" title="Get Image" @click="getImage()">
-            <i class="fas fa-download"></i>
-          </div>
-          <div class="img-name-text" title="Image Name">
-            {{imageName}}
-          </div>
-          <b-col cols="6" offset="3">
-            <div class="img-name">
-                <b-form-group label="Foto Ismi">
-                  <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
+
+      <div class="col-lg-12 mb-4">
+        <b-card title="Etkinlik Güncelle">
+          <b-card-body>
+            <b-row>
+              <b-col>
+                <b-form-group label="Etkinlik Adı">
+                  <b-input label="Etkinlik Adı" 
+                              placeholder="Etkinlik Adı"
+                              v-model="activity.activityTitle">
+                  </b-input>
                 </b-form-group>
-            </div>
-          </b-col>
-          <div class="button-wrapper">
-        
-          <span class="button" @click="$refs.file.click()">
-            <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
-            Görsel Ekle
-          </span>
+              </b-col>
+              <b-col>
+                <b-form-group label="Etkinlik Türü">
+                  <b-select v-model="activity.activityType" class="mb-4">
+                    <option v-for="(activityType, index) in activityTypeList" 
+                      :key="index" v-bind:value="activityType"> 
+                      {{activity.activityType}}
+                    </option>
+                  </b-select>
+                </b-form-group>
+              </b-col>
+              <b-col cols="1" class="mt-4">
+                  <div class="edit_buttons">
+                    <span title="Ekle" class="ion ion-ios-settings" @click="toggleActivitySettings()"></span>
+                  </div>
+              </b-col>
+            </b-row>
 
-          <span class="button ml-5" @click="crop">
-            Crop 
-          </span>
+            <b-row>
+              <b-col cols="6" class="activity-text">
+                <b-form-group label="Etkinlik Açıklaması">
+                  <b-textarea label="Etkinlik Açıklaması" 
+                              placeholder="Etkinlik Açıklaması"
+                              rows="5"
+                              v-model="activity.activityText">
+                  </b-textarea>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                  <b-col cols="12">
+                    <b-form-group label="Etkinlik Dili">
+                      <b-select v-model="activity.activityLanguage" class="">
+                        <option v-for="(activityLanguage, index) in languages" 
+                            :key="index" v-bind:value="activityLanguage"> 
+                            {{activity.activityLanguage}}
+                        </option>
+                      </b-select>
+                    </b-form-group>
+                  </b-col>
+                  <b-col cols="12">
+                    <b-form-group label="İnternet Sayfası Linki">
+                      <b-input-group  class="mt-2"
+                        placeholder="İnternet Sayfası Linki">
+                        <b-form-input v-model="activity.activityLink"></b-form-input>
+                      </b-input-group>
+                    </b-form-group>
+                  </b-col>
+              </b-col>
+            </b-row>
 
-          <label class="switch">
-            <input type="checkbox" v-model="toggleEditImage">
-            <span class="slider round"></span>
-            <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
-          </label>
+            <b-row class="mb-3" v-if="activitySettings">
+                <hr class="model-hr">
+                <b-col cols="12" class="">
+                  <b-input-group prepend="Etkinlik Türü" class="mt-2">
+                    <b-form-input v-model="activityType"></b-form-input>
+                    <div class="edit_buttons">
+                      <span title="Ekle" class="fa fa-check" @click="addToActivityTypeList(activityType)"></span>
+                    </div>
+                  </b-input-group>
+                </b-col>
 
-          </div>
-        </div>
-      </b-col>
-    </b-row> 
-  </div>
-  <div class="tab-pane fade" :class="{active: expandTab == 'activityOperations', show: expandTab == 'activityOperations'}" id="navs-left-home">
-    <div class="activity-operations-buttons">
-      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="confirmActivity" v-if="activity.status == 'unconfirmed'" >Etkinligi Onayla</b-btn>
-      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="unconfirmActivity" v-if="activity.status == 'confirmed'">Etkinligi Reddet</b-btn>
-      <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="deleteActivity">Etkinligi Sil</b-btn>
+                <b-col class="" cols="2" v-for="(activityType, index) in activityTypeList" :key="index">
+                  <span class="identityItem">{{activityType}} 
+                    <i class="fa fa-times" @click="removeFromActivityTypeList(index)"></i></span>
+                </b-col>
+                <hr class="model-hr">
+                <b-col class="offset-10">
+                  <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="updateActivityTypeList">Etkinlik Türü Listesini Guncelle</b-btn>
+                </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col>
+                    <b-form-group label="Başlangıç Tarihi">
+                      <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Başlangıç Tarihi" />
+                    </b-form-group>
+              </b-col>
+              <b-col>
+                    <b-form-group label="Bitiş Tarihi">
+                      <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitiş Tarihi" />
+                    </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group label="Reklamda Göster">
+                  <b-select v-model="visible" class="">
+                    <option v-for="(visible, index) in visibleOptions" 
+                      :key="index" v-bind:value="visible"> 
+                      {{visible}}
+                    </option>
+                  </b-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+
+            <b-row>
+              <b-col cols="12">
+                <div class="upload-example">
+                  <div v-show="image">
+                      <cropper
+                        :src="image"
+                        ref="cropper"
+                      />
+                  </div>
+                  <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
+                    <i class="fa fa-times"></i>
+                  </div>
+                  <div v-show="image" class="img-name-text" title="Image Name">
+                    {{imageName}}
+                  </div>
+                  <b-col cols="6" offset="3">
+                    <div class="img-name">
+                        <b-form-group label="Görsel İsmi">
+                          <b-form-input v-model="imageName" placeholder="Görsel İsmi"></b-form-input>  
+                        </b-form-group>
+                    </div>
+                  </b-col>
+                  <div class="button-wrapper">
+                
+                  <span class="button" @click="$refs.file.click()">
+                    <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                    Görsel Ekle
+                  </span>
+
+                  <span class="button ml-5" @click="crop">
+                    Kırp 
+                  </span>
+
+                  <label class="switch">
+                    <input type="checkbox" v-model="toggleEditImage">
+                    <span class="slider round"></span>
+                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                  </label>
+                  </div>
+                </div>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col class="offset-10">
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">Etkinlik Ekle</b-btn>
+              </b-col>
+            </b-row>
+          </b-card-body>
+        </b-card>
+      </div>
     </div>
   </div>
-  </div>
-</div>
-
-<b-row>
-  <b-col class="offset-10">
-    <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">Etkinligi Guncelle</b-btn>
-  </b-col>
-</b-row>
-
 </div>
 </template>
 <script>
@@ -174,6 +195,7 @@ components: {
   VueTimepicker
 },
 data: () => ({
+  languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦', 'Hepsi 🌍'],
   activity: {
     activityImage: ''
   },
@@ -189,6 +211,9 @@ data: () => ({
   image: null,
   startDate: null,
   endDate: null,
+  activitySettings: false,
+  visibleOptions: ['Reklamda Göster', 'Reklamdan Kaldır'],
+  visible: '',
   coordinates: {
     width: 0,
     height: 0,

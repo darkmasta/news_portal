@@ -1,9 +1,9 @@
-var mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
+const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 
-var adSchema = new Schema({
+const adSchema = new Schema({
   owner: String,
   ownerEmail: String,
   adName: { type: String, unique: true },
@@ -17,7 +17,7 @@ var adSchema = new Schema({
   startDate: Date,
   views: Number,
   clicks: Number,
-  endDate: Date,
-});
+  endDate: Date
+})
 
-module.exports.adSchema = adSchema;
+module.exports.adSchema = adSchema

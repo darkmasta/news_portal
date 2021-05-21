@@ -51,6 +51,8 @@ router.post('/create_post', jsonParser, (req, res) => {
         state: postData.state,
         postOrder: postOrder,
         sliderImages: postData.sliderImages,
+        videoLink: postData.videoLink,
+        manset: postData.manset,
         views: 0,
         logs: [
           {

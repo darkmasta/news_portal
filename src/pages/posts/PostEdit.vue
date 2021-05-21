@@ -405,7 +405,7 @@ export default {
   },
   data: () => ({
     info_message: '',
-    expandTab: '',
+    expandTab: 'edit',
     expandLog: false,
     expandCategory: true,
     expandImage: true,
@@ -468,6 +468,8 @@ export default {
     let data = {}
     data.id = vm.$route.params.id
     vm.id = data.id
+
+    vm.expandTab = 'edit',
 
 
     axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
