@@ -90,7 +90,7 @@ app.post(
 )
 
 app.get('/images/:id', jsonParser, (req, res) => {
-  var id = req.params.id
+  const id = req.params.id
 
   path.resolve('temp/index.html')
   res.sendFile(id, { root: './images' })

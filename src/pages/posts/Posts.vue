@@ -5,7 +5,7 @@
       <div class="page-header">
         <h4>Haber Listesi</h4>
       </div>
-      <b-btn variant="primary rounded-pill" class="align-self-start" to="/posts/create"><span class="fas fa-plus-circle"></span> Create Post</b-btn>
+      <b-btn variant="primary rounded-pill" class="align-self-start" to="/posts/create"><span class="fas fa-plus-circle"></span> Haber Oluştur</b-btn>
     </b-col>
   </b-row>
 

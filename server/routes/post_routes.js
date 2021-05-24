@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const ba64 = require('ba64')
+const fs = require('fs')
 
 const Posts = require('../Models/posts')
 const Post = Posts.Post
@@ -52,6 +53,7 @@ router.post('/create_post', jsonParser, (req, res) => {
         postOrder: postOrder,
         sliderImages: postData.sliderImages,
         videoLink: postData.videoLink,
+        videoName: postData.videoName,
         manset: postData.manset,
         views: 0,
         logs: [
@@ -260,6 +262,38 @@ router.post('/delete_post', jsonParser, (req, res) => {
   const promise = Post.findOneAndDelete({ _id: postData.id })
 
   promise.then(doc => res.json('success'))
+})
+
+router.post('/upload_video', jsonParser, (req, res) => {
+  const postData = req.body.data
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin') res.json('Authentication Error')
+
+  if (req.files) {
+    console.log(req.files)
+    const file = req.files.file
+    const fileName = file.name
+    const mimetype = file.mimetype
+
+    fs.writeFile('./videos/' + fileName, file.data, function (err, result) {
+      if (err) res.json(err)
+      else {
+        res.json('success')
+      }
+    })
+  }
+})
+
+router.get('/video/:id', jsonParser, (req, res) => {
+  const postData = req.body.data
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin') res.json('Authentication Error')
+
+  const videoPath = req.params.id
+
+  res.sendFile(videoPath, { root: './videos' })
 })
 
 module.exports = router

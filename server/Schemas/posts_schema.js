@@ -27,6 +27,7 @@ const postSchema = new Schema({
   sliderImages: [String],
   manset: Boolean,
   videoLink: String,
+  videoName: String,
   postImage: String,
   content: String,
   state: String,

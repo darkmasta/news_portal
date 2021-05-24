@@ -129,8 +129,26 @@
                       <b-form-input v-model="videoLink" placeholder="Video Linki"></b-form-input>  
                     </b-form-group>
               </b-col>
-
             </b-row>
+
+            <b-row>
+              <b-col cols="6" class="offset-3">
+                <span class="button" @click="$refs.video.click()">
+                  <input type="file" ref="video" @change="uploadVideo($event)" />
+                  Video Ekle
+                </span>
+              </b-col>
+            </b-row>
+
+            <b-row class="mt-5" v-if="videoName">
+              <b-col cols="6" class="offset-3">
+                <video width="650" controls muted="muted" autoplay>
+                  <source :src="videoSrc" type="video/mp4">
+                </video>
+              </b-col>
+            </b-row>
+
+
         </div>
 
         <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
@@ -485,6 +503,8 @@ export default {
       sliderImages: [],
       manset: false,
       videoLink: '',
+      videoName: '',
+      videoSrc: '',
     }
   },
   beforeCreate() {
@@ -493,11 +513,16 @@ export default {
     var vm = this;
     vm.categoryTitles = Object.keys(categoryData)
 
+    vm.owner = this.$store.getters.getUser
+
+
+    console.log("OWNER --------- \t", vm.owner)
+
     let images = localStorage.getItem('images')
     images.split('~').forEach( image => {
-      console.log(image)
+      // console.log(image)
       // vm.sliderImages.push('http://localhost:5000/images/' + image + '.jpeg')
-      this.sliderImages.push('https://defensehere.herokuapp.com/images/' + image + '.jpeg')
+      this.sliderImages.push(process.env.VUE_APP_SERVER_URL + '/images/' + image + '.jpeg')
     }) 
 
 
@@ -506,21 +531,29 @@ export default {
       .then((response) => {
         let tags = response.data
         vm.tagsWithIds = tags
-        console.log(tags)
+        // console.log(tags)
         tags.forEach( tag => {
           vm.tags.push(tag.tagName)
         })
 
-        console.log(vm.tags)
+        // console.log(vm.tags)
 
       })
+
+    /*
+    axios
+      .get(process.env.VUE_APP_SERVER_URL + "/video/" + 'test.mp4')
+      .then((response) => {
+        console.log(response.data);
+      })
+    */
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
       .then((response) => {
           //console.log(response.data);
           vm.categoriesData = response.data[0];
-          console.log(vm.categoriesData.updatedCategories)
+          // console.log(vm.categoriesData.updatedCategories)
           vm.categoriesData.updatedCategories.forEach(element => {
               vm.categoryTitles.push(element.topCategory)
           });
@@ -540,8 +573,6 @@ export default {
               }
           })
       });
-
-    vm.owner = this.$store.getters.getUser
 
   },
   methods: {
@@ -611,6 +642,7 @@ export default {
             formData.append("sliderImages", vm.sliderImages)
             formData.append('videoLink', vm.videoLink)
             formData.append('manset', vm.manset)
+            formData.append('videoName', vm.videoName)
 
 
             axios
@@ -728,6 +760,7 @@ export default {
               formData.append("sliderImages", vm.sliderImages)
               formData.append('videoLink', vm.videoLink)
               formData.append('manset', vm.manset)
+              formData.append('videoName', vm.videoName)
 
               axios
                 .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
@@ -808,6 +841,39 @@ export default {
 				reader.readAsDataURL(input.files[0]);
 			}
 		},
+    uploadVideo(event) {
+      var input = event.target
+      var vm = this
+
+      if (input.files && input.files[0]) {
+        console.log(input.files[0])
+        const formData = new FormData();
+        formData.append('file', input.files[0])
+
+        axios
+          .post(process.env.VUE_APP_SERVER_URL + "/upload_video", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(
+            (response) => {
+              console.log(response.data)
+              if (response.data == "success") {
+                vm.$notify({
+                    type: 'success',
+                    text: 'Video Yuklendi!'
+                });
+                vm.videoName = input.files[0].name
+                vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + vm.videoName
+              }
+            },
+            (response) => {
+              console.log(response);
+            }
+          );
+      }
+    },
     blobToBase64 (blob)  {
       const reader = new FileReader();
       reader.readAsDataURL(blob);

@@ -118,6 +118,38 @@
 
             </b-row>
         </div>
+        <div class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}" id="navs-left-home">
+            <b-row  class="edit_log">
+              <b-col cols="6" class="offset-3 mt-2">
+                <h3>Video Linki</h3> 
+              </b-col>
+
+              <b-col cols="6" offset="3">
+                    <b-form-group label="Video Linki">
+                      <b-form-input v-model="videoLink" placeholder="Video Linki"></b-form-input>  
+                    </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col cols="6" class="offset-3">
+                <span class="button" @click="$refs.video.click()">
+                  <input type="file" ref="video" @change="uploadVideo($event)" />
+                  Video Ekle
+                </span>
+              </b-col>
+            </b-row>
+
+            <b-row class="mt-5" v-if="videoName">
+              <b-col cols="6" class="offset-3">
+                <video width="650" controls muted="muted" autoplay>
+                  <source :src="videoSrc" type="video/mp4">
+                </video>
+              </b-col>
+            </b-row>
+
+
+        </div>
         <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
@@ -462,6 +494,9 @@ export default {
     tag: '',
     selectedTags: [],
     sliderImages: [],
+    videoLink: '',
+    videoName: '',
+    videoSrc: '',
   }),
   created() {
     var vm = this;
@@ -517,6 +552,9 @@ export default {
           vm.postRussianLink = vm.post.postRussianLink
           vm.postUkranianLink = vm.post.postUkranianLink
           vm.sliderImages = vm.post.sliderImages[0].split(',')
+          let videoName = vm.post.videoName
+          vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + videoName
+          vm.videoName = videoName
 
           fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
                   .then(res => res.blob())
@@ -761,6 +799,39 @@ export default {
             };
             reader.readAsDataURL(input.files[0]);
         }
+    },
+    uploadVideo(event) {
+      var input = event.target
+      var vm = this
+
+      if (input.files && input.files[0]) {
+        console.log(input.files[0])
+        const formData = new FormData();
+        formData.append('file', input.files[0])
+
+        axios
+          .post(process.env.VUE_APP_SERVER_URL + "/upload_video", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(
+            (response) => {
+              console.log(response.data)
+              if (response.data == "success") {
+                vm.$notify({
+                    type: 'success',
+                    text: 'Video Yuklendi!'
+                });
+                vm.videoName = input.files[0].name
+                vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + vm.videoName
+              }
+            },
+            (response) => {
+              console.log(response);
+            }
+          );
+      }
     },
     blobToBase64 (blob)  {
       const reader = new FileReader();
