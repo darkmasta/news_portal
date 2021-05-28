@@ -77,5 +77,15 @@ module.exports = {
         return options;
       });
   },
+
   lintOnSave: false,
+
+  pluginOptions: {
+    i18n: {
+      locale: 'tr',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false
+    }
+  }
 };

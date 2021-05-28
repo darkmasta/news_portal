@@ -135,7 +135,7 @@
     <b-col>
      <b-card style="width: 55rem;">
             <h4 class="card-title">File 1</h4>
-            <img class="doc-img" v-bind:src="'/images/' + salesperson.file1name"  alt="Card image cap"/>
+            <img class="doc-img" :src="'/images/' + salesperson.file1name"  alt="Card image cap"/>
 
      </b-card>
     </b-col>
@@ -144,7 +144,7 @@
     <b-col>
      <b-card style="width: 55rem;">
             <h4 class="card-title">File 2</h4>
-            <img class="doc-img" v-bind:src="'/images/' + salesperson.file2name"  alt="Card image cap"/>
+            <img class="doc-img" :src="'/images/' + salesperson.file2name"  alt="Card image cap"/>
 
      </b-card>
     </b-col>
@@ -167,7 +167,7 @@ axios.defaults.withCredentials = true
 Vue.use(AxiosPlugin)
 
 export default {
-  name: "SalesPerson",
+  name: "sales-person",
   metaInfo: {
     title: "Sales Person",
   },

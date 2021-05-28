@@ -264,6 +264,9 @@ export default {
   metaInfo: {
     title: "Quotes",
   },
+    components: {
+    }, 
+    mixins: [loadCustomers],
   props: {
       model: {
         type: Object,
@@ -313,52 +316,6 @@ export default {
           text: "",
         },
     };
-    }, 
-    mixins: [loadCustomers],
-    components: {
-    },
-    created() {
-      var vm = this
-       axios.post(process.env.VUE_APP_SERVER_URL + '/get_customers/')
-                .then(response => { 
-                    var data = response.data
-                    //console.log(data)
-                    vm.customers = data
-                    _.each(data, function(customer, index) { 
-                      var tmp_quote = {
-                        value: 0,
-                        text: ''
-                      }
-                      tmp_quote.value = index;
-                      tmp_quote.text = customer.fullName;
-                      vm.options.push(tmp_quote)
-                    })
-                })
-
-      var data = {}
-      data.id = vm.$route.params.id
-       
-       axios.post(process.env.VUE_APP_SERVER_URL + '/get_quote_by_id', {data})
-                .then(response => { 
-                    var userData = response.data[0]
-                    console.log(userData)
-                    vm.vin = userData.vin
-                    vm.carModel = userData.model
-                    vm.year = userData.year
-                    vm.profit = userData.profit
-                    vm.selectedPrice = userData.price
-                    vm.city = userData.originCity
-                    vm.state = userData.originState
-                    vm.zipCode = userData.originZipCode
-                    vm.dZipCode = userData.destinationZipCode
-                    vm.dCity = userData.destinationCity
-                    vm.dState = userData.destinationState
-                    })
-    },
-    events: {
-        click: function(data) {
-            console.log(data)
-        }
     },
     watch: {
       vin: function()  {
@@ -415,6 +372,49 @@ export default {
           });
         }
       }
+    },
+    created() {
+      var vm = this
+       axios.post(process.env.VUE_APP_SERVER_URL + '/get_customers/')
+                .then(response => { 
+                    var data = response.data
+                    //console.log(data)
+                    vm.customers = data
+                    _.each(data, function(customer, index) { 
+                      var tmp_quote = {
+                        value: 0,
+                        text: ''
+                      }
+                      tmp_quote.value = index;
+                      tmp_quote.text = customer.fullName;
+                      vm.options.push(tmp_quote)
+                    })
+                })
+
+      var data = {}
+      data.id = vm.$route.params.id
+       
+       axios.post(process.env.VUE_APP_SERVER_URL + '/get_quote_by_id', {data})
+                .then(response => { 
+                    var userData = response.data[0]
+                    console.log(userData)
+                    vm.vin = userData.vin
+                    vm.carModel = userData.model
+                    vm.year = userData.year
+                    vm.profit = userData.profit
+                    vm.selectedPrice = userData.price
+                    vm.city = userData.originCity
+                    vm.state = userData.originState
+                    vm.zipCode = userData.originZipCode
+                    vm.dZipCode = userData.destinationZipCode
+                    vm.dCity = userData.destinationCity
+                    vm.dState = userData.destinationState
+                    })
+    },
+    events: {
+        click: function(data) {
+            console.log(data)
+        }
     },
     methods: {
       saveSelectedQuotes(selectedQuotes) {

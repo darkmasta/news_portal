@@ -2,7 +2,7 @@
 <div>
     <h2>Salespersons Registers</h2>
     <b-row>
-     <b-col cols="4" class="" v-for="salesperson in salespersons" :key="salesperson._id">
+     <b-col v-for="salesperson in salespersons" :key="salesperson._id" cols="4" class="">
         <b-card class="mb-2 salesperson-box">
           <b-card-title class="admin-card-title">
             {{salesperson.fullname}} ---> {{salesperson.email}}
@@ -12,7 +12,7 @@
                   <i class="admin-icon fa fa-clock" aria-hidden="true"></i>
                     &nbsp;{{salesperson.date}} 
                   </span>
-              <a class="salesperson-info-link" @click="goToSalesPerson(salesperson._id)" href="#">View Salesperson&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+              <a class="salesperson-info-link" href="#" @click="goToSalesPerson(salesperson._id)">View Salesperson&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
           </div>
         </b-card>
       </b-col>
@@ -34,7 +34,7 @@ axios.defaults.withCredentials = true
 Vue.use(AxiosPlugin)
 
 export default {
-  name: "SalesPersons",
+  name: "sales-persons",
   metaInfo: {
     title: "SalesPersons",
   },

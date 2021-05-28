@@ -105,7 +105,7 @@
             <p class="quotes-title">Selected</p>
         </b-row>
 
-        <b-row class="quote-container" v-for="quote in quotes" :key="quote._id">              
+        <b-row v-for="quote in quotes" :key="quote._id" class="quote-container">              
           <i class="fas fa-trash-alt delete-icon" @click="removeQuote(quote._id)"></i>
           <b-row class="car-model-container">
             <i class="fas fa-truck truck-icon"></i>
@@ -334,6 +334,7 @@
                     :borderless="borderless"
                     :outlined="outlined"
                     :small="small"
+                    ref="myTable"
                     :hover="hover"
                     :dark="dark"
                     :fixed="fixed"
@@ -342,8 +343,7 @@
                     :items="quotesTableData"
                     :fields="fields"
                     :head-variant="headVariant"
-                    :table-variant="tableVariant"
-                    @row-selected="rowSelected" ref="myTable" 
+                    :table-variant="tableVariant" @row-selected="rowSelected" 
                   >
                   </b-table>
 

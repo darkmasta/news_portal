@@ -33,10 +33,10 @@
                 <b-form-group label="Isim">
                   <span v-if="!edit">{{ userData.firstName }}</span>
                   <b-input
-                    label="Isim"
                     v-if="edit"
-                    placeholder="Isim"
                     v-model="userData.firstName"
+                    label="Isim"
+                    placeholder="Isim"
                   >
                   </b-input>
                 </b-form-group>
@@ -45,10 +45,10 @@
                 <b-form-group label="Soy Isim">
                   <span v-if="!edit"> {{ userData.lastName }} </span>
                   <b-input
-                    label="Soy Isim"
                     v-if="edit"
-                    placeholder="Soy Isim"
                     v-model="userData.lastName"
+                    label="Soy Isim"
+                    placeholder="Soy Isim"
                   >
                   </b-input>
                 </b-form-group>
@@ -60,10 +60,10 @@
                 <b-form-group label="E-mail">
                   <span v-if="!edit">{{ userData.email }}</span>
                   <b-input
-                    label="Email"
                     v-if="edit"
-                    placeholder="Email"
                     v-model="userData.email"
+                    label="Email"
+                    placeholder="Email"
                   >
                   </b-input>
                 </b-form-group>
@@ -71,9 +71,9 @@
               <b-col>
                 <b-form-group label="Kullanici Dili">
                 <span v-if="!edit">{{defaultLang}}</span>
-                <b-select v-model="defaultLang" class="" v-if="edit">
+                <b-select v-if="edit" v-model="defaultLang" class="">
                     <option v-for="(defaultLang, index) in languages" 
-                        :key="index" v-bind:value="defaultLang"> 
+                        :key="index" :value="defaultLang"> 
                         {{defaultLang}}
                     </option>
                 </b-select>
@@ -93,10 +93,10 @@
                 <b-form-group label="Password">
                   <span v-if="!edit">{{ userData.password}}</span>
                   <b-input
-                    label="Password"
                     v-if="edit"
-                    placeholder="Password"
                     v-model="userData.password"
+                    label="Password"
+                    placeholder="Password"
                   >
                   </b-input>
                 </b-form-group>
@@ -104,9 +104,9 @@
               <b-col>
                 <b-form-group label="Kullanici Rolu">
                 <span v-if="!edit">{{ userData.userRole }}</span>
-                <b-select v-model="userRole" class="" v-if="edit">
+                <b-select v-if="edit" v-model="userRole" class="">
                     <option v-for="(userRole, index) in userRoles" 
-                        :key="index" v-bind:value="userRole"> 
+                        :key="index" :value="userRole"> 
                         {{userRole}}
                     </option>
                 </b-select>

@@ -32,14 +32,14 @@
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
         </template>
         <template #cell(details)="data" class="activities-table-buttons">
-        <span title="Göster" class="fas fa-broadcast-tower" 
-            v-if="data.item.visible == 'Gösterilmiyor'" @click="makeVisible(data)"></span>
-        <span title="Gösterme" class="fab fa-firstdraft mr-2 text-primary"
-            v-if="data.item.visible == 'Gösteriliyor'" @click="makeInvisible(data)"></span>
-          <span title="Red" class="fa fa-ban" 
-              v-if="data.item.status == 'Onaylandi'" @click="unconfirmActivity(data)"></span>
-          <span title="Onay" class="fa fa-check mr-2 text-primary"
-              v-if="data.item.status == 'Onay Bekliyor'" @click="confirmActivity(data)"></span>
+        <span v-if="data.item.visible == 'Gösterilmiyor'" title="Göster" 
+            class="fas fa-broadcast-tower" @click="makeVisible(data)"></span>
+        <span v-if="data.item.visible == 'Gösteriliyor'" title="Gösterme"
+            class="fab fa-firstdraft mr-2 text-primary" @click="makeInvisible(data)"></span>
+          <span v-if="data.item.status == 'Onaylandi'" title="Red" 
+              class="fa fa-ban" @click="unconfirmActivity(data)"></span>
+          <span v-if="data.item.status == 'Onay Bekliyor'" title="Onay"
+              class="fa fa-check mr-2 text-primary" @click="confirmActivity(data)"></span>
           <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToActivity(data)"></span>
           <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
         </template>
@@ -165,6 +165,14 @@ export default {
     perPage: 10,
     currentPage: 1,
   }),
+  computed: {
+    totalItems() {
+      return this.activitiesTableData.length;
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
+  },
   created() {
     var vm = this
       
@@ -192,14 +200,6 @@ export default {
             vm.originalActivitiesTableData = vm.activitiesTableData
       });
 
-  },
-  computed: {
-    totalItems() {
-      return this.activitiesTableData.length;
-    },
-    totalPages () {
-      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-    },
   },
   methods: {
     goToActivity(data) {

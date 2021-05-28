@@ -107,6 +107,14 @@ export default {
     perPage: 25,
     currentPage: 1,
   }),
+  computed: {
+    totalItems() {
+      return this.tagsTableData.length;
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
+  },
   created() {
     var vm = this
       
@@ -128,14 +136,6 @@ export default {
             vm.originalTagsTableData = vm.tagsTableData
       });
 
-  },
-  computed: {
-    totalItems() {
-      return this.tagsTableData.length;
-    },
-    totalPages () {
-      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-    },
   },
   methods: {
     goToTag(data) {

@@ -2,20 +2,20 @@
   <sidenav :orientation="orientation" :class="curClasses" :accordion="true">
     <div class="sidenav-inner mt-4" :class="{ 'py-1': orientation !== 'horizontal' }">
       <sidenav-router-link icon="fas fa-tachometer-alt" :badge-class="isMenuActive('/')?'success badge-dot': null" to="/" :exact="true">Dashboard</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">Haber Yönetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">Etkinlik Yönetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/ads')?'success badge-dot': null" to="/ads" :active="isMenuActive('/ads')" :exact="true">Reklam Yönetimi</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/identity')?'success badge-dot': null" to="/identity" :active="isMenuActive('/identity')" :exact="true">Künye Düzenle</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/contact')?'success badge-dot': null" to="/contact" :active="isMenuActive('/contact')" :exact="true">İletişim Düzenle</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-address-card" :badge-class="isMenuActive('/about')?'success badge-dot': null" to="/about" :active="isMenuActive('/about')" :exact="true">Hakkımızda</sidenav-router-link>
-      <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin')?'success badge-dot': null" to="/admin" :active="isMenuActive('/users')" :exact="true">Kullanıcı İşlemleri</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-newspaper" :badge-class="isMenuActive('/posts')?'success badge-dot': null" to="/posts" :active="isMenuActive('/posts')" :exact="true">{{ $t('main.post management')}}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-calendar-week" :badge-class="isMenuActive('/orders')?'success badge-dot': null" to="/activities" :active="isMenuActive('/activities')" :exact="true">{{ $t('main.activity management') }}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-ad" :badge-class="isMenuActive('/ads')?'success badge-dot': null" to="/ads" :active="isMenuActive('/ads')" :exact="true">{{ $t('main.ad management' )}}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-heading" :badge-class="isMenuActive('/identity')?'success badge-dot': null" to="/identity" :active="isMenuActive('/identity')" :exact="true">{{ $t('main.identity management') }}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-file" :badge-class="isMenuActive('/contact')?'success badge-dot': null" to="/contact" :active="isMenuActive('/contact')" :exact="true">{{ $t('main.contact management') }}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-address-card" :badge-class="isMenuActive('/about')?'success badge-dot': null" to="/about" :active="isMenuActive('/about')" :exact="true">{{ $t('main.about management') }}</sidenav-router-link>
+      <sidenav-router-link icon="fas fa-users" :badge-class="isMenuActive('/admin/users')?'success badge-dot': null" to="/admin/users" :active="isMenuActive('/users')" :exact="true">{{ $t('main.users management') }}</sidenav-router-link>
       <sidenav-divider />
 
 
       <li class="sidenav-item" style="">
         <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
           <i class="sidenav-icon fas fa-tag"></i>
-          <div>Kategori İşlemleri</div>
+          <div>{{ $t('main.category management')}}</div>
         </a>
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
@@ -34,7 +34,7 @@
       <li class="sidenav-item" style="">
         <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
           <i class="sidenav-icon fas fa-hashtag"></i>
-          <div>Etiket İşlemleri</div>
+          <div>{{ $t('main.tags management') }}</div>
         </a>
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
@@ -53,7 +53,7 @@
       <li class="sidenav-item" style="">
         <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
           <i style="font-size: 22px;" class="sidenav-icon fab fa-searchengin"></i>
-          <div>SEO İşlemleri</div>
+          <div>{{ $t('main.seo management') }}</div>
         </a>
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">

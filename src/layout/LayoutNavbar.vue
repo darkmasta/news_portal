@@ -20,14 +20,17 @@
       <b-navbar-nav class="align-items-lg-center ml-auto">
         <b-nav-item-dropdown no-caret :right="!isRtlMode" class="demo-navbar-notifications">
           <template slot="button-content">
-            <i class="ion ion-md-notifications-outline navbar-icon align-middle mr-1 ml-1"></i>
-            <span class="d-lg-none align-middle">&nbsp; Notifications</span>
+            <i class="fas fa-language navbar-icon align-middle mr-1 ml-1"></i>
+            
+            <span class="d-lg-none align-middle">&nbsp; Diller</span>
           </template>
 
           <b-list-group flush>
           </b-list-group>
 
-          <a href="javascript:void(0)" class="d-block text-center text-light small p-2 my-1">Show all notifications</a>
+          <a href="javascript:void(0)" 
+            v-for="locale in locales" :key="locale" @click="switchLocale(locale)"
+            class="d-block text-center text-light small p-2 my-1">{{locale}}</a>
         </b-nav-item-dropdown>
         <!-- Divider -->
         <div class="nav-item d-none d-lg-block text-big font-weight-light line-height-1 opacity-25 mr-3 ml-1">
@@ -79,7 +82,8 @@ export default {
     publicUrl: process.env.VUE_APP_SERVER_URL,
     curUser: { name: "", photo: "" },
     currentUser: "",
-    logoUrl: 'https://defensehere.herokuapp.com/images/logo.png'
+    logoUrl: 'https://defensehere.herokuapp.com/images/logo.png',
+    locales: process.env.VUE_APP_I18N_SUPPORTED_LOCALE.split(',')
   }),
   created() {
     var vm = this
@@ -116,6 +120,11 @@ export default {
     },
     logout()  {
       this.$router.push({name: 'Login'})
+    },
+    switchLocale(locale) {
+      if (this.$i18n.locale !== locale) {
+        this.$i18n.locale = locale
+      }
     }
   },
 };

@@ -4,14 +4,14 @@
         <b-form-group label="Alt Kategori Sil">
           <b-select v-model="topCategory" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
-              :key="index" v-bind:value="categoryTitle"> 
+              :key="index" :value="categoryTitle"> 
               {{categoryTitle}}
             </option>
           </b-select>
           {{categoryTitle}}
           <b-select v-model="bottomCategory" class="mb-4">
             <option v-for="(bottomCategory, index) in categoriesData[topCategory]" 
-              :key="index" v-bind:value="bottomCategory"> 
+              :key="index" :value="bottomCategory"> 
               {{bottomCategory}}
             </option>
           </b-select>
@@ -26,7 +26,7 @@ import axios from "axios";
 import categoryData from "./categories_data"
 
 export default {
-  name: "DeleteBottomCategory",
+  name: "delete-bottom-category",
   data() {
     return {
       categoryTitle: "",

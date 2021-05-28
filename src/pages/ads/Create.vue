@@ -14,9 +14,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Reklam Başlığı">
-                  <b-input label="Reklam Başlığı" 
-                              placeholder="Başlık"
-                              v-model="adTitle">
+                  <b-input v-model="adTitle" 
+                              label="Reklam Başlığı"
+                              placeholder="Başlık">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -24,7 +24,7 @@
                 <b-form-group label="Reklam Sayfası">
                   <b-select v-model="adType" class="mb-4">
                     <option v-for="(adType, index) in adTypeList" 
-                      :key="index" v-bind:value="adType"> 
+                      :key="index" :value="adType"> 
                       {{adType}}
                     </option>
                   </b-select>
@@ -34,7 +34,7 @@
                 <b-form-group label="Reklam Dili">
                   <b-select v-model="adLanguage" class="">
                     <option v-for="(adLanguage, index) in languages" 
-                        :key="index" v-bind:value="adLanguage"> 
+                        :key="index" :value="adLanguage"> 
                         {{adLanguage}}
                     </option>
                   </b-select>
@@ -45,9 +45,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Reklam Linki">
-                  <b-input label="Reklam Linki" 
-                              placeholder="Link"
-                              v-model="adLink">
+                  <b-input v-model="adLink" 
+                              label="Reklam Linki"
+                              placeholder="Link">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -55,7 +55,7 @@
                 <b-form-group label="Reklam Konumu">
                   <b-select v-model="adLocation" class="mb-4">
                     <option v-for="(adLocation, index) in adLocationList" 
-                      :key="index" v-bind:value="adLocation"> 
+                      :key="index" :value="adLocation"> 
                       {{adLocation}}
                     </option>
                   </b-select>
@@ -65,7 +65,7 @@
                 <b-form-group label="Reklam Durumu">
                   <b-select v-model="adStatus" class="mb-4">
                     <option v-for="(adStatus, index) in adStatusList" 
-                      :key="index" v-bind:value="adStatus"> 
+                      :key="index" :value="adStatus"> 
                       {{adStatus}}
                     </option>
                   </b-select>
@@ -79,8 +79,8 @@
                 <div class="upload-example">
                   <div v-show="image">
                       <cropper
-                        :src="image"
                         ref="cropper"
+                        :src="image"
                       />
                   </div>
                   <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
@@ -99,7 +99,7 @@
                   <div class="button-wrapper">
                 
                   <span class="button" @click="$refs.file.click()">
-                    <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                    <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
                     Görsel Ekle
                   </span>
 
@@ -108,9 +108,9 @@
                   </span>
 
                   <label class="switch">
-                    <input type="checkbox" v-model="toggleEditImage">
+                    <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
                   </label>
                   </div>
                 </div>
@@ -163,6 +163,9 @@ export default {
     base64: '',
     toggleEditImage: false,
   }),
+  computed: {
+
+  },
   created() {
       var vm = this
 
@@ -270,9 +273,6 @@ export default {
         };
       });
     },
-  },
-  computed: {
-
   }
 } 
 </script>

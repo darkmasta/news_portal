@@ -20,9 +20,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Reklam Başlığı">
-                  <b-input label="Reklam Başlığı" 
-                              placeholder="Başlık"
-                              v-model="ad.adTitle">
+                  <b-input v-model="ad.adTitle" 
+                              label="Reklam Başlığı"
+                              placeholder="Başlık">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -30,7 +30,7 @@
                 <b-form-group label="Reklam Sayfası">
                   <b-select v-model="ad.adType" class="mb-4">
                     <option v-for="(adType, index) in adTypeList" 
-                      :key="index" v-bind:value="adType"> 
+                      :key="index" :value="adType"> 
                       {{ad.adType}}
                     </option>
                   </b-select>
@@ -40,7 +40,7 @@
                 <b-form-group label="Reklam Dili">
                   <b-select v-model="ad.adLanguage" class="">
                     <option v-for="(adLanguage, index) in languages" 
-                        :key="index" v-bind:value="adLanguage"> 
+                        :key="index" :value="adLanguage"> 
                         {{adLanguage}}
                     </option>
                   </b-select>
@@ -51,9 +51,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Reklam Linki">
-                  <b-input label="Reklam Linki" 
-                              placeholder="Link"
-                              v-model="ad.link">
+                  <b-input v-model="ad.link" 
+                              label="Reklam Linki"
+                              placeholder="Link">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -61,7 +61,7 @@
                 <b-form-group label="Reklam Konumu">
                   <b-select v-model="adLocation" class="mb-4">
                     <option v-for="(adLocation, index) in adLocationList" 
-                      :key="index" v-bind:value="adLocation"> 
+                      :key="index" :value="adLocation"> 
                       {{adLocation}}
                     </option>
                   </b-select>
@@ -71,7 +71,7 @@
                 <b-form-group label="Reklam Durumu">
                   <b-select v-model="ad.status" class="mb-4">
                     <option v-for="(adStatus, index) in adStatusList" 
-                      :key="index" v-bind:value="adStatus"> 
+                      :key="index" :value="adStatus"> 
                       {{ad.status}}
                     </option>
                   </b-select>
@@ -85,8 +85,8 @@
                 <div class="upload-example">
                   <div v-show="image">
                       <cropper
-                        :src="image"
                         ref="cropper"
+                        :src="image"
                       />
                   </div>
                   <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
@@ -105,7 +105,7 @@
                   <div class="button-wrapper">
                 
                   <span class="button" @click="$refs.file.click()">
-                    <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                    <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
                     Görsel Ekle
                   </span>
 
@@ -114,9 +114,9 @@
                   </span>
 
                   <label class="switch">
-                    <input type="checkbox" v-model="toggleEditImage">
+                    <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
                   </label>
                   </div>
                 </div>
@@ -147,7 +147,7 @@ import 'vue2-timepicker/dist/VueTimepicker.css'
 
 
 export default {
-name: "Ad",
+name: "ad",
 components: {
   Cropper,
   Datepicker,

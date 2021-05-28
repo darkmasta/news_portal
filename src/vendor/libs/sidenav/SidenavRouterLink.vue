@@ -6,7 +6,7 @@
     :exact="exact"
     :event="event">
     <a class="sidenav-link" :class="linkClass">
-      <i class="sidenav-icon" v-if="icon" :class="icon"></i>
+      <i v-if="icon" class="sidenav-icon" :class="icon"></i>
       <div><slot></slot></div>
       <div v-if="(badge || badgeClass)" class="pl-1 ml-auto"><b-badge :variant="badgeClass">{{badge}}</b-badge></div>
     </a>

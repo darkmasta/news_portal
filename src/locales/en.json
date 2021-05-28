@@ -1,0 +1,15 @@
+{
+  "main": {
+    "welcome" : "Hello from {company}!",
+    "post management": "Post Management",
+    "activity management": "Activity Management",
+    "ad management": "Ad Management",
+    "identity management": "Identity Management",
+    "contact management": "Contact Management",
+    "about management":  "About Management",
+    "users management": "Users Management",
+    "category management": "Category Management",
+    "tags management": "Tags Management",
+    "seo management": "SEO Management"
+  }
+}

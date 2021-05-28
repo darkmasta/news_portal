@@ -14,9 +14,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Etkiet İsmi">
-                  <b-input label="Etkiet İsmi" 
-                              placeholder="Etkiet İsmi"
-                              v-model="tagName">
+                  <b-input v-model="tagName" 
+                              label="Etkiet İsmi"
+                              placeholder="Etkiet İsmi">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -47,6 +47,9 @@ export default {
     tagName: '',
     tagText: '',
   }),
+  computed: {
+
+  },
   created() {
     var vm = this
 
@@ -70,9 +73,6 @@ export default {
           }
         });
     }
-  },
-  computed: {
-
   }
 } 
 </script>

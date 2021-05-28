@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-md-12">
           <h2 style="text-decoration: underline;">Haber Olustur</h2>
+          <h2>{{ $t('main.welcome', {company: 'Lokalise'})}}</h2>
           <span class="info_message">{{info_message}}</span>
       </div>
     </div>
@@ -10,47 +11,47 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'edit'" data-toggle="tab" href="/#/posts/create"
-                      :class="{active: expandTab == 'edit'}">Edit Tarihi</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'edit'}"
+                      @click="expandTab = 'edit'">Edit Tarihi</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'categories'" data-toggle="tab" href="/#/posts/create"
-                      :class="{active: expandTab == 'categories'}">Kategoriler</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'categories'}"
+                      @click="expandTab = 'categories'">Kategoriler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'tags'" data-toggle="tab" href="/#/posts/create"
-                      :class="{active: expandTab == 'tags'}">Etiketler</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'tags'}"
+                      @click="expandTab = 'tags'">Etiketler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'postImage'" data-toggle="tab" href="/#/posts/create"
-                  :class="{active: expandTab == 'postImage'}">Haber Resmi</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'postImage'}"
+                  @click="expandTab = 'postImage'">Haber Resmi</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'postLinks'" data-toggle="tab" href="/#/posts/create"
-                  :class="{active: expandTab == 'postLinks'}">Haber Linkleri</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'postLinks'}"
+                  @click="expandTab = 'postLinks'">Haber Linkleri</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'languages'" data-toggle="tab" href="/#/posts/create"
-                  :class="{active: expandTab == 'languages'}">Haber Dilleri</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'languages'}"
+                  @click="expandTab = 'languages'">Haber Dilleri</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'carousel'" data-toggle="tab" href="/#/posts/create"
-                  :class="{active: expandTab == 'carousel'}">Albüm</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'carousel'}"
+                  @click="expandTab = 'carousel'">Albüm</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'video'" data-toggle="tab" href="/#/posts/create"
-                  :class="{active: expandTab == 'video'}">Video</a>
+           data-toggle="tab" href="/#/posts/create" :class="{active: expandTab == 'video'}"
+                  @click="expandTab = 'video'">Video</a>
         </li>
       </ul>
       <div class="tab-content" style="overflow-y: scroll; overflow-x: hidden;">
-        <div class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}" id="navs-left-home">
+        <div id="navs-left-home" class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>Albüm</h3> 
@@ -60,8 +61,8 @@
               <div class="upload-example">
                 <div>
                     <cropper
-                      :src="image"
                       ref="cropper2"
+                      :src="image"
                       :transitions="true"
                     />
                 </div>
@@ -84,7 +85,7 @@
                 </b-col>
                 <div class="button-wrapper">
                   <span class="button" @click="$refs.file2.click()">
-                    <input type="file" ref="file2" @change="loadImage($event)" accept="image/*">
+                    <input ref="file2" type="file" accept="image/*" @change="loadImage($event)">
                     Görsel Ekle
                   </span>
 
@@ -93,9 +94,9 @@
                   </span>
 
                   <label class="switch">
-                    <input type="checkbox" v-model="toggleEditImage">
+                    <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
                   </label>
                 </div>
                 <div class="button-wrapper">
@@ -110,7 +111,10 @@
               <b-col cols="12 mt-5">
                 <carousel>
                   <slide v-for="(image, index) in sliderImages" :key="index" class="slide-item">
-                    <img :src="image" />
+                    <img :src="image" class="slider-img" />
+                    <div  class="remove-slide-button" title="Reset Image" @click="removeSlide(index)">
+                      <i class="fa fa-times"></i>
+                    </div>
                   </slide>
                 </carousel>
 
@@ -118,7 +122,7 @@
 
             </b-row>
         </div>
-        <div class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}" id="navs-left-home">
+        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>Video Linki</h3> 
@@ -134,13 +138,13 @@
             <b-row>
               <b-col cols="6" class="offset-3">
                 <span class="button" @click="$refs.video.click()">
-                  <input type="file" ref="video" @change="uploadVideo($event)" />
+                  <input ref="video" type="file" @change="uploadVideo($event)" />
                   Video Ekle
                 </span>
               </b-col>
             </b-row>
 
-            <b-row class="mt-5" v-if="videoName">
+            <b-row v-if="videoName" class="mt-5">
               <b-col cols="6" class="offset-3">
                 <video width="650" controls muted="muted" autoplay>
                   <source :src="videoSrc" type="video/mp4">
@@ -151,17 +155,17 @@
 
         </div>
 
-        <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
+        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>Edit Tarihi</h3> 
               </b-col>
 
-              <b-col cols="10" class="ml-2" v-for="(log, index) in editLogs" :key="index">
+              <b-col v-for="(log, index) in editLogs" :key="index" cols="10" class="ml-2">
                 <b-input-group prepend="Edit Log" class="mt-2">
                   <b-form-input v-model="log.editText">
                   </b-form-input>
-                  <b-form-input v-bind:value="log.editor" disabled></b-form-input>
+                  <b-form-input :value="log.editor" disabled></b-form-input>
                   <div class="edit_buttons">
                     <span class="fas fa-times" @click="removeLog(index)"></span>
                     <span class="far fa-edit" @click="editLog(index)"></span>
@@ -171,7 +175,7 @@
 
             </b-row>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}">
           <b-row class="edit_log"> 
             <b-col class="categories__container">
               <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
@@ -182,7 +186,7 @@
                 <ul class="category__list">
                   <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
                     class="category__list-item">
-                    <input type="checkbox" :value="category" v-model="selectedCategories"> 
+                    <input v-model="selectedCategories" type="checkbox" :value="category"> 
                     {{category}}
                   </li>
                 </ul>
@@ -195,25 +199,25 @@
               </b-col>
           </b-row>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}">
 
         <vue-typeahead-bootstrap
           v-model="tag"
           :data="tags"
-          :minMatchingChars="1"
+          :min-matching-chars="1"
           @hit="addToSelectedTags"
         />
 
 
         <div class="selected-tags mt-5">
-          <span class="selected-tag" v-for="(selectedTag, index) in selectedTags" :key="index">{{selectedTag}}
-          <i @click="removeFromSelectedTags(index)" style="color: red;" class="fas fa-times ml-2"></i></span>
+          <span v-for="(selectedTag, index) in selectedTags" :key="index" class="selected-tag">{{selectedTag}}
+          <i style="color: red;" class="fas fa-times ml-2" @click="removeFromSelectedTags(index)"></i></span>
         </div>
 
 
 
         </div>
-        <div class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}" id="navs-left-messages">
+        <div id="navs-left-messages" class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}">
           <b-row >
           <b-col cols="12">
             <b-col cols="6" class="offset-5 mt-3 kategoriler">
@@ -222,8 +226,8 @@
             <div class="upload-example">
               <div>
                   <cropper
-                    :src="image"
                     ref="cropper"
+                    :src="image"
                     :transitions="true"
                   />
               </div>
@@ -246,7 +250,7 @@
               <div class="button-wrapper">
             
               <span class="button" @click="$refs.file.click()">
-                <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
                 Görsel Ekle
               </span>
 
@@ -255,9 +259,9 @@
               </span>
 
               <label class="switch">
-                <input type="checkbox" v-model="toggleEditImage">
+                <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
               </label>
              
               </div>
@@ -265,7 +269,7 @@
           </b-col>
           </b-row>
         </div>
-        <div class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}" id="navs-left-messages">
+        <div id="navs-left-messages" class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}">
           <b-row>
             <b-row>
             <b-col cols="12" class="publish_date_box mt-4 ml-3">
@@ -293,7 +297,7 @@
               <b-form-group label="Haber Dili">
                 <b-select v-model="postLanguage" class="">
                   <option v-for="(postLanguage, index) in languages" 
-                      :key="index" v-bind:value="postLanguage"> 
+                      :key="index" :value="postLanguage"> 
                       {{postLanguage}}
                   </option>
                 </b-select>
@@ -337,7 +341,7 @@
             </b-col>
           </b-row>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}">
           <b-row>
             <b-col cols="10" class="offset-1">
               <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
@@ -375,10 +379,10 @@
           </b-row>
           <b-row>
             <b-col cols="4" class="mt-5 offset-9">
-              <b-btn v-if="manset" @click="manset = false;" variant="primary rounded-pill" class="new-post-btn">
+              <b-btn v-if="manset" variant="primary rounded-pill" class="new-post-btn" @click="manset = false;">
                 <span class="fas fa-plus-circle"></span>  Manşette Yayınla
               </b-btn>
-              <b-btn v-if="!manset" @click="manset = true;" variant="primary rounded-pill" class="new-post-btn">
+              <b-btn v-if="!manset" variant="primary rounded-pill" class="new-post-btn" @click="manset = true;">
                 <span class="fas fa-plus-circle"></span>  Normal Yayınla
               </b-btn>
             </b-col>
@@ -392,14 +396,14 @@
      <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @ready="onReady"></ckeditor>
         </div>
       </b-col>
     </b-row>
 
     <b-row class="mt-4">
       <b-col offset="9">
-         <b-btn @click="submitPost" variant="primary rounded-pill" class="new-post-btn">
+         <b-btn variant="primary rounded-pill" class="new-post-btn" @click="submitPost">
           <span class="fas fa-plus-circle"></span> Haberi Kaydet
          </b-btn>
       </b-col>
@@ -436,7 +440,7 @@ Vue.use(CKEditor)
 
 
 export default {
-  name: "PostsCreate",
+  name: "posts-create",
   components: {
     Cropper,
     Carousel,
@@ -515,16 +519,13 @@ export default {
 
     vm.owner = this.$store.getters.getUser
 
-
-    console.log("OWNER --------- \t", vm.owner)
-
-    let images = localStorage.getItem('images')
-    images.split('~').forEach( image => {
-      // console.log(image)
-      // vm.sliderImages.push('http://localhost:5000/images/' + image + '.jpeg')
-      this.sliderImages.push(process.env.VUE_APP_SERVER_URL + '/images/' + image + '.jpeg')
-    }) 
-
+    let images = localStorage.getItem('images') || ''
+    if (images) {
+      images.split('~').forEach( image => {
+        if (image != '')
+          this.sliderImages.push(process.env.VUE_APP_SERVER_URL + '/images/' + image + '.jpeg')
+      }) 
+    }
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
@@ -918,6 +919,7 @@ export default {
                     } else {
                       localStorage.setItem('images', vm.imageName + '~')
                     }
+                    setTimeout(() => { location.reload(); }, 1000);
                   }
                 },
                 (response) => {
@@ -949,6 +951,19 @@ export default {
     removeFromSelectedTags(index) {
       var vm = this
       vm.selectedTags.splice(index, 1)
+    },
+    removeSlide(index) {
+      var vm = this
+      let images = localStorage.getItem('images') || ''
+      if (images) {
+        var imagesArr = images.split('~').filter( el => el != "")
+        console.log(imagesArr)
+        vm.sliderImages.splice(index, 1)
+        imagesArr.splice(index,1)
+        let string = ''
+        imagesArr.forEach( img => string = img + '~')
+        localStorage.setItem('images', string)
+      }
     }
   },
 };
@@ -1186,6 +1201,27 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   border: 1px solid #ccc;
+}
+
+.slider-img {
+  width: 20vw;
+  height: auto;
+}
+
+.remove-slide-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 0px;
+  right: -15%;
+  height: 20px;
+  width: 20px;
+  background: #3fb37f;
+}
+
+.edit_log h3 {
+  text-align: center;
 }
 
 </style>

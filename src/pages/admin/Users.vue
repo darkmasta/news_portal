@@ -23,9 +23,9 @@
           </b-row>
 
         <b-table
-          class="table nexus-table mt-2" hover  
-                          borderless 
-                          ref="myTable"
+          ref="myTable" class="table nexus-table mt-2"  
+                          hover 
+                          borderless
           :items="usersTableData"
           :per-page="perPage"
           :current-page="currentPage"
@@ -69,7 +69,7 @@ moment.locale('tr')
 
 
 export default {
-name: "AdminUsers",
+name: "admin-users",
 metaInfo: {
   title: "Users",
 },
@@ -158,9 +158,24 @@ data: () => ({
 
   // pagination
   perPageOptions: [2, 4, 6, 8, 10],
-  perPage: 2,
+  perPage: 20,
   currentPage: 1,
-}), 
+}),
+computed: {
+  totalItems () {
+    return this.usersTableData.length
+  },
+  totalPages () {
+    return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+  },
+  tableFields () {
+    if (!this.jsonData[0]) return []
+    return Object.keys(this.quotesTableData[0]).map(key => ({
+      key,
+      sortable: this.isSortable
+    }))
+  }
+ }, 
 created() {
   var vm = this
 
@@ -257,22 +272,7 @@ methods: {
     // update the rows
     this.usersTableData = filtered
   } 
-},
-computed: {
-  totalItems () {
-    return this.usersTableData.length
-  },
-  totalPages () {
-    return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-  },
-  tableFields () {
-    if (!this.jsonData[0]) return []
-    return Object.keys(this.quotesTableData[0]).map(key => ({
-      key,
-      sortable: this.isSortable
-    }))
-  }
- }
+}
 }
 </script>
 

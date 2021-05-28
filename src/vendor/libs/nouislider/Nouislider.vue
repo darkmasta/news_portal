@@ -14,13 +14,6 @@ export default {
     'options',
     'disabled'
   ],
-  mounted () {
-    this.initSlider(this.options)
-  },
-  beforeDestroy () {
-    this.destroySlider()
-    this._oldValue = null
-  },
   watch: {
     value (value) {
       if (value.join(';') === this._oldValue) return
@@ -36,6 +29,13 @@ export default {
     disabled (isDisabled) {
       this.disableSlider(isDisabled)
     }
+  },
+  mounted () {
+    this.initSlider(this.options)
+  },
+  beforeDestroy () {
+    this.destroySlider()
+    this._oldValue = null
   },
   methods: {
     initSlider (options) {

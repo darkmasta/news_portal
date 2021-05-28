@@ -1,0 +1,15 @@
+{
+  "main": {
+    "welcome" : "Hello from {company}!",
+    "post management": "Haber Yönetimi",
+    "activity management": "Etkinlik Yönetimi",
+    "ad management": "Reklam Yönetimi",
+    "identity management": "Künye Düzenle",
+    "contact management": "İletişim Düzenle",
+    "about management":  "Hakkımızda",
+    "users management": "Kullanıcı İşlemleri",
+    "category management": "Kategori İşlemleri",
+    "tags management": "Etiket İşlemleri",
+    "seo management": "SEO İşlemleri"
+  }
+}

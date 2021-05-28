@@ -12,13 +12,13 @@
     <b-row>
       <b-col class="categories__container">
         <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
-            @click="clickCategory(index)" class="categories__single-category expand_category"
+            class="categories__single-category expand_category" @click="clickCategory(index)"
                     >
           <h3 class="category__title">{{categoryTitle}}</h3>
           <ul class="category__list">
             <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
               class="category__list-item">
-              <input type="checkbox" :value="category" v-model="selectedCategories"> 
+              <input v-model="selectedCategories" type="checkbox" :value="category"> 
               {{category}}
             </li>
           </ul>

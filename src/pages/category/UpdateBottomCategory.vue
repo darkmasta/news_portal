@@ -4,18 +4,18 @@
         <b-form-group label="Alt Kategori Duzenle">
           <b-select v-model="topCategory" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
-              :key="index" v-bind:value="categoryTitle"> 
+              :key="index" :value="categoryTitle"> 
               {{categoryTitle}}
             </option>
           </b-select>
           {{categoryTitle}}
           <b-select v-model="bottomCategory" class="mb-4">
             <option v-for="(bottomCategory, index) in categoriesData[topCategory]" 
-              :key="index" v-bind:value="bottomCategory"> 
+              :key="index" :value="bottomCategory"> 
               {{bottomCategory}}
             </option>
           </b-select>
-          <b-input v-model="categoryName" v-bind:value="categoryName" label="Alt Kategori" placeholder="Alt Kategoriyi Guncelle">
+          <b-input v-model="categoryName" :value="categoryName" label="Alt Kategori" placeholder="Alt Kategoriyi Guncelle">
           </b-input>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
                     @click="updateBottomCategory(topCategory, bottomCategory)">Alt Kategori Update</b-btn>
@@ -28,7 +28,7 @@ import axios from "axios";
 import categoryData from "./categories_data"
 
 export default {
-  name: "UpdateBottomCategory",
+  name: "update-bottom-category",
   data() {
     return {
       categoryTitle: "",

@@ -7,7 +7,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Activity",
+  name: "activity",
   props: {
       activity: Object
   },

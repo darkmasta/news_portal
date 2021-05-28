@@ -32,10 +32,10 @@
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
         </template>
         <template #cell(details)="data" class="activities-table-buttons">
-          <span title="Red" class="fa fa-ban" 
-              v-if="data.item.status == 'Onaylandi'" @click="unconfirmAd(data)"></span>
-          <span title="Onay" class="fa fa-check mr-2 text-primary"
-              v-if="data.item.status == 'Onay Bekliyor'" @click="confirmAd(data)"></span>
+          <span v-if="data.item.status == 'Onaylandi'" title="Red" 
+              class="fa fa-ban" @click="unconfirmAd(data)"></span>
+          <span v-if="data.item.status == 'Onay Bekliyor'" title="Onay"
+              class="fa fa-check mr-2 text-primary" @click="confirmAd(data)"></span>
           <span title="Edit Reklam" class="far fa-edit mr-2 text-primary" @click="goToAd(data)"></span>
           <span title="Delete Reklam" class="fas fa-times text-danger" @click="deleteAd(data)"></span>
         </template>
@@ -166,6 +166,14 @@ export default {
     perPage: 10,
     currentPage: 1,
   }),
+  computed: {
+    totalItems () {
+      return this.adsTableData.length
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
+  },
   created() {
     var vm = this
 
@@ -208,14 +216,6 @@ export default {
       })
 
 
-  },
-  computed: {
-    totalItems () {
-      return this.adsTableData.length
-    },
-    totalPages () {
-      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-    },
   },
 methods: {
   goToAd(data) {

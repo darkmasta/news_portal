@@ -13,7 +13,7 @@
         <div class="select_container">
             <b-select v-model="language" class="language_box">
                 <option v-for="(language, index) in languages" 
-                    :key="index" v-bind:value="language"> 
+                    :key="index" :value="language"> 
                     {{language}}
                 </option>
             </b-select>
@@ -47,8 +47,8 @@
 
 
     <b-row class="top_activities_container">
-        <b-col cols="4" class="top_activity_item"
-         v-for="(ad, index) in ads.slice(0,3)" :key="index"
+        <b-col v-for="(ad, index) in ads.slice(0,3)" :key="index"
+         cols="4" class="top_activity_item"
          @click="incrementClick(ad)">
             <img :src="ad.adImage"> 
             <h3 class="ad-title">{{ad.adName}}</h3>

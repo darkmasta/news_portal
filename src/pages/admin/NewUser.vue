@@ -29,9 +29,9 @@
               <b-col>
                 <b-form-group label="Isim">
                   <b-input
+                    v-model="userData.firstName"
                     label="Isim"
                     placeholder="Isim"
-                    v-model="userData.firstName"
                   >
                   </b-input>
                 </b-form-group>
@@ -39,9 +39,9 @@
               <b-col>
                 <b-form-group label="Soy Isim">
                   <b-input
+                    v-model="userData.lastName"
                     label="Soy Isim"
                     placeholder="Soy Isim"
-                    v-model="userData.lastName"
                   >
                   </b-input>
                 </b-form-group>
@@ -49,9 +49,9 @@
               <b-col>
                 <b-form-group label="Telefon">
                   <b-input
+                    v-model="userData.phone"
                     label="Telefon"
                     placeholder="Telefon"
-                    v-model="userData.phone"
                   >
                   </b-input>
                 </b-form-group>
@@ -61,9 +61,9 @@
               <b-col>
               <b-form-group label="E-mail">
                   <b-input
+                    v-model="userData.email"
                     label="E-mail"
                     placeholder="E-mail"
-                    v-model="userData.email"
                   >
                   </b-input>
                 </b-form-group>
@@ -72,7 +72,7 @@
                 <b-form-group label="Kullanici Dili">
                 <b-select v-model="defaultLang" class="">
                     <option v-for="(defaultLang, index) in languages" 
-                        :key="index" v-bind:value="defaultLang"> 
+                        :key="index" :value="defaultLang"> 
                         {{defaultLang}}
                     </option>
                 </b-select>
@@ -83,9 +83,9 @@
               <b-col cols="12">
                 <b-form-group label="Adres">
                   <b-input
+                    v-model="userData.address"
                     label="Address"
                     placeholder="Address"
-                    v-model="userData.address"
                   >
                   </b-input>
                 </b-form-group>
@@ -96,9 +96,9 @@
               <b-col cols="4">
                 <b-form-group label="Sifre">
                   <b-input
+                    v-model="userData.password"
                     label="Sifre"
                     placeholder="Sifre"
-                    v-model="userData.password"
                   >
                   </b-input>
                 </b-form-group>
@@ -107,7 +107,7 @@
                 <b-form-group label="Kullanici Rolu">
                 <b-select v-model="userRole" class="">
                     <option v-for="(userRole, index) in userRoles" 
-                        :key="index" v-bind:value="userRole"> 
+                        :key="index" :value="userRole"> 
                         {{userRole}}
                     </option>
                 </b-select>

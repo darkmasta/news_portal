@@ -34,27 +34,27 @@
               <b-col>
                 <b-form-group label="Name">
                   <span v-if="!edit">{{ userData.name }}</span>
-                  <b-input label="Name" v-if="edit"
-                              placeholder="Name"
-                              v-model="userData.name">
+                  <b-input v-if="edit" v-model="userData.name"
+                              label="Name"
+                              placeholder="Name">
                   </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="E-mail">
                   <span v-if="!edit"> {{ userData.email }} </span>
-                  <b-input label="E-mail" v-if="edit"
-                              placeholder="E-mail"
-                              v-model="userData.email">
+                  <b-input v-if="edit" v-model="userData.email"
+                              label="E-mail"
+                              placeholder="E-mail">
                   </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Phone">
                     <span v-if="!edit">{{ userData.phone }}</span>
-                    <b-input label="Phone" v-if="edit"
-                                placeholder="Phone"
-                                v-model="userData.phone">
+                    <b-input v-if="edit" v-model="userData.phone"
+                                label="Phone"
+                                placeholder="Phone">
                     </b-input>
                 </b-form-group>
               </b-col>
@@ -63,27 +63,27 @@
               <b-col>
                 <b-form-group label="City">
                   <span v-if="!edit">{{ userData.city }}</span>
-                    <b-input label="City" v-if="edit"
-                                placeholder="City"
-                                v-model="userData.city">
+                    <b-input v-if="edit" v-model="userData.city"
+                                label="City"
+                                placeholder="City">
                     </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="State">
                   <span v-if="!edit">{{ userData.state}}</span>
-                    <b-input label="State" v-if="edit"
-                                placeholder="State"
-                                v-model="userData.state">
+                    <b-input v-if="edit" v-model="userData.state"
+                                label="State"
+                                placeholder="State">
                     </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Zip Code">
                   <span v-if="!edit">{{ userData.zip}}</span>
-                    <b-input label="Zip Code" v-if="edit"
-                                placeholder="Zip Code"
-                                v-model="userData.zip">
+                    <b-input v-if="edit" v-model="userData.zip"
+                                label="Zip Code"
+                                placeholder="Zip Code">
                     </b-input>
                 </b-form-group>
               </b-col>
@@ -92,18 +92,18 @@
               <b-col cols="4">
                 <b-form-group label="Default Profit">
                     <span v-if="!edit">{{userData.defaultProfit}}</span>
-                    <b-input label="Enter Your Profit" v-if="edit"
-                                placeholder="Profit"
-                                v-model="userData.defaultProfit">
+                    <b-input v-if="edit" v-model="userData.defaultProfit"
+                                label="Enter Your Profit"
+                                placeholder="Profit">
                       </b-input>
                     </b-form-group>
               </b-col>
               <b-col cols="8">
                 <b-form-group label="Address">
                   <span v-if="!edit">{{ userData.address}}</span>
-                    <b-input label="Address" v-if="edit"
-                                placeholder="Address"
-                                v-model="userData.address">
+                    <b-input v-if="edit" v-model="userData.address"
+                                label="Address"
+                                placeholder="Address">
                     </b-input>
                   </b-form-group>
               </b-col>

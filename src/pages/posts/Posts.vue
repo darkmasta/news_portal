@@ -18,21 +18,21 @@
   </div>
 
   <b-table
-      class="table nexus-table" hover selectable
-      borderless 
-      @row-selected="rowSelected" ref="myTable" 
-      :items="postsTableData"
+      ref="myTable" class="table nexus-table" hover
+      selectable 
+      borderless :items="postsTableData" 
       :current-page="currentPage"
       :per-page="perPage"
-      :fields="tableFields">
+      :fields="tableFields"
+      @row-selected="rowSelected">
       <template #cell(postImage)="data" >
           <img  class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
       </template>
       <template #cell(details)="data">
-        <span title="Publish" class="fas fa-broadcast-tower" 
-            v-if="data.item.status == 'Taslak'" @click="goToPostLink(data)"></span>
-        <span title="Draft" class="fab fa-firstdraft mr-2 text-primary"
-            v-if="data.item.status == 'Aktif'" @click="goToPostLink(data)"></span>
+        <span v-if="data.item.status == 'Taslak'" title="Publish" 
+            class="fas fa-broadcast-tower" @click="goToPostLink(data)"></span>
+        <span v-if="data.item.status == 'Aktif'" title="Draft"
+            class="fab fa-firstdraft mr-2 text-primary" @click="goToPostLink(data)"></span>
         <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToPost(data)"></span>
         <span title="Delete Post" class="fas fa-times text-danger" @click="deletePost(data)"></span>
       </template>
@@ -73,7 +73,7 @@ moment.locale('tr')
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "Posts",
+  name: "posts",
   metaInfo: {
     title: "Posts",
   },
@@ -154,6 +154,14 @@ export default {
     perPage: 10,
     currentPage: 1,
   }),
+  computed: {
+    totalItems() {
+      return this.postsTableData.length;
+    },
+    totalPages () {
+      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
+    },
+  },
   created() {
     var vm = this
     
@@ -181,14 +189,6 @@ export default {
       });
     
 
-  },
-  computed: {
-    totalItems() {
-      return this.postsTableData.length;
-    },
-    totalPages () {
-      return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
-    },
   },
   methods: {
     rowSelected(data) {

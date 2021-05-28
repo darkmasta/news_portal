@@ -40,11 +40,11 @@
               </b-form-group>
 
               <b-form-group label="Password" label-size="lg">
-                <b-input type="password" v-model="model.password" required />
+                <b-input v-model="model.password" type="password" required />
               </b-form-group>
 
               <b-form-group label="Repeat Password" label-size="lg">
-                <b-input type="password" v-model="model.passwordRepeat" required />
+                <b-input v-model="model.passwordRepeat" type="password" required />
               </b-form-group>
             </b-card-body>
             <b-card-footer>

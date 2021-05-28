@@ -1,7 +1,7 @@
 <template>
   <div class="layout-wrapper layout-1 layout-without-sidenav">
     <div class="layout-inner">
-      <app-layout-navbar :sidenavToggle="false" />
+      <app-layout-navbar :sidenav-toggle="false" />
 
       <div class="layout-container">
         <div class="layout-content">

@@ -13,7 +13,7 @@
         <div class="select_container">
             <b-select v-model="language" class="language_box">
                 <option v-for="(language, index) in languages" 
-                    :key="index" v-bind:value="language"> 
+                    :key="index" :value="language"> 
                     {{language}}
                 </option>
             </b-select>
@@ -112,6 +112,18 @@ export default {
       image: '',
       id: ''
   }),
+  computed: {
+      publishDate: function() {
+          var vm = this
+          if(vm.post && vm.post.publishDate) return vm.post.publishDate.split('T').shift()
+          else return "No Date is avaliable"
+      },
+      imageSrc: () => {
+          var vm = this
+          if (vm.post && vm.post.postImage) return process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
+          else return "No image"
+      }
+  },
   created() {
     var vm = this;
 
@@ -171,18 +183,6 @@ export default {
           var vm = this
           let id = vm.post._id
           this.$router.push({ name: 'Posts Edit', params: { id: id}})
-      }
-  },
-  computed: {
-      publishDate: function() {
-          var vm = this
-          if(vm.post && vm.post.publishDate) return vm.post.publishDate.split('T').shift()
-          else return "No Date is avaliable"
-      },
-      imageSrc: () => {
-          var vm = this
-          if (vm.post && vm.post.postImage) return process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
-          else return "No image"
       }
   }
 };

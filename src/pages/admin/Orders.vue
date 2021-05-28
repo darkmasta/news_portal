@@ -31,6 +31,7 @@
                 :borderless="borderless"
                 :outlined="outlined"
                 :small="small"
+                ref="myTable"
                 :hover="hover"
                 :dark="dark"
                 :fixed="fixed"
@@ -41,16 +42,15 @@
                 :head-variant="headVariant"
                 :table-variant="tableVariant"
                 @row-selected="rowSelected"
-                ref="myTable"
               >
               </b-table>
 
               <b-btn
+                v-if="selectedOrders.length == 1"
                 class="p-3 px-5 mt-4"
                 size="lg"
                 variant="warning"
                 style="float: right; margin-left: 25px"
-                v-if="selectedOrders.length == 1"
                 @click="goToOrder()"
                 >Edit Selected Order!</b-btn
               >

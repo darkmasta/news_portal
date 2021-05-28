@@ -13,7 +13,7 @@
 import axios from "axios";
 
 export default {
-  name: "CreateTopCategory",
+  name: "create-top-category",
   data() {
     return {
       tagName: "",

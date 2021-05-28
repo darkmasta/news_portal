@@ -10,32 +10,32 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'google'" data-toggle="tab" href="#"
-                      :class="{active: expandTab == 'google'}">SEO Ayarlari</a>
+           data-toggle="tab" href="#" :class="{active: expandTab == 'google'}"
+                      @click="expandTab = 'google'">SEO Ayarlari</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'social'" data-toggle="tab" href="#"
-                      :class="{active: expandTab == 'social'}">Sosyal Medya Linkleri</a>
+           data-toggle="tab" href="#" :class="{active: expandTab == 'social'}"
+                      @click="expandTab = 'social'">Sosyal Medya Linkleri</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'seoImage'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'seoImage'}">Görsel</a>
+           data-toggle="tab" href="#" :class="{active: expandTab == 'seoImage'}"
+                  @click="expandTab = 'seoImage'">Görsel</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'logo'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'logo'}">Logo</a>
+           data-toggle="tab" href="#" :class="{active: expandTab == 'logo'}"
+                  @click="expandTab = 'logo'">Logo</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'favicon'" data-toggle="tab" href="#"
-                  :class="{active: expandTab == 'favicon'}">Favicon</a>
+           data-toggle="tab" href="#" :class="{active: expandTab == 'favicon'}"
+                  @click="expandTab = 'favicon'">Favicon</a>
         </li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane fade" :class="{active: expandTab == 'google', show: expandTab == 'google'}" id="navs-left-home">
+        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'google', show: expandTab == 'google'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>SEO Ayarları</h3> 
@@ -64,7 +64,7 @@
                   </b-input-group>
                 </b-col>
 
-                <b-col class="offset-2" cols="2" v-for="(seoKeyword, index) in seoKeywords" :key="index">
+                <b-col v-for="(seoKeyword, index) in seoKeywords" :key="index" class="offset-2" cols="2">
                   <span class="identityItem">{{seoKeyword}} 
                     <i class="fa fa-times" @click="removeFromSeoKeywords(index)"></i></span>
                 </b-col>
@@ -73,7 +73,7 @@
 
             </b-row>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'social', show: expandTab == 'social'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'social', show: expandTab == 'social'}">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>Sosyal Medya Ayarlari</h3> 
               </b-col>
@@ -96,7 +96,7 @@
                 </b-form-group>
               </b-col>
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'favicon', show: expandTab == 'favicon'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'favicon', show: expandTab == 'favicon'}">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>Favicon</h3> 
               </b-col>
@@ -105,8 +105,8 @@
             <div class="upload-example">
               <div>
                   <cropper
-                    :src="image"
                     ref="cropper3"
+                    :src="image"
                     :transitions="true"
                   />
               </div>
@@ -120,7 +120,7 @@
 
             
               <span class="button" @click="$refs.file.click()">
-                <input type="file" ref="file" @change="loadFavicon($event)" accept="image/*">
+                <input ref="file" type="file" accept="image/*" @change="loadFavicon($event)">
                Favicon Yükle 
               </span>
 
@@ -129,12 +129,12 @@
               </span>
 
               <label class="switch">
-                <input type="checkbox" v-model="toggleEditImage">
+                <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
               </label>
              
-                <b-btn @click="changeFavicon" variant="primary rounded-pill" class="change-logo ml-5 mb-1">
+                <b-btn variant="primary rounded-pill" class="change-logo ml-5 mb-1" @click="changeFavicon">
                   <span class="fas fa-plus-circle"></span> Faviconu Güncelle
                 </b-btn>
 
@@ -143,7 +143,7 @@
           </b-col>
           
         </div>
-        <div class="tab-pane fade " :class="{active: expandTab == 'logo', show: expandTab == 'logo'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'logo', show: expandTab == 'logo'}">
 
           <b-row>
           <b-col cols="12">
@@ -153,8 +153,8 @@
             <div class="upload-example">
               <div>
                   <cropper
-                    :src="image"
                     ref="cropper2"
+                    :src="image"
                     :transitions="true"
                   />
               </div>
@@ -168,7 +168,7 @@
 
             
               <span class="button" @click="$refs.file.click()">
-                <input type="file" ref="file" @change="loadLogo($event)" accept="image/*">
+                <input ref="file" type="file" accept="image/*" @change="loadLogo($event)">
                Logo Yükle 
               </span>
 
@@ -177,12 +177,12 @@
               </span>
 
               <label class="switch">
-                <input type="checkbox" v-model="toggleEditImage">
+                <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
               </label>
              
-                <b-btn @click="changeLogo" variant="primary rounded-pill" class="change-logo ml-5 mb-1">
+                <b-btn variant="primary rounded-pill" class="change-logo ml-5 mb-1" @click="changeLogo">
                   <span class="fas fa-plus-circle"></span> Logoyu Güncelle
                 </b-btn>
 
@@ -191,7 +191,7 @@
           </b-col>
           </b-row>
         </div>
-        <div class="tab-pane fade images_tab" :class="{active: expandTab == 'seoImage', show: expandTab == 'seoImage'}" id="navs-left-messages">
+        <div id="navs-left-messages" class="tab-pane fade images_tab" :class="{active: expandTab == 'seoImage', show: expandTab == 'seoImage'}">
           <b-row >
           <b-col cols="12">
             <b-col cols="6" class="offset-5 mt-3 kategoriler">
@@ -200,8 +200,8 @@
             <div class="upload-example">
               <div>
                   <cropper
-                    :src="image"
                     ref="cropper"
+                    :src="image"
                     :transitions="true"
                   />
               </div>
@@ -224,7 +224,7 @@
               <div class="button-wrapper">
             
               <span class="button" @click="$refs.file.click()">
-                <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
                 Görsel Ekle
               </span>
 
@@ -233,9 +233,9 @@
               </span>
 
               <label class="switch">
-                <input type="checkbox" v-model="toggleEditImage">
+                <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
               </label>
              
               </div>
@@ -250,7 +250,7 @@
 
     <b-row class="mt-4">
       <b-col offset="9">
-         <b-btn @click="submitSettings" variant="primary rounded-pill" class="new-post-btn">
+         <b-btn variant="primary rounded-pill" class="new-post-btn" @click="submitSettings">
           <span class="fas fa-plus-circle"></span> Ayarları Kaydet
          </b-btn>
       </b-col>
@@ -267,7 +267,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 
 export default {
-  name: "PostsCreate",
+  name: "posts-create",
   components: {
     Cropper,
   },

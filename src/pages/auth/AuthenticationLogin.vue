@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-center align-items-center pb-2 mb-4 mt-5">
           <b-img :src="require('@/assets/images/logo.png')" width="180"/>
         </div>
-        <p class="header ml-1 mt-5" id="welcome-text">
+        <p id="welcome-text" class="header ml-1 mt-5">
           Welcome!<br>
           Defenshere<br>
           Dashboard

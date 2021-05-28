@@ -2,15 +2,16 @@
   "name": "appwork-vue-starter",
   "version": "1.5.2",
   "private": true,
-  "main": "./server/app.js",
   "scripts": {
-    "start": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\"",
+    "start": "npm run serve"
   },
+  "main": "./server/app.js",
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^27.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^27.0.0",
@@ -123,6 +124,7 @@
     "vue-flatpickr-component": "~8.1.2",
     "vue-form-wizard": "~0.8.4",
     "vue-gallery": "~2.0.0",
+    "vue-i18n": "^8.24.4",
     "vue-input-tag": "~2.0.5",
     "vue-jstree": "~2.1.6",
     "vue-masonry": "~0.11.1",
@@ -180,6 +182,7 @@
     "rename-webpack-plugin": "^2.0.0",
     "sass-loader": "^8.0.0",
     "suppress-chunks-webpack-plugin": "^1.0.5",
+    "vue-cli-plugin-i18n": "~2.1.1",
     "vue-template-compiler": "~2.6.6"
   },
   "eslintConfig": {
@@ -214,13 +217,6 @@
       }
     ]
   },
-  "eslintIgnore": [
-    "/dist/",
-    "/*.js",
-    "/tests/unit/coverage/",
-    "src/vendor/libs/**/*.js",
-    "/node_modules/**"
-  ],
   "postcss": {
     "plugins": {
       "autoprefixer": {}
@@ -244,5 +240,12 @@
   },
   "engines": {
     "node": "10.x"
-  }
+  },
+  "eslintIgnore": [
+    "/dist/",
+    "/*.js",
+    "/tests/unit/coverage/",
+    "src/vendor/libs/**/*.js",
+    "/node_modules/**"
+  ]
 }

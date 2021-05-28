@@ -10,32 +10,32 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'edit'" data-toggle="tab" href="/#/about"
-                      :class="{active: expandTab == 'edit'}">Başlık</a>
+           data-toggle="tab" href="/#/about" :class="{active: expandTab == 'edit'}"
+                      @click="expandTab = 'edit'">Başlık</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'categories'" data-toggle="tab" href="/#/about"
-                      :class="{active: expandTab == 'categories'}">Kategoriler</a>
+           data-toggle="tab" href="/#/about" :class="{active: expandTab == 'categories'}"
+                      @click="expandTab = 'categories'">Kategoriler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'tags'" data-toggle="tab" href="/#/about"
-                      :class="{active: expandTab == 'tags'}">Etiketler</a>
+           data-toggle="tab" href="/#/about" :class="{active: expandTab == 'tags'}"
+                      @click="expandTab = 'tags'">Etiketler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'postLinks'" data-toggle="tab" href="/#/about"
-                  :class="{active: expandTab == 'postLinks'}">Linkler</a>
+           data-toggle="tab" href="/#/about" :class="{active: expandTab == 'postLinks'}"
+                  @click="expandTab = 'postLinks'">Linkler</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
-           @click="expandTab = 'languages'" data-toggle="tab" href="/#/about"
-                  :class="{active: expandTab == 'languages'}">Diller</a>
+           data-toggle="tab" href="/#/about" :class="{active: expandTab == 'languages'}"
+                  @click="expandTab = 'languages'">Diller</a>
         </li>
       </ul>
       <div class="tab-content">
-          <div class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}" id="navs-left-home">
+          <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}">
 
             <b-row>
               <b-col cols="10" class="offset-1 mb-3">
@@ -48,7 +48,7 @@
           </div>
 
 
-          <div class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}" id="navs-left-profile">
+          <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}">
             <b-row class="edit_log"> 
               <b-col class="categories__container">
                 <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
@@ -59,7 +59,7 @@
                   <ul class="category__list">
                     <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
                       class="category__list-item">
-                      <input type="checkbox" :value="category" v-model="selectedCategories"> 
+                      <input v-model="selectedCategories" type="checkbox" :value="category"> 
                       {{category}}
                     </li>
                   </ul>
@@ -73,26 +73,26 @@
             </b-row>
         </div>
 
-      <div class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}" id="navs-left-profile">
+      <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}">
 
         <vue-typeahead-bootstrap
           v-model="tag"
           :data="tags"
-          :minMatchingChars="1"
+          :min-matching-chars="1"
           @hit="addToSelectedTags"
         />
 
 
         <div class="selected-tags mt-5">
-          <span class="selected-tag" v-for="(selectedTag, index) in selectedTags" :key="index">{{selectedTag}}
-          <i @click="removeFromSelectedTags(index)" style="color: red;" class="fas fa-times ml-2"></i></span>
+          <span v-for="(selectedTag, index) in selectedTags" :key="index" class="selected-tag">{{selectedTag}}
+          <i style="color: red;" class="fas fa-times ml-2" @click="removeFromSelectedTags(index)"></i></span>
         </div>
 
 
 
         </div>
 
-        <div class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}" id="navs-left-messages">
+        <div id="navs-left-messages" class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}">
 
           <b-row>
             <b-col cols="10" class="offset-1">
@@ -131,7 +131,7 @@
           </b-row>
         </div>
 
-        <div class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}" id="navs-left-profile">
+        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}">
           <b-row>
             <b-col cols="10" class="offset-1">
               <b-input-group prepend="Ingilizce Hakkımızda 🇬🇧" class="mt-2">
@@ -176,14 +176,14 @@
     <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @ready="onReady"></ckeditor>
         </div>
       </b-col>
     </b-row>
 
     <b-row class="mt-6">
       <b-col offset="9">
-         <b-btn @click="submitContact" variant="primary rounded-pill" class="new-post-btn mt-5">
+         <b-btn variant="primary rounded-pill" class="new-post-btn mt-5" @click="submitContact">
           <span class="fas fa-plus-circle"></span> Iletişim Kaydet
          </b-btn>
       </b-col>
@@ -218,7 +218,7 @@ import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 // Required dependency of bootstrap css/scss files
 
 export default {
-  name: "About",
+  name: "about",
   components: {
     Cropper,
     Datepicker,

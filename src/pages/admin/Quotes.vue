@@ -26,6 +26,7 @@
                     :borderless="borderless"
                     :outlined="outlined"
                     :small="small"
+                    ref="myTable"
                     :hover="hover"
                     :dark="dark"
                     :fixed="fixed"
@@ -34,14 +35,13 @@
                     :items="quotesTableData"
                     :fields="fields"
                     :head-variant="headVariant"
-                    :table-variant="tableVariant"
-                    @row-selected="rowSelected" ref="myTable" 
+                    :table-variant="tableVariant" @row-selected="rowSelected" 
                   >
                   </b-table>
 
-                  <b-btn class="p-3 px-5 mt-4" size="lg" variant="warning" 
+                  <b-btn v-if="selectedQuotes.length == 1" class="p-3 px-5 mt-4" size="lg" 
+                            variant="warning"
                             style="float: right; margin-left: 25px;"
-                            v-if="selectedQuotes.length == 1"
                             @click="goToQuote()">Edit Selected Quote!</b-btn>
             </div>
 
@@ -77,6 +77,9 @@ export default {
   metaInfo: {
     title: "Quotes",
   },
+    components: {
+    }, 
+    mixins: [loadCustomers],
   props: {
       model: {
         type: Object,
@@ -144,9 +147,8 @@ export default {
         tableVariant: '',
         noCollapse: false
     };
-    }, 
-    mixins: [loadCustomers],
-    components: {
+    },
+    watch: {
     },
     created() {
       var vm = this
@@ -207,8 +209,6 @@ export default {
         click: function(data) {
             console.log(data)
         }
-    },
-    watch: {
     },
     methods: {
       goToQuote() {

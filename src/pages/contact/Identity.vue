@@ -20,7 +20,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Eddifa şirketi adına imtiyaz sahibi" class="mt-2">
           <b-form-input v-model="kunyeImtiyaz"
-           v-on:keyup.enter="addToKunyeImtiyaz(kunyeImtiyaz)"></b-form-input>
+           @keyup.enter="addToKunyeImtiyaz(kunyeImtiyaz)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check"
              @click="addToKunyeImtiyaz(kunyeImtiyaz)"
@@ -31,7 +31,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(kunyeImtiyaz, index) in kunyeImtiyazList" :key="index">
+      <b-col v-for="(kunyeImtiyaz, index) in kunyeImtiyazList" :key="index" class="" cols="2">
         <span class="identityItem">{{kunyeImtiyaz}} 
           <i class="fa fa-times" @click="removeFromKunyeImtiyaz(index)"></i></span>
       </b-col>
@@ -41,7 +41,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Genel Yayın Yönetmeni" class="mt-2">
           <b-form-input v-model="genelYayinYonetmeni"
-              v-on:keyup.enter="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></b-form-input>
+              @keyup.enter="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></span>
           </div>
@@ -50,7 +50,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(genelYayinYonetmeni, index) in genelYayinYonetmeniList" :key="index">
+      <b-col v-for="(genelYayinYonetmeni, index) in genelYayinYonetmeniList" :key="index" class="" cols="2">
         <span class="identityItem">{{genelYayinYonetmeni}} 
           <i class="fa fa-times" @click="removeFromGenelYayinYonetmeni(index)"></i></span>
       </b-col>
@@ -60,7 +60,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Arapça Haberler" class="mt-2">
           <b-form-input v-model="arabicNews"
-              v-on:keyup.enter="addToArabicNews(arabicNews)"></b-form-input>
+              @keyup.enter="addToArabicNews(arabicNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToArabicNews(arabicNews)"></span>
           </div>
@@ -69,7 +69,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(arabicNews, index) in arabicNewsList" :key="index">
+      <b-col v-for="(arabicNews, index) in arabicNewsList" :key="index" class="" cols="2">
         <span class="identityItem">{{arabicNews}} 
           <i class="fa fa-times" @click="removeFromArabicNews(index)"></i></span>
       </b-col>
@@ -79,7 +79,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="İngilizce Haberler" class="mt-2">
           <b-form-input v-model="englishNews"
-              v-on:keyup.enter="addToEnglishNews(englishNews)"></b-form-input>
+              @keyup.enter="addToEnglishNews(englishNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToEnglishNews(englishNews)"></span>
           </div>
@@ -88,7 +88,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(englishNews, index) in englishNewsList" :key="index">
+      <b-col v-for="(englishNews, index) in englishNewsList" :key="index" class="" cols="2">
         <span class="identityItem">{{englishNews}} 
           <i class="fa fa-times" @click="removeFromEnglishNews(index)"></i></span>
       </b-col>
@@ -98,7 +98,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Rusça Haberler" class="mt-2">
           <b-form-input v-model="russianNews"
-              v-on:keyup.enter="addToRussianNews(russianNews)"></b-form-input>
+              @keyup.enter="addToRussianNews(russianNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToRussianNews(russianNews)"></span>
           </div>
@@ -107,7 +107,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(russianNews, index) in russianNewsList" :key="index">
+      <b-col v-for="(russianNews, index) in russianNewsList" :key="index" class="" cols="2">
         <span class="identityItem">{{russianNews}} 
           <i class="fa fa-times" @click="removeFromRussianNews(index)"></i></span>
       </b-col>
@@ -117,7 +117,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Türkçe Haberler" class="mt-2">
           <b-form-input v-model="turkishNews"
-              v-on:keyup.enter="addToTurkishNews(turkishNews)"></b-form-input>
+              @keyup.enter="addToTurkishNews(turkishNews)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToTurkishNews(turkishNews)"></span>
           </div>
@@ -126,7 +126,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(turkishNews, index) in turkishNewsList" :key="index">
+      <b-col v-for="(turkishNews, index) in turkishNewsList" :key="index" class="" cols="2">
         <span class="identityItem">{{turkishNews}} 
           <i class="fa fa-times" @click="removeFromTurkishNews(index)"></i></span>
       </b-col>
@@ -136,7 +136,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Kurgu ve Kamera" class="mt-2">
           <b-form-input v-model="camera"
-              v-on:keyup.enter="addToCamera(camera)"></b-form-input>
+              @keyup.enter="addToCamera(camera)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToCamera(camera)"></span>
           </div>
@@ -145,7 +145,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(camera, index) in cameraList" :key="index">
+      <b-col v-for="(camera, index) in cameraList" :key="index" class="" cols="2">
         <span class="identityItem">{{camera}} 
           <i class="fa fa-times" @click="removeFromCamera(index)"></i></span>
       </b-col>
@@ -155,7 +155,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Post Prodüksiyon" class="mt-2">
           <b-form-input v-model="postProduction"
-              v-on:keyup.enter="addToPostProduction(postProduction)"></b-form-input>
+              @keyup.enter="addToPostProduction(postProduction)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToPostProduction(postProduction)"></span>
           </div>
@@ -164,7 +164,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(postProduction, index) in postProductionList" :key="index">
+      <b-col v-for="(postProduction, index) in postProductionList" :key="index" class="" cols="2">
         <span class="identityItem">{{postProduction}} 
           <i class="fa fa-times" @click="removeFromPostProduction(index)"></i></span>
       </b-col>
@@ -174,7 +174,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Seslendirme" class="mt-2">
           <b-form-input v-model="sound"
-              v-on:keyup.enter="addToSound(sound)"></b-form-input>
+              @keyup.enter="addToSound(sound)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToSound(sound)"></span>
           </div>
@@ -183,7 +183,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(sound, index) in soundList" :key="index">
+      <b-col v-for="(sound, index) in soundList" :key="index" class="" cols="2">
         <span class="identityItem">{{sound}} 
           <i class="fa fa-times" @click="removeFromSound(index)"></i></span>
       </b-col>
@@ -193,7 +193,7 @@
       <b-col cols="10" class="offset-1">
         <b-input-group prepend="Hukuk Danışmanı" class="mt-2">
           <b-form-input v-model="lawyer"
-              v-on:keyup.enter="addToLawyer(lawyer)"></b-form-input>
+              @keyup.enter="addToLawyer(lawyer)"></b-form-input>
           <div class="edit_buttons">
             <span title="Ekle" class="fa fa-check" @click="addToLawyer(lawyer)"></span>
           </div>
@@ -202,7 +202,7 @@
     </b-row>
 
     <b-row class="offset-1">
-      <b-col class="" cols="2" v-for="(lawyer, index) in lawyerList" :key="index">
+      <b-col v-for="(lawyer, index) in lawyerList" :key="index" class="" cols="2">
         <span class="identityItem">{{lawyer}} 
           <i class="fa fa-times" @click="removeFromLawyer(index)"></i></span>
       </b-col>
@@ -210,10 +210,10 @@
 
     <b-row class="mt-6">
       <b-col offset="8">
-         <b-btn @click="showModalFunc" variant="secondary rounded-pill" class="mr-3 new-post-btn mt-5">
+         <b-btn variant="secondary rounded-pill" class="mr-3 new-post-btn mt-5" @click="showModalFunc">
           Künye Önizleme
          </b-btn>
-         <b-btn @click="submitIdentity" variant="primary rounded-pill" class="new-post-btn mt-5">
+         <b-btn variant="primary rounded-pill" class="new-post-btn mt-5" @click="submitIdentity">
           <span class="fas fa-plus-circle"></span> Künye Kaydet
          </b-btn>
       </b-col>
@@ -223,7 +223,7 @@
     <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor :editor="editor" @ready="onReady" v-model="editorData" :config="editorConfig"></ckeditor>
+          <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @ready="onReady"></ckeditor>
         </div>
       </b-col>
     </b-row>
@@ -233,7 +233,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">KÜNYE</h5>
-            <button @click="showModal = false" type="button" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <button type="button" class="close" @click="showModal = false"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
           </div>
           <div class="modal-body">
             <b-row>
@@ -294,7 +294,7 @@
             </b-row>
           </div>
           <div class="modal-footer">
-            <button @click="showModal = false" type="button" class="btn btn-default">Kapat</button>
+            <button type="button" class="btn btn-default" @click="showModal = false">Kapat</button>
           </div>
         </div>
       </div>
@@ -315,7 +315,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 Vue.use(CKEditor)
 
 export default {
-  name: "Contact",
+  name: "contact",
   components: {
   },
   data() {

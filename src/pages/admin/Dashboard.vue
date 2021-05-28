@@ -2,7 +2,7 @@
 <div>
           <b-row class="container2">
               <b-col id="sales-box" class="box" cols="4">
-                  <b-card class="mb-2" id="sales">
+                  <b-card id="sales" class="mb-2">
                       <b-card-title class="admin-card-title">
                           Kullanici Islemleri 
                         <i class="info-icon fa fa-info-circle" aria-hidden="true"></i>
@@ -12,7 +12,7 @@
                               <i class="admin-icon fa fa-arrow-circle-down" aria-hidden="true"></i>
                                 &nbsp;12 
                               </span>
-                          <a class="admin-info-link" id="sales-link" @click="goToUsers()" href="#">Kullanicilari Goruntule&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                          <a id="sales-link" class="admin-info-link" href="#" @click="goToUsers()">Kullanicilari Goruntule&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a>
                       </div>
                   </b-card>
               </b-col>

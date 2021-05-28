@@ -14,23 +14,6 @@ export default {
       default: 'button'
     }
   },
-  render (createElement) {
-    const attrs = this.tag === 'button' ? { type: 'button' } : {}
-
-    return createElement(
-      this.tag,
-      { attrs },
-      this.$slots.default
-    )
-  },
-  beforeDestroy () {
-    if (!this.ladda) return
-    this.ladda.remove()
-    this.ladda = null
-  },
-  mounted () {
-    this.ladda = Ladda.create(this.$el)
-  },
   watch: {
     loading (value) {
       if (!this.ladda) return
@@ -44,6 +27,23 @@ export default {
         this.ladda.setProgress(value)
       }
     }
+  },
+  beforeDestroy () {
+    if (!this.ladda) return
+    this.ladda.remove()
+    this.ladda = null
+  },
+  mounted () {
+    this.ladda = Ladda.create(this.$el)
+  },
+  render (createElement) {
+    const attrs = this.tag === 'button' ? { type: 'button' } : {}
+
+    return createElement(
+      this.tag,
+      { attrs },
+      this.$slots.default
+    )
   }
 }
 </script>

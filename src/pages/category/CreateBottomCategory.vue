@@ -4,7 +4,7 @@
         <b-form-group label="Yeni Alt Kategori">
           <b-select v-model="topCategory" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
-              :key="index" v-bind:value="categoryTitle"> 
+              :key="index" :value="categoryTitle"> 
               {{categoryTitle}}
             </option>
           </b-select>
@@ -22,7 +22,7 @@ import axios from "axios";
 import categoryData from "./categories_data"
 
 export default {
-  name: "CreateBottomCategory",
+  name: "create-bottom-category",
   data() {
     return {
       categoryTitle: "",

@@ -13,9 +13,9 @@
             <b-row>
               <b-col>
                 <b-form-group label="Etkinlik Adı">
-                  <b-input label="Etkinlik Adı" 
-                              placeholder="Etkinlik Adı"
-                              v-model="activityTitle">
+                  <b-input v-model="activityTitle" 
+                              label="Etkinlik Adı"
+                              placeholder="Etkinlik Adı">
                   </b-input>
                 </b-form-group>
               </b-col>
@@ -23,7 +23,7 @@
                 <b-form-group label="Etkinlik Türü">
                   <b-select v-model="activityType" class="mb-4">
                     <option v-for="(activityType, index) in activityTypeList" 
-                      :key="index" v-bind:value="activityType"> 
+                      :key="index" :value="activityType"> 
                       {{activityType}}
                     </option>
                   </b-select>
@@ -39,10 +39,10 @@
             <b-row>
               <b-col cols="6" class="activity-text">
                 <b-form-group label="Etkinlik Açıklaması">
-                  <b-textarea label="Etkinlik Açıklaması" 
+                  <b-textarea v-model="activityText" 
+                              label="Etkinlik Açıklaması"
                               placeholder="Etkinlik Açıklaması"
-                              rows="5"
-                              v-model="activityText">
+                              rows="5">
                   </b-textarea>
                 </b-form-group>
               </b-col>
@@ -51,7 +51,7 @@
                     <b-form-group label="Etkinlik Dili">
                       <b-select v-model="activityLanguage" class="">
                         <option v-for="(activityLanguage, index) in languages" 
-                            :key="index" v-bind:value="activityLanguage"> 
+                            :key="index" :value="activityLanguage"> 
                             {{activityLanguage}}
                         </option>
                       </b-select>
@@ -68,7 +68,7 @@
               </b-col>
             </b-row>
 
-            <b-row class="mb-3" v-if="activitySettings">
+            <b-row v-if="activitySettings" class="mb-3">
                 <hr class="model-hr">
                 <b-col cols="12" class="">
                   <b-input-group prepend="Etkinlik Türü" class="mt-2">
@@ -79,7 +79,7 @@
                   </b-input-group>
                 </b-col>
 
-                <b-col class="" cols="2" v-for="(activityType, index) in activityTypeList" :key="index">
+                <b-col v-for="(activityType, index) in activityTypeList" :key="index" class="" cols="2">
                   <span class="identityItem">{{activityType}} 
                     <i class="fa fa-times" @click="removeFromActivityTypeList(index)"></i></span>
                 </b-col>
@@ -104,7 +104,7 @@
                 <b-form-group label="Reklamda Göster">
                   <b-select v-model="visible" class="">
                     <option v-for="(visible, index) in visibleOptions" 
-                      :key="index" v-bind:value="visible"> 
+                      :key="index" :value="visible"> 
                       {{visible}}
                     </option>
                   </b-select>
@@ -118,8 +118,8 @@
                 <div class="upload-example">
                   <div v-show="image">
                       <cropper
-                        :src="image"
                         ref="cropper"
+                        :src="image"
                       />
                   </div>
                   <div v-show="image" class="reset-button" title="Reset Image" @click="reset()">
@@ -138,7 +138,7 @@
                   <div class="button-wrapper">
                 
                   <span class="button" @click="$refs.file.click()">
-                    <input type="file" ref="file" @change="loadImage($event)" accept="image/*">
+                    <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
                     Görsel Ekle
                   </span>
 
@@ -147,9 +147,9 @@
                   </span>
 
                   <label class="switch">
-                    <input type="checkbox" v-model="toggleEditImage">
+                    <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span v-bind:class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
                   </label>
                   </div>
                 </div>
@@ -201,6 +201,9 @@ export default {
     visibleOptions: ['Reklamda Göster', 'Reklamdan Kaldır'],
     visible: '',
   }),
+  computed: {
+
+  },
   created() {
       var vm = this
 
@@ -383,9 +386,6 @@ export default {
 				}, 'image/jpeg');
 			}
 		},
-  },
-  computed: {
-
   }
 } 
 </script>
