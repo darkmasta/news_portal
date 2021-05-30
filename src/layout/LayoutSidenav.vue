@@ -20,12 +20,12 @@
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/category">Kategoriler</router-link></div>
+              <div><router-link to="/category">{{ $t('main.categories')}}</router-link></div>
             </a>
           </li>
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/category/create">Kategori Oluştur</router-link></div>
+              <div><router-link to="/category/create">{{ $t('main.create category') }}</router-link></div>
             </a>
           </li>
         </ul>
@@ -39,12 +39,12 @@
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/tags">Etiketler</router-link></div>
+              <div><router-link to="/tags">{{ $t('main.tags') }}</router-link></div>
             </a>
           </li>
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/tags/create">Etiket Oluştur</router-link></div>
+              <div><router-link to="/tags/create">{{ $t('main.create tag') }}</router-link></div>
             </a>
           </li>
         </ul>
@@ -58,7 +58,7 @@
         <ul class="sidenav-menu">
           <li class="sidenav-item" style="display: block;">
             <a href="javascript:void(0)" class="sidenav-link">
-              <div><router-link to="/seo/create">SEO Ayarlar</router-link></div>
+              <div><router-link to="/seo/create">{{ $t('main.seo settings')}}</router-link></div>
             </a>
           </li>
         </ul>

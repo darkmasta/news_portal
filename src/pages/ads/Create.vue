@@ -3,25 +3,27 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Reklam Oluştur</span>
+          <span class="text-muted font-weight-light">{{ $t('ads.create ad') }}</span>
         </h4>
       </div>
 
 
       <div class="col-lg-12 mb-4">
-        <b-card title="Yeni Reklam Formu">
+        <b-card>
+          <h4>{{ $t('ads.new ad form') }}</h4>
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Reklam Başlığı">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad header') }}</legend>
                   <b-input v-model="adTitle" 
-                              label="Reklam Başlığı"
                               placeholder="Başlık">
                   </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklam Sayfası">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad type') }}</legend>
                   <b-select v-model="adType" class="mb-4">
                     <option v-for="(adType, index) in adTypeList" 
                       :key="index" :value="adType"> 
@@ -31,7 +33,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklam Dili">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad language') }}</legend>
                   <b-select v-model="adLanguage" class="">
                     <option v-for="(adLanguage, index) in languages" 
                         :key="index" :value="adLanguage"> 
@@ -44,7 +47,8 @@
 
             <b-row>
               <b-col>
-                <b-form-group label="Reklam Linki">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad link') }}</legend>
                   <b-input v-model="adLink" 
                               label="Reklam Linki"
                               placeholder="Link">
@@ -52,7 +56,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklam Konumu">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad position') }}</legend>
                   <b-select v-model="adLocation" class="mb-4">
                     <option v-for="(adLocation, index) in adLocationList" 
                       :key="index" :value="adLocation"> 
@@ -62,7 +67,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklam Durumu">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('ads.ad status') }}</legend>
                   <b-select v-model="adStatus" class="mb-4">
                     <option v-for="(adStatus, index) in adStatusList" 
                       :key="index" :value="adStatus"> 
@@ -91,7 +97,8 @@
                   </div>
                   <b-col cols="6" offset="3">
                     <div class="img-name">
-                        <b-form-group label="Görsel İsmi">
+                        <b-form-group>
+                          <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('posts.photo name') }}</legend>
                           <b-form-input v-model="imageName" placeholder="Görsel İsmi"></b-form-input>  
                         </b-form-group>
                     </div>
@@ -100,17 +107,17 @@
                 
                   <span class="button" @click="$refs.file.click()">
                     <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
-                    Görsel Ekle
+                    {{ $t('posts.add image') }}
                   </span>
 
                   <span class="button ml-5" @click="crop">
-                    Kırp
+                    {{ $t('posts.crop') }}
                   </span>
 
                   <label class="switch">
                     <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">{{ $t('posts.edit image') }}</span>
                   </label>
                   </div>
                 </div>
@@ -119,7 +126,7 @@
 
             <b-row>
               <b-col class="offset-10">
-                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">Reklam Ekle</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">{{ $t('ads.create ad') }}</b-btn>
               </b-col>
             </b-row>
           </b-card-body>

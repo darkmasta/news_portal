@@ -3,11 +3,11 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-1">
-          <span class="text-muted font-weight-light">Etkinlikler</span>
+          <span class="text-muted font-weight-light">{{ $t('activities.activities') }}</span>
         </h4>
       </div>
       <b-col class="offset-10">
-          <b-btn variant="primary rounded-pill" class="align-self-start" to="/activities/create"><span class="fas fa-plus-circle"></span> Etkinlik Oluştur</b-btn>
+          <b-btn variant="primary rounded-pill" class="align-self-start" to="/activities/create"><span class="fas fa-plus-circle"></span> {{ $t('activities.create activity') }}</b-btn>
       </b-col>
     </div>
 
@@ -86,70 +86,6 @@ export default {
     title: "Activities",
   },
   data: () => ({
-    tableFields: [
-      {
-        key: "activityImage",
-        label: "Etkinlik Resmi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "Baslik",
-        label: 'Etkinlik Adı',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "owner",
-        label: "Ekleyen",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "activityType",
-        label: "Etkinlik Kategorisi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "startDate",
-        label: "Başlangıç Tarihi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "endDate",
-        label: "Bitiş Tarihi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "status",
-        label: "Etkinlik Durumu",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "visible",
-        label: "Reklam Alanında",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "details",
-        label: 'İşlemler',
-        sortable: "true",
-        class: "text-center align-middle",
-      }
-    ],
     activities: [],
     activitiesTableData: [],
     originalActivitiesTableData: [],
@@ -166,6 +102,72 @@ export default {
     currentPage: 1,
   }),
   computed: {
+    tableFields() { 
+      return [
+      {
+        key: "activityImage",
+        label: this.translateCol('activity image'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "Baslik",
+        label: this.translateCol('activity name'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "owner",
+        label: this.translateCol('creator'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "activityType",
+        label: this.translateCol('activity category'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "startDate",
+        label: this.translateCol('start date'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "endDate",
+        label: this.translateCol('end date'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "status",
+        label: this.translateCol('activity status'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "visible",
+        label: this.translateCol('ad field'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "details",
+        label: this.translateCol('details'),
+        sortable: "true",
+        class: "text-center align-middle",
+      }
+    ]
+    },
     totalItems() {
       return this.activitiesTableData.length;
     },
@@ -186,10 +188,10 @@ export default {
                 id: activity._id.slice(-4),
                 startDate: moment(activity.startDate).format('DD/MM/YYYY, h:mm:ss a'),
                 endDate: moment(activity.endDate).format('DD/MM/YYYY, h:mm:ss a'),
-                status: (activity.status == 'confirmed') ? 'Onaylandı' : 'Onay Bekliyor',
+                status: (activity.status == 'confirmed') ? vm.$i18n.t('confirmed') : vm.$i18n.t('unconfirmed'),
                 owner: activity.owner,
                 position: activity.activityPosition,
-                visible: activity.visible ? 'Gösteriliyor' : 'Gösterilmiyor',
+                visible: activity.visible ? vm.$i18n.t('visible') : vm.$i18n.t('not visible'),
                 activityType: activity.activityType,
                 activityImage: process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage,
                 Baslik: activity.activityTitle,
@@ -202,6 +204,9 @@ export default {
 
   },
   methods: {
+    translateCol (colName) {
+      return this.$i18n.t('activities.' + colName)
+    },
     goToActivity(data) {
       this.$router.push({ name: 'Activity', params: { id: data.value } })
     },

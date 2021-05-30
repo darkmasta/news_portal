@@ -27,17 +27,18 @@
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Isim">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.name') }}</legend>
                   <b-input
                     v-model="userData.firstName"
-                    label="Isim"
                     placeholder="Isim"
                   >
                   </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Soy Isim">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.lastname') }}</legend>
                   <b-input
                     v-model="userData.lastName"
                     label="Soy Isim"
@@ -47,7 +48,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Telefon">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.phone') }}</legend>
                   <b-input
                     v-model="userData.phone"
                     label="Telefon"
@@ -59,7 +61,8 @@
             </b-row>
             <b-row>
               <b-col>
-              <b-form-group label="E-mail">
+              <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.email') }}</legend>
                   <b-input
                     v-model="userData.email"
                     label="E-mail"
@@ -69,7 +72,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Kullanici Dili">
+                <b-form-group>
+                <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.user language') }}</legend>
                 <b-select v-model="defaultLang" class="">
                     <option v-for="(defaultLang, index) in languages" 
                         :key="index" :value="defaultLang"> 
@@ -81,7 +85,8 @@
             </b-row>
             <b-row>
               <b-col cols="12">
-                <b-form-group label="Adres">
+                <b-form-group>
+                <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.address') }}</legend>
                   <b-input
                     v-model="userData.address"
                     label="Address"
@@ -94,7 +99,8 @@
 
             <b-row>
               <b-col cols="4">
-                <b-form-group label="Sifre">
+                <b-form-group>
+                <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.password') }}</legend>
                   <b-input
                     v-model="userData.password"
                     label="Sifre"
@@ -104,7 +110,8 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Kullanici Rolu">
+                <b-form-group>
+                <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('users.role') }}</legend>
                 <b-select v-model="userRole" class="">
                     <option v-for="(userRole, index) in userRoles" 
                         :key="index" :value="userRole"> 
@@ -117,7 +124,7 @@
 
             <b-row>
               <b-col cols="3">
-                <b-btn @click="submitProfile(userData)">Kaydet</b-btn>
+                <b-btn @click="submitProfile(userData)">{{ $t('users.save') }}</b-btn>
               </b-col>
             </b-row>
           </b-card-body>

@@ -2,12 +2,12 @@
 <div>
       <b-row>
       <b-col>
-        <h3>Kullanıcı Listesi</h3>
+        <h3>{{ $t('users.user list') }}</h3>
       </b-col>
     </b-row>
     <b-row>
       <b-col offset="10">
-        <b-btn variant="primary rounded-pill" class="align-self-start new-user-btn" @click="goToNewUser"><span class="fas fa-plus-circle"></span> Yeni Kullanıcı Ekle</b-btn>
+        <b-btn variant="primary rounded-pill" class="align-self-start new-user-btn" @click="goToNewUser"><span class="fas fa-plus-circle"></span> {{ $t('users.add new user')}}</b-btn>
       </b-col>
     </b-row>
   <b-row>
@@ -75,49 +75,6 @@ metaInfo: {
 },
 data: () => ({
   value: "",
-  fields: [ 
-    {
-      key: "order",
-      label: "Kullanıcı Sırası",
-      sortable: true,
-      sortDirection: "desc",
-      class: "text-center align-middle",
-    },
-    {
-      key: "name",
-      label: 'İsim Soyisim',
-      sortable: "true",
-      class: "text-center align-middle",
-    },
-    {
-      key: 'Email', 
-      label: 'E-posta Adresi',
-      sortable: true
-    } ,
-    {
-      key: "userRole",
-      label: "Kullanıcı Rolü",
-      sortable: true,
-      sortDirection: "desc",
-      class: "text-center align-middle",
-    },
-    {
-      key: 'Son_Gorulme',
-      sortable: true, 
-      label: 'Son Aktif Olma Zamanı'
-    }, 
-    {
-      key: 'Kullanici_Dili',
-      label: 'Kullanıcı Dili', 
-      sortable: true
-    },
-    {
-      key: "details",
-      label: 'İşlemler',
-      sortable: "true",
-      class: "text-center align-middle",
-    },
-  ],
   usersTableData: [], 
   originalUsersTableData: [], 
   loading: false,
@@ -162,6 +119,51 @@ data: () => ({
   currentPage: 1,
 }),
 computed: {
+  fields() { 
+    return [ 
+      {
+        key: "order",
+        label: this.translateCol('user order'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "name",
+        label: this.translateCol('name surname'),
+        sortable: "true",
+        class: "text-center align-middle",
+      },
+      {
+        key: 'Email', 
+        label: this.translateCol('email'),
+        sortable: true
+      } ,
+      {
+        key: "userRole",
+        label: this.translateCol('role'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: 'Son_Gorulme',
+        sortable: true, 
+        label: this.translateCol('last login') 
+      }, 
+      {
+        key: 'Kullanici_Dili',
+        label: this.translateCol('user language'), 
+        sortable: true
+      },
+      {
+        key: "details",
+        label: this.translateCol('details'),
+        sortable: "true",
+        class: "text-center align-middle",
+      },
+    ]
+  },
   totalItems () {
     return this.usersTableData.length
   },
@@ -202,6 +204,9 @@ created() {
 
 },
 methods: {
+  translateCol (colName) {
+    return this.$i18n.t('users.' + colName)
+  },
   goToNewUser() {
       this.$router.push({ name: 'AdminUserCreate' })
   },

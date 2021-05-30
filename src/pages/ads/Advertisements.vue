@@ -3,11 +3,11 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-1">
-          <span class="text-muted font-weight-light">Reklamlar</span>
+          <span class="text-muted font-weight-light">{{ $t('ads.ads') }}</span>
         </h4>
       </div>
       <b-col class="offset-10">
-          <b-btn variant="primary rounded-pill" class="align-self-start" to="/ads/create"><span class="fas fa-plus-circle"></span> Yeni Reklam Ekle</b-btn>
+          <b-btn variant="primary rounded-pill" class="align-self-start" to="/ads/create"><span class="fas fa-plus-circle"></span> {{ $t('ads.create new ad') }}</b-btn>
       </b-col>
     </div>
 
@@ -84,77 +84,6 @@ export default {
   components: {
   },
   data: () => ({
-    tableFields: [
-      {
-        key: "adImage",
-        label: "Reklam Görseli",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "Baslik",
-        label: 'Reklam Adı',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "owner",
-        label: "Ekleyen",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "link",
-        label: "Reklam Linki",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "views",
-        label: "Görüntülenme",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "clicks",
-        label: "Tıklanma",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "adType",
-        label: "Reklam Grubu",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "position",
-        label: "Reklam Konumu",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "status",
-        label: "Reklam Durumu",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "details",
-        label: 'İşlemler',
-        sortable: "true",
-        class: "text-center align-middle",
-      }
-    ],
     ads: [],
     adsTableData: [],
     originalAdsTableData: [],
@@ -167,6 +96,79 @@ export default {
     currentPage: 1,
   }),
   computed: {
+    tableFields() {
+      return [
+        {
+          key: "adImage",
+          label: this.translateCol('ad image'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "Baslik",
+          label: this.translateCol('ad header'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "owner",
+          label: this.translateCol('creator'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "link",
+          label: this.translateCol('ad link'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "views",
+          label: this.translateCol('views'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "clicks",
+          label: this.translateCol('clicks'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "adType",
+          label: this.translateCol('ad type'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "position",
+          label: this.translateCol('position'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "status",
+          label: this.translateCol('status'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "details",
+          label: this.translateCol('details'),
+          sortable: "true",
+          class: "text-center align-middle",
+        }
+      ]
+    },
     totalItems () {
       return this.adsTableData.length
     },
@@ -200,7 +202,7 @@ export default {
               console.log(ad)
               var tmp_ad= {
                 position: ad.adPosition || '---',
-                status: (ad.status == 'unconfirmed') ? 'Onay Bekliyor' : 'Onaylandi',
+                status: (ad.status == 'unconfirmed') ? vm.$i18n.t('unconfirmed') : vm.$i18n.t('confirmed'),
                 owner: ad.owner,
                 adType: ad.adType,
                 views: ad.views,
@@ -218,6 +220,9 @@ export default {
 
   },
 methods: {
+  translateCol (colName) {
+    return this.$i18n.t('ads.' + colName)
+  },
   goToAd(data) {
      this.$router.push({ name: 'Ad', params: { id: data.value } })
   },

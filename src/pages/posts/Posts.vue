@@ -3,9 +3,9 @@
   <b-row>
     <b-col class="d-flex justify-content-between ">
       <div class="page-header">
-        <h4>Haber Listesi</h4>
+        <h4>{{ $t('posts.post list') }}</h4>
       </div>
-      <b-btn variant="primary rounded-pill" class="align-self-start" to="/posts/create"><span class="fas fa-plus-circle"></span> Haber Oluştur</b-btn>
+      <b-btn variant="primary rounded-pill" class="align-self-start" to="/posts/create"><span class="fas fa-plus-circle"></span> {{ $t('posts.create post') }}</b-btn>
     </b-col>
   </b-row>
 
@@ -77,72 +77,8 @@ export default {
   metaInfo: {
     title: "Posts",
   },
-  data: () => ({
-    tableFields: [
-      {
-        key: "order",
-        label: "Haber Sirasi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "postImage",
-        label: "Haber Resmi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "Baslik",
-        label: 'Başlık',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "date",
-        label: "Eklenme Tarihi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "owner",
-        label: "Ekleyen Kişi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "views",
-        label: "Okunma Sayısı",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "language",
-        label: 'Haber Dilleri',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "status",
-        label: "Durumu",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "details",
-        label: 'İşlemler',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-    ],
+  data: function() {
+    return {
     posts: [],
     postsTableData: [],
     previewImageUrl: null,
@@ -153,8 +89,77 @@ export default {
     // pagination
     perPage: 10,
     currentPage: 1,
-  }),
+    }
+  },
   computed: {
+    tableFields() {
+      return [
+      {
+        key: "order",
+        label: this.translateCol('post order'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "postImage",
+        label: this.translateCol('post image'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "Baslik",
+        label: this.translateCol('post header'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "date",
+        label: this.translateCol('creation date'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "owner",
+        label: this.translateCol('creator'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "views",
+        label: this.translateCol('reads'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "language",
+        label: this.translateCol('languages'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "status",
+        label: this.translateCol('status'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+      {
+        key: "details",
+        label: this.translateCol('details'),
+        sortable: true,
+        sortDirection: "desc",
+        class: "text-center align-middle",
+      },
+
+      ] 
+    },
     totalItems() {
       return this.postsTableData.length;
     },
@@ -191,6 +196,9 @@ export default {
 
   },
   methods: {
+    translateCol (colName) {
+      return this.$i18n.t('posts.' + colName)
+    },
     rowSelected(data) {
       this.selectedRows = data;
       console.log(data);

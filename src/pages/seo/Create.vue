@@ -2,7 +2,7 @@
   <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
-          <h2 style="text-decoration: underline;">Haber Olustur</h2>
+          <h2 style="text-decoration: underline;">{{ $t('seo.seo settings')}}</h2>
           <span class="info_message">{{info_message}}</span>
       </div>
     </div>
@@ -11,17 +11,17 @@
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="#" :class="{active: expandTab == 'google'}"
-                      @click="expandTab = 'google'">SEO Ayarlari</a>
+                      @click="expandTab = 'google'">{{$t('seo.seo settings')}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="#" :class="{active: expandTab == 'social'}"
-                      @click="expandTab = 'social'">Sosyal Medya Linkleri</a>
+                      @click="expandTab = 'social'">{{$t('seo.social links')}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="#" :class="{active: expandTab == 'seoImage'}"
-                  @click="expandTab = 'seoImage'">Görsel</a>
+                  @click="expandTab = 'seoImage'">{{$t('seo.seo image')}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
@@ -38,17 +38,19 @@
         <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'google', show: expandTab == 'google'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
-                <h3>SEO Ayarları</h3> 
+                <h3>{{$t('seo.seo settings')}}</h3> 
               </b-col>
 
               <b-col cols="10" class="offset-1">
-                <b-form-group label="Google Baslik">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('seo.google header') }}</legend>
                   <b-form-input v-model="googleHeading" placeholder="Google Baslik"></b-form-input>  
                 </b-form-group>
               </b-col>
 
               <b-col cols="10" class="offset-1">
-                <b-form-group label="Google Aciklama">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('seo.google text') }}</legend>
                   <b-form-textarea v-model="googleStatement" placeholder="Google Aciklama"></b-form-textarea>  
                 </b-form-group>
               </b-col>
@@ -56,7 +58,12 @@
 
               <b-row>
                 <b-col cols="10" class="offset-3">
-                  <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
+                  <b-input-group class="mt-2">
+                      <template #prepend>
+                        <b-input-group-text>
+                          {{ $t('seo.seo keywords') }} 
+                        </b-input-group-text>
+                      </template>
                     <b-form-input v-model="seoKeyword"></b-form-input>
                     <div class="edit_buttons">
                       <span title="Ekle" class="fa fa-check" @click="addToSeoKeywords(seoKeyword)"></span>
@@ -75,7 +82,7 @@
         </div>
         <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'social', show: expandTab == 'social'}">
               <b-col cols="6" class="offset-3 mt-2">
-                <h3>Sosyal Medya Ayarlari</h3> 
+                <h3>{{ $t('seo.social media settings') }}</h3> 
               </b-col>
 
               <b-col cols="10" class="offset-1">
@@ -125,17 +132,17 @@
               </span>
 
               <span class="button ml-5" @click="crop">
-                Kırp
+                {{ $t('posts.crop')}}
               </span>
 
               <label class="switch">
                 <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">{{ $t('posts.edit image') }}</span>
               </label>
              
                 <b-btn variant="primary rounded-pill" class="change-logo ml-5 mb-1" @click="changeFavicon">
-                  <span class="fas fa-plus-circle"></span> Faviconu Güncelle
+                  <span class="fas fa-plus-circle"></span> {{ $t('seo.update favicon') }}
                 </b-btn>
 
               </div>
@@ -169,21 +176,21 @@
             
               <span class="button" @click="$refs.file.click()">
                 <input ref="file" type="file" accept="image/*" @change="loadLogo($event)">
-               Logo Yükle 
+                {{ $t('seo.add logo') }}
               </span>
 
               <span class="button ml-5" @click="crop">
-                Kırp
+                {{ $t('posts.crop') }}
               </span>
 
               <label class="switch">
                 <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">{{ $t('posts.edit image') }}</span>
               </label>
              
                 <b-btn variant="primary rounded-pill" class="change-logo ml-5 mb-1" @click="changeLogo">
-                  <span class="fas fa-plus-circle"></span> Logoyu Güncelle
+                  <span class="fas fa-plus-circle"></span> {{ $t('seo.update logo') }}
                 </b-btn>
 
               </div>
@@ -195,7 +202,7 @@
           <b-row >
           <b-col cols="12">
             <b-col cols="6" class="offset-5 mt-3 kategoriler">
-              <h3>SEO Resmi</h3> 
+              <h3>{{ $t('seo.seo image') }}</h3> 
             </b-col>
             <div class="upload-example">
               <div>
@@ -216,7 +223,8 @@
               </div>
               <b-col cols="6" offset="3">
                 <div class="img-name">
-                    <b-form-group label="Foto Ismi">
+                    <b-form-group>
+                      <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('posts.photo name') }}</legend>
                       <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
                     </b-form-group>
                 </div>
@@ -225,17 +233,17 @@
             
               <span class="button" @click="$refs.file.click()">
                 <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
-                Görsel Ekle
+                {{ $t('posts.add image') }}
               </span>
 
               <span class="button ml-5" @click="crop">
-                Kırp 
+                {{ $t('posts.crop') }}
               </span>
 
               <label class="switch">
                 <input v-model="toggleEditImage" type="checkbox">
                 <span class="slider round"></span>
-                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
+                <span :class="{switch_closed: toggleEditImage}" class="switch_text">{{ $t('posts.edit image')}}</span>
               </label>
              
               </div>
@@ -251,7 +259,7 @@
     <b-row class="mt-4">
       <b-col offset="9">
          <b-btn variant="primary rounded-pill" class="new-post-btn" @click="submitSettings">
-          <span class="fas fa-plus-circle"></span> Ayarları Kaydet
+          <span class="fas fa-plus-circle"></span>  {{ $t('seo.save settings') }}
          </b-btn>
       </b-col>
     </b-row>
@@ -310,6 +318,7 @@ export default {
   created() {
     var vm = this;
 
+    vm.expandTab = 'google'
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_seo/")
       .then((response) => {

@@ -3,19 +3,20 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Etiket Oluştur</span>
+          <span class="text-muted font-weight-light">{{ $t('tags.create tag') }}</span>
         </h4>
       </div>
 
 
       <div class="col-lg-12 mb-4">
-        <b-card title="Yeni Etiket Formu">
+        <b-card>
+          <h4>{{ $t('tags.new tag form') }}</h4>
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Etkiet İsmi">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('tags.tag name') }}</legend>
                   <b-input v-model="tagName" 
-                              label="Etkiet İsmi"
                               placeholder="Etkiet İsmi">
                   </b-input>
                 </b-form-group>
@@ -24,7 +25,7 @@
 
             <b-row>
               <b-col class="offset-10">
-                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitTag">Etiket Ekle</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitTag">{{ $t('tags.add tag')}}</b-btn>
               </b-col>
             </b-row>
           </b-card-body>

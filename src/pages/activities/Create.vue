@@ -3,24 +3,28 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-4">
-          <span class="text-muted font-weight-light">Etkinlik Oluştur</span>
+          <span class="text-muted font-weight-light">{{ $t('activities.create activity') }}</span>
         </h4>
       </div>
 
       <div class="col-lg-12 mb-4">
-        <b-card title="Yeni Etkinlik Formu">
+        <b-card>
+          <h3>
+            {{ $t('activities.new activity form') }}
+          </h3>
           <b-card-body>
             <b-row>
               <b-col>
-                <b-form-group label="Etkinlik Adı">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.activity name') }}</legend>
                   <b-input v-model="activityTitle" 
-                              label="Etkinlik Adı"
                               placeholder="Etkinlik Adı">
                   </b-input>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Etkinlik Türü">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.activity category') }}</legend>
                   <b-select v-model="activityType" class="mb-4">
                     <option v-for="(activityType, index) in activityTypeList" 
                       :key="index" :value="activityType"> 
@@ -38,17 +42,18 @@
 
             <b-row>
               <b-col cols="6" class="activity-text">
-                <b-form-group label="Etkinlik Açıklaması">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.activity text') }}</legend>
                   <b-textarea v-model="activityText" 
-                              label="Etkinlik Açıklaması"
-                              placeholder="Etkinlik Açıklaması"
+                              :placeholder="activityTextPlaceholder"
                               rows="5">
                   </b-textarea>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
                   <b-col cols="12">
-                    <b-form-group label="Etkinlik Dili">
+                    <b-form-group>
+                      <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.activity language') }}</legend>
                       <b-select v-model="activityLanguage" class="">
                         <option v-for="(activityLanguage, index) in languages" 
                             :key="index" :value="activityLanguage"> 
@@ -58,7 +63,8 @@
                     </b-form-group>
                   </b-col>
                   <b-col cols="12">
-                    <b-form-group label="İnternet Sayfası Linki">
+                    <b-form-group>
+                      <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.activity link') }}</legend>
                       <b-input-group  class="mt-2"
                         placeholder="İnternet Sayfası Linki">
                         <b-form-input v-model="activityLink"></b-form-input>
@@ -91,17 +97,20 @@
 
             <b-row>
               <b-col>
-                    <b-form-group label="Başlangıç Tarihi">
+                    <b-form-group>
+                      <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.start date') }}</legend>
                       <datepicker v-model="startDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Başlangıç Tarihi" />
                     </b-form-group>
               </b-col>
               <b-col>
-                    <b-form-group label="Bitiş Tarihi">
+                    <b-form-group>
+                      <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.end date') }}</legend>
                       <datepicker v-model="endDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Bitiş Tarihi" />
                     </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group label="Reklamda Göster">
+                <b-form-group>
+                  <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('activities.show in ad') }}</legend>
                   <b-select v-model="visible" class="">
                     <option v-for="(visible, index) in visibleOptions" 
                       :key="index" :value="visible"> 
@@ -130,7 +139,8 @@
                   </div>
                   <b-col cols="6" offset="3">
                     <div class="img-name">
-                        <b-form-group label="Görsel İsmi">
+                        <b-form-group>
+                          <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('posts.photo name') }}</legend>
                           <b-form-input v-model="imageName" placeholder="Görsel İsmi"></b-form-input>  
                         </b-form-group>
                     </div>
@@ -139,17 +149,17 @@
                 
                   <span class="button" @click="$refs.file.click()">
                     <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
-                    Görsel Ekle
+                    {{ $t('posts.add image') }}
                   </span>
 
                   <span class="button ml-5" @click="crop">
-                    Kırp 
+                    {{ $t('posts.crop') }}
                   </span>
 
                   <label class="switch">
                     <input v-model="toggleEditImage" type="checkbox">
                     <span class="slider round"></span>
-                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">{{ $t('posts.edit image') }}</span>
                   </label>
                   </div>
                 </div>
@@ -158,7 +168,7 @@
 
             <b-row>
               <b-col class="offset-10">
-                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">Etkinlik Ekle</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">{{ $t('activities.create activity') }}</b-btn>
               </b-col>
             </b-row>
           </b-card-body>
@@ -182,25 +192,28 @@ export default {
     Datepicker,
     Cropper
   },
-  data: () => ({
-    languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦', 'Hepsi 🌍'],
-    activityLanguage: '',
-    activityTitle: '',
-    activityLink: '',
-    activityText: '',
-    activityImage: '',
-    activityTypeList: [],
-    activityType: '',
-    activitySettings: false,
-    startDate: null,
-    endDate: null,
-    imageName: '',
-    image: null,
-    base64: '',
-    toggleEditImage: false,
-    visibleOptions: ['Reklamda Göster', 'Reklamdan Kaldır'],
-    visible: '',
-  }),
+  data: function() {
+    return {
+      languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦', 'Hepsi 🌍'],
+      activityLanguage: '',
+      activityTitle: '',
+      activityTextPlaceholder: this.$i18n.t('activities.activity text'),
+      activityLink: '',
+      activityText: '',
+      activityImage: '',
+      activityTypeList: [],
+      activityType: '',
+      activitySettings: false,
+      startDate: null,
+      endDate: null,
+      imageName: '',
+      image: null,
+      base64: '',
+      toggleEditImage: false,
+      visibleOptions: ['Reklamda Göster', 'Reklamdan Kaldır'],
+      visible: '',
+    }
+  },
   computed: {
 
   },

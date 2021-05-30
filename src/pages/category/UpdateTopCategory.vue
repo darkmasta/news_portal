@@ -1,7 +1,8 @@
 <template>
     <b-row>
       <b-col cols="6" class="top-category mt-5">
-        <b-form-group label="Ust Kategori Duzenle">
+        <b-form-group>
+          <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('categories.edit top category') }}</legend>
           <b-select v-model="categoryTitle" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
               :key="index" :value="categoryTitle"> 
@@ -12,7 +13,7 @@
           <b-input v-model="topCategory" label="Ust Kategori" placeholder="Ust Kategoriyi Guncelle">
           </b-input>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
-                    @click="updateTopCategory()">Ust Kategori Duzenle</b-btn>
+                    @click="updateTopCategory()">{{ $t('categories.edit top category')}}</b-btn>
         </b-form-group>
       </b-col>
     </b-row>

@@ -2,14 +2,19 @@
   <div style="overflow-x: hidden; overflow-y: scroll;">
     <div class="row">
       <div class="col-md-12">
-          <h2 style="text-decoration: underline;">KÜNYE</h2>
+          <h2 style="text-decoration: underline;">{{ $t('identity.identity')}}</h2>
       </div>
     </div>
 
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Künye Başlık" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.identity header') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="kunyeHeading"></b-form-input>
         </b-input-group>
       </b-col>
@@ -18,7 +23,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Eddifa şirketi adına imtiyaz sahibi" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.franchisee') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="kunyeImtiyaz"
            @keyup.enter="addToKunyeImtiyaz(kunyeImtiyaz)"></b-form-input>
           <div class="edit_buttons">
@@ -39,7 +49,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Genel Yayın Yönetmeni" class="mt-2">
+        <b-input-group  class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.general editorial director') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="genelYayinYonetmeni"
               @keyup.enter="addToGenelYayinYonetmeni(genelYayinYonetmeni)"></b-form-input>
           <div class="edit_buttons">
@@ -58,7 +73,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Arapça Haberler" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.arabic news') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="arabicNews"
               @keyup.enter="addToArabicNews(arabicNews)"></b-form-input>
           <div class="edit_buttons">
@@ -77,7 +97,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="İngilizce Haberler" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.english news') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="englishNews"
               @keyup.enter="addToEnglishNews(englishNews)"></b-form-input>
           <div class="edit_buttons">
@@ -96,7 +121,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Rusça Haberler" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.russian news') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="russianNews"
               @keyup.enter="addToRussianNews(russianNews)"></b-form-input>
           <div class="edit_buttons">
@@ -115,7 +145,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Türkçe Haberler" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.turkish news') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="turkishNews"
               @keyup.enter="addToTurkishNews(turkishNews)"></b-form-input>
           <div class="edit_buttons">
@@ -134,7 +169,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Kurgu ve Kamera" class="mt-2">
+        <b-input-group  class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.camera') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="camera"
               @keyup.enter="addToCamera(camera)"></b-form-input>
           <div class="edit_buttons">
@@ -153,7 +193,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Post Prodüksiyon" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.post production') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="postProduction"
               @keyup.enter="addToPostProduction(postProduction)"></b-form-input>
           <div class="edit_buttons">
@@ -172,7 +217,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Seslendirme" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.sound') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="sound"
               @keyup.enter="addToSound(sound)"></b-form-input>
           <div class="edit_buttons">
@@ -191,7 +241,12 @@
 
     <b-row>
       <b-col cols="10" class="offset-1">
-        <b-input-group prepend="Hukuk Danışmanı" class="mt-2">
+        <b-input-group class="mt-2">
+          <template #prepend>
+            <b-input-group-text>
+              {{ $t('identity.legal counseling') }} 
+            </b-input-group-text>
+          </template>
           <b-form-input v-model="lawyer"
               @keyup.enter="addToLawyer(lawyer)"></b-form-input>
           <div class="edit_buttons">
@@ -211,10 +266,11 @@
     <b-row class="mt-6">
       <b-col offset="8">
          <b-btn variant="secondary rounded-pill" class="mr-3 new-post-btn mt-5" @click="showModalFunc">
-          Künye Önizleme
+         {{ $t('identity.identity preview') }}
          </b-btn>
          <b-btn variant="primary rounded-pill" class="new-post-btn mt-5" @click="submitIdentity">
-          <span class="fas fa-plus-circle"></span> Künye Kaydet
+          <span class="fas fa-plus-circle"></span> 
+         {{ $t('identity.save identity') }}
          </b-btn>
       </b-col>
     </b-row>

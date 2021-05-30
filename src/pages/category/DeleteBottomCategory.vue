@@ -1,7 +1,8 @@
 <template>
     <b-row>
       <b-col cols="6" class="top-category mt-5">
-        <b-form-group label="Alt Kategori Sil">
+        <b-form-group>
+          <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('categories.delete bottom category') }}</legend>
           <b-select v-model="topCategory" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
               :key="index" :value="categoryTitle"> 
@@ -16,7 +17,7 @@
             </option>
           </b-select>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
-                    @click="deleteBottomCategory(topCategory, bottomCategory)">Alt Kategori Sil</b-btn>
+                    @click="deleteBottomCategory(topCategory, bottomCategory)">{{ $t('categories.delete bottom category')}}</b-btn>
         </b-form-group>
       </b-col>
     </b-row>

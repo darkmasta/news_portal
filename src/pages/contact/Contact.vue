@@ -2,7 +2,7 @@
   <div style="overflow: hidden;">
     <div class="row">
       <div class="col-md-12">
-          <h2 style="text-decoration: underline;">İLETİŞİM</h2>
+          <h2 style="text-decoration: underline;">{{ $t('contact.contact') }}</h2>
       </div>
     </div>
 
@@ -11,27 +11,27 @@
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="/#/contact" :class="{active: expandTab == 'edit'}"
-                      @click="expandTab = 'edit'">Başlık</a>
+                      @click="expandTab = 'edit'">{{ $t('main.header') }}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="/#/contact" :class="{active: expandTab == 'categories'}"
-                      @click="expandTab = 'categories'">Kategoriler</a>
+                      @click="expandTab = 'categories'">{{ $t('main.categories') }}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="/#/contact" :class="{active: expandTab == 'tags'}"
-                      @click="expandTab = 'tags'">Etiketler</a>
+                      @click="expandTab = 'tags'">{{ $t('main.tags') }}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="/#/contact" :class="{active: expandTab == 'postLinks'}"
-                  @click="expandTab = 'postLinks'">Linkler</a>
+                  @click="expandTab = 'postLinks'">{{ $t('main.links') }}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="/#/contact" :class="{active: expandTab == 'languages'}"
-                  @click="expandTab = 'languages'">Diller</a>
+                  @click="expandTab = 'languages'">{{ $t('main.languages') }}</a>
         </li>
       </ul>
       <div class="tab-content">
@@ -39,7 +39,12 @@
 
             <b-row>
               <b-col cols="10" class="offset-1 mb-3">
-                <b-input-group prepend="Iletisim Başlık" class="mt-2">
+                <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact header') }} 
+                    </b-input-group-text>
+                  </template>
                   <b-form-input v-model="contactHeading"></b-form-input>
                 </b-input-group>
               </b-col>
@@ -68,7 +73,7 @@
             </b-row>
             <b-row>
                 <b-col cols="12" class="mt-2 mb-2">
-                    <span>Selected Categories: </span>{{selectedCategories}}
+                    <span>{{ $t('posts.selected categories')}} </span>{{selectedCategories}}
                 </b-col>
             </b-row>
         </div>
@@ -96,35 +101,60 @@
 
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="İletişim URL'si" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact URL') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postCustomUrl"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="İletişim Anahtar Kelimeler" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact keywords') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postKeywords"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Seo Anahtar Kelimeler" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact seo keywords') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postSeoWords"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Seo Url Adresi" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.seo url') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postSeoUrl"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1 mb-3">
-              <b-input-group prepend="Seo Baslik Aciklamasi" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.seo header text') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postSeoHeader"></b-form-input>
               </b-input-group>
             </b-col>
@@ -134,35 +164,60 @@
         <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}">
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Ingilizce İletişim 🇬🇧" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact english') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postEnglishLink"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Arapca İletişim 🇸🇦" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact arabic') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postArabicLink"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Rusca İletişim 🇷🇺" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact russian') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postRussianLink"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Ukraynaca İletişim 🇺🇦" class="mt-2">
+              <b-input-group  class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact ukranian') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postUkranianLink"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Fransizca İletişim 🇫🇷" class="mt-2">
+              <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t('contact.contact french') }} 
+                    </b-input-group-text>
+                  </template>
                 <b-form-input v-model="postFrenchLink"></b-form-input>
               </b-input-group>
             </b-col>
@@ -184,7 +239,7 @@
     <b-row class="mt-6">
       <b-col offset="9">
          <b-btn variant="primary rounded-pill" class="new-post-btn mt-5" @click="submitContact">
-          <span class="fas fa-plus-circle"></span> Iletişim Kaydet
+          <span class="fas fa-plus-circle"></span> {{ $t('contact.save contact') }}
          </b-btn>
       </b-col>
     </b-row>

@@ -3,10 +3,13 @@
     <b-row>
       <b-col class="d-flex justify-content-between ">
         <div class="page-header">
-          <h4>Kategoriler </h4>
-         Seçilmiş Kategoriler : {{selectedCategories}}
+          <h4>{{ $t('categories.categories') }}</h4>
+         {{ $t('posts.selected categories')}}: {{selectedCategories}}
         </div>
-        <b-btn variant="primary rounded-pill" class="align-self-start" to="/category/create"><span class="fas fa-plus-circle"></span> Yeni Kategori Ekle</b-btn>
+        <b-btn variant="primary rounded-pill" class="align-self-start" 
+        to="/category/create"><span class="fas fa-plus-circle"></span>
+          {{ $t('categories.add new category') }}
+         </b-btn>
       </b-col>
     </b-row>
     <b-row>

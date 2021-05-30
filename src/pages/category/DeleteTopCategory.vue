@@ -1,14 +1,15 @@
 <template>
     <b-row>
       <b-col cols="6" class="top-category-form-container mt-5">
-        <b-form-group label="Ust Kategori Sil">
+        <b-form-group>
+         <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('categories.delete top category') }}</legend>
          <b-select v-model="topCategory" class="mb-4">
             <option v-for="(categoryTitle, index) in categoryTitles" 
               :key="index" :value="categoryTitle"> 
               {{categoryTitle}}
             </option>
           </b-select>
-          <b-btn variant="primary" class="font-weight-bold save-order" @click="deleteTopCategory(topCategory)">Ust Kategori Sil</b-btn>
+          <b-btn variant="primary" class="font-weight-bold save-order" @click="deleteTopCategory(topCategory)">{{ $t('categories.delete top category')}}</b-btn>
         </b-form-group>
       </b-col>
     </b-row>

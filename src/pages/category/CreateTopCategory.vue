@@ -1,10 +1,11 @@
 <template>
   <b-row>
       <b-col cols="6" class="top-category-form-container">
-        <b-form-group label="Yeni Ust Kategori">
+        <b-form-group>
+          <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('categories.new top category') }}</legend>
           <b-input v-model="categoryTitle" label="" placeholder="Yeni ust kategory" class="new_top_category_input">
           </b-input>
-          <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitTopCategory(categoryTitle)">Ust kategori ekle</b-btn>
+          <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitTopCategory(categoryTitle)">{{$t('categories.add top category')}}</b-btn>
         </b-form-group>
       </b-col>
     </b-row>

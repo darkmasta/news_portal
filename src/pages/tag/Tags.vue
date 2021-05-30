@@ -3,11 +3,11 @@
       <div class="row">
       <div class="col-lg-12">
         <h4 class="font-weight-bold py-3 mb-1">
-          <span class="text-muted font-weight-light">Etiketler</span>
+          <span class="text-muted font-weight-light">{{ $t('main.tags')}}</span>
         </h4>
       </div>
       <b-col class="offset-10">
-          <b-btn variant="primary rounded-pill" class="align-self-start" to="/tags/create"><span class="fas fa-plus-circle"></span> Yeni Etiket Ekle</b-btn>
+          <b-btn variant="primary rounded-pill" class="align-self-start" to="/tags/create"><span class="fas fa-plus-circle"></span> {{ $t('tags.add new tag')}}</b-btn>
       </b-col>
     </div>
 
@@ -62,42 +62,6 @@ export default {
     title: "Tags",
   },
   data: () => ({
-    tableFields: [
-      {
-        key: "order",
-        label: "Etiket Sirasi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "tag",
-        label: 'Etiket İsmi',
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "date",
-        label: "Eklenme Tarihi",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "total",
-        label: "Toplam Kullanim",
-        sortable: true,
-        sortDirection: "desc",
-        class: "text-center align-middle",
-      },
-      {
-        key: "details",
-        label: 'İşlemler',
-        sortable: "true",
-        class: "text-center align-middle",
-      }
-    ],
     tags: [],
     tagsTableData: [],
     originalTagsTableData: [],
@@ -108,6 +72,44 @@ export default {
     currentPage: 1,
   }),
   computed: {
+    tableFields() { 
+      return [
+        {
+          key: "order",
+          label: this.translateCol('tag order'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "tag",
+          label: this.translateCol('tag name'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "date",
+          label: this.translateCol('creation date'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "total",
+          label: this.translateCol('total usage'),
+          sortable: true,
+          sortDirection: "desc",
+          class: "text-center align-middle",
+        },
+        {
+          key: "details",
+          label: this.translateCol('details'),
+          sortable: "true",
+          class: "text-center align-middle",
+        }
+      ]
+    },
     totalItems() {
       return this.tagsTableData.length;
     },
@@ -138,6 +140,9 @@ export default {
 
   },
   methods: {
+    translateCol (colName) {
+      return this.$i18n.t('tags.' + colName)
+    },
     goToTag(data) {
       console.log(data)
       this.$router.push({ name: 'Tag', params: { id: data.value } })
