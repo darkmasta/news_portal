@@ -5,6 +5,9 @@
           <legend class="bv-no-focus-ring col-form-label pt-0">{{ $t('categories.new top category') }}</legend>
           <b-input v-model="categoryTitle" label="" placeholder="Yeni ust kategory" class="new_top_category_input">
           </b-input>
+          <legend class="bv-no-focus-ring col-form-label pt-0 mt-2">{{ $t('categories.category color') }}</legend>
+          <b-input v-model="topCategoryColor" label="" placeholder="Kategori Rengi" class="new_top_category_input">
+          </b-input>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitTopCategory(categoryTitle)">{{$t('categories.add top category')}}</b-btn>
         </b-form-group>
       </b-col>
@@ -18,6 +21,7 @@ export default {
   data() {
     return {
       categoryTitle: "",
+      topCategoryColor: "",
     }
   },
   created() {
@@ -27,7 +31,8 @@ export default {
   methods: {
     submitTopCategory(categoryName) {
       var vm = this
-      var data = {"categoryName": categoryName}
+      var data = {"categoryName": categoryName,
+                  "topCategoryColor": vm.topCategoryColor}
 
       if (categoryName.length < 2) {
         vm.$notify({

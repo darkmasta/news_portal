@@ -1,28 +1,36 @@
-var mongoose = require("mongoose");
-var Float = require("mongoose-float").loadType(mongoose, 5);
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
-
-var categorySchema = new Schema({
+const categorySchema = new Schema({
   companies: [String], // sirketler
+  companiesColor: [String],
   clustering: [String], // kumelenme
-  countries: [String], //ulkeler
+  clusteringColor: [String], // kumelenme
+  countries: [String], // ulkeler
+  countriesColor: [String], // ulkeler
   thinkTank: [String], // dusunce kurulusu
+  thinkTankColor: [String], // dusunce kurulusu
   sources: [String], // kaynaklar
+  sourcesColor: [String], // kaynaklar
   youtubers: [String], //  youtuber'lar
+  youtubersColor: [String], //  youtuber'lar
   institutions: [String], // Kurunlar
+  institutionsColor: [String], // Kurunlar
   mainCategories: [String], // Ana Kategoriler
+  mainCategoriesColor: [String], // Ana Kategoriler
   singleCategories: [String], // Tekli kategoriler
+  singleCategoriesColor: [String], // Tekli kategoriler
   updatedCategories: [
     {
       topCategory: String, // Sonradan eklenenleri buraya yazacaz
       bottomCategory: String,
-    },
+      color: String,
+      topColor: String
+    }
   ],
   kunyeHeading: String,
   contactHeading: String,
-  aboutHeading: String,
-});
+  aboutHeading: String
+})
 
-module.exports.categorySchema = categorySchema;
+module.exports.categorySchema = categorySchema

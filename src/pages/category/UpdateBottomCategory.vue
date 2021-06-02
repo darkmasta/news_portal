@@ -18,6 +18,9 @@
           </b-select>
           <b-input v-model="categoryName" :value="categoryName" label="Alt Kategori" placeholder="Alt Kategoriyi Guncelle">
           </b-input>
+          <legend class="bv-no-focus-ring col-form-label pt-0 mt-2">{{ $t('categories.category color') }}</legend>
+          <b-input v-model="categoryColor" label="" placeholder="Kategori Rengi" class="new_top_category_input">
+          </b-input>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
                     @click="updateBottomCategory(topCategory, bottomCategory)">{{ $t('categories.edit bottom category')}}</b-btn>
         </b-form-group>
@@ -38,6 +41,7 @@ export default {
       topCategory: "",
       bottomCategory: "",
       categoryTitles: [],
+      categoryColor: ''
     }
   },
   created() {
@@ -71,10 +75,28 @@ export default {
     });
     console.log(vm.categoriesData)
   },
+  watch: {
+    bottomCategory: function(newC, oldC) {
+      var vm = this
+      if (newC.length > 1) {
+        console.log(this.categoriesData[vm.topCategory])
+        console.log(this.categoriesData.updatedCategories)
+        this.categoriesData.updatedCategories.forEach(category => {
+          if (category.bottomCategory == newC) {
+            console.log(category)
+            vm.categoryColor = category.color
+          }
+        })
+      }
+    }
+  },
   methods: {
     updateBottomCategory (topCategory, bottomCategory) {
         var vm = this
-        var data = {"topCategory": topCategory, "bottomCategory": bottomCategory}
+        const categoryColor = vm.categoryColor
+        var data = {"topCategory": topCategory,
+                    "bottomCategory": bottomCategory,
+                    "categoryColor": categoryColor}
         data['categoryName'] = vm.categoryName
         console.log(data)
         if (vm.categoryName.length < 2) {

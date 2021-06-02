@@ -438,7 +438,15 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col cols="4" class="mt-5 offset-9">
+            <b-col cols="4" class="mt-3 offset-9">
+              <b-btn v-if="showInMobile" variant="primary rounded-pill" class="new-post-btn" @click="showInMobile = false;">
+                <span class="fa fa-mobile"></span>  {{ $t('posts.publish mobile') }}
+              </b-btn>
+              <b-btn v-if="!showInMobile" variant="primary rounded-pill" class="new-post-btn" @click="showInMobile = true;">
+                <span class="fas fa-mobile"></span> {{ $t('posts.publish big screen') }}
+              </b-btn>
+            </b-col>
+            <b-col cols="4" class="mt-2 offset-9">
               <b-btn v-if="manset" variant="primary rounded-pill" class="new-post-btn" @click="manset = false;">
                 <span class="fas fa-plus-circle"></span>  {{ $t('posts.publish headline') }}
               </b-btn>
@@ -569,6 +577,7 @@ export default {
       videoLink: '',
       videoName: '',
       videoSrc: '',
+      showInMobile: false
     }
   },
   beforeCreate() {
@@ -712,6 +721,7 @@ export default {
             formData.append('videoLink', vm.videoLink)
             formData.append('manset', vm.manset)
             formData.append('videoName', vm.videoName)
+            formData.append('mobile', vm.showInMobile)
 
 
             axios
@@ -830,6 +840,7 @@ export default {
               formData.append('videoLink', vm.videoLink)
               formData.append('manset', vm.manset)
               formData.append('videoName', vm.videoName)
+              formData.append('mobile', vm.showInMobile)
 
               axios
                 .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {

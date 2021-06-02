@@ -47,7 +47,8 @@ const postSchema = new Schema({
   isOnAir: Boolean,
   isDraft: Boolean,
   position: String,
-  views: Number
+  views: Number,
+  mobile: Boolean
 })
 
 module.exports.postSchema = postSchema

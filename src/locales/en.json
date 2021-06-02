@@ -63,7 +63,9 @@
     "selected categories": "Selected Categories",
     "publish headline": "Publish Headline",
     "publish normal": "Publish Normal",
-    "save post": "Save Post"
+    "save post": "Save Post",
+    "publish mobile": "Show In Mobile",
+    "publish big screen": "Show In Big Screen"
   },
   "activities": {
     "activity image": "Activity Image",
@@ -178,7 +180,8 @@
     "edit top category": "Edit Top Category",
     "edit bottom category": "Edit Bottom Category",
     "delete top category": "Delete Top Category",
-    "delete bottom category": "Delete Bottom Category"
+    "delete bottom category": "Delete Bottom Category",
+    "category color": "Category Color"
   },
   "tags": {
     "add new tag": "Add New Tag",

@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
-var identitySchema = new Schema({
+const identitySchema = new Schema({
   kunyeHeading: String,
   kunyeImtiyaz: [String],
   genelYayinYonetmeni: [String],
@@ -18,7 +18,7 @@ var identitySchema = new Schema({
   contactHeading: String,
   contactContent: String,
   aboutHeading: String,
-  aboutContent: String,
-});
+  aboutContent: String
+})
 
-module.exports.identitySchema = identitySchema;
+module.exports.identitySchema = identitySchema

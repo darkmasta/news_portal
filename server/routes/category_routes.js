@@ -21,6 +21,7 @@ router.post('/add_top_category', jsonParser, (req, res) => {
   const data = req.body.data
 
   const categoryName = data.categoryName
+  const categoryColor = data.topCategoryColor
 
   if (!isAdmin === 'admin') res.json('Authorization Error')
 
@@ -28,7 +29,11 @@ router.post('/add_top_category', jsonParser, (req, res) => {
     {},
     {
       $push: {
-        updatedCategories: { topCategory: categoryName, bottomCategory: '' }
+        updatedCategories: {
+          topCategory: categoryName,
+          bottomCategory: '',
+          topColor: categoryColor
+        }
       }
     }
   )
@@ -41,6 +46,7 @@ router.post('/update_top_category', jsonParser, (req, res) => {
 
   const data = req.body.data
   const categoryName = data.categoryName
+  const categoryColor = data.topCategoryColor
   const topCategory = data.topCategory
 
   if (!isAdmin === 'admin') res.json('Authentication Error')
@@ -52,7 +58,8 @@ router.post('/update_top_category', jsonParser, (req, res) => {
     },
     {
       $set: {
-        'updatedCategories.$.topCategory': categoryName
+        'updatedCategories.$.topCategory': categoryName,
+        'updatedCategories.$.topColor': categoryColor
       }
     }
   )
@@ -64,7 +71,8 @@ router.post('/update_top_category', jsonParser, (req, res) => {
       },
       {
         $set: {
-          'updatedCategories.$.topCategory': categoryName
+          'updatedCategories.$.topCategory': categoryName,
+          'updatedCategories.$.topColor': categoryColor
         }
       },
       {
@@ -85,6 +93,7 @@ router.post('/update_bottom_category', jsonParser, (req, res) => {
 
   const categoryName = data.categoryName
   const bottomCategory = data.bottomCategory
+  const categoryColor = data.categoryColor
 
   if (!isAdmin === 'admin') res.json('Authentication Error')
 
@@ -94,7 +103,8 @@ router.post('/update_bottom_category', jsonParser, (req, res) => {
     },
     {
       $set: {
-        'updatedCategories.$.bottomCategory': categoryName
+        'updatedCategories.$.bottomCategory': categoryName,
+        'updatedCategories.$.color': categoryColor
       }
     }
   )
@@ -106,6 +116,7 @@ router.post('/add_bottom_category', jsonParser, (req, res) => {
   const data = req.body.data
   const topCategory = data.topCategory
   const bottomCategory = data.bottomCategory
+  const categoryColor = data.categoryColor
   const { isAdmin } = decodeCookie(req.cookies.defensehere)
 
   if (!isAdmin === 'admin') res.json('Authentication Error')
@@ -116,7 +127,8 @@ router.post('/add_bottom_category', jsonParser, (req, res) => {
       $push: {
         updatedCategories: {
           topCategory: topCategory,
-          bottomCategory: bottomCategory
+          bottomCategory: bottomCategory,
+          color: categoryColor
         }
       }
     }

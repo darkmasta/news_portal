@@ -12,6 +12,9 @@
           <div class="mb-2">{{topCategory}}</div>
           <b-input v-model="bottomCategory" label="" placeholder="Yeni alt kategory">
           </b-input>
+          <legend class="bv-no-focus-ring col-form-label pt-0 mt-2">{{ $t('categories.category color') }}</legend>
+          <b-input v-model="categoryColor" label="" placeholder="Kategori Rengi" class="new_top_category_input">
+          </b-input>
           <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
                     @click="submitBottomCategory(topCategory, bottomCategory)">{{$t('categories.add bottom category')}}</b-btn>
         </b-form-group>
@@ -29,6 +32,7 @@ export default {
       categoryTitle: "",
       topCategory: "",
       bottomCategory: "",
+      categoryColor: '',
       categoryTitles: [],
     }
   },
@@ -55,8 +59,10 @@ export default {
   },
   methods: {
     submitBottomCategory (topCategory, bottomCategory) {
-        var data = {"topCategory": topCategory, "bottomCategory": bottomCategory}
         var vm = this
+        var data = {"topCategory": topCategory, 
+                    "bottomCategory": bottomCategory,
+                    "categoryColor": vm.categoryColor}
         axios
             .post(process.env.VUE_APP_SERVER_URL + "/add_bottom_category/", {data})
             .then((response) => {

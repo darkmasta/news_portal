@@ -63,7 +63,9 @@
     "post language": "Haber Dilleri",
     "publish headline": "Manşette Yayınla",
     "publish normal": "Normal Yayınla",
-    "save post": "Haberi Kaydet"
+    "save post": "Haberi Kaydet",
+    "publish mobile": "Show In Mobile",
+    "publish big screen": "Show In Big Screen"
   },
   "activities": {
     "activity image": "Etkinlik Resmi",
@@ -178,7 +180,8 @@
     "edit top category": "Üst Kategori Düzenle",
     "edit bottom category": "Alt Kategori Düzenle",
     "delete top category": "Üst Kategori Sil",
-    "delete bottom category": "Alt Kategori Sil"
+    "delete bottom category": "Alt Kategori Sil",
+    "category color": "Kategori Rengi"
   },
   "tags": {
     "add new tag": "Yeni Etiket Ekle",

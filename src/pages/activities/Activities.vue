@@ -32,13 +32,13 @@
             <img class="post-table-image" :src="data.value" with="75" height="75" @click="previewImage(data.value)" />
         </template>
         <template #cell(details)="data" class="activities-table-buttons">
-        <span v-if="data.item.visible == 'Gösterilmiyor'" title="Göster" 
+        <span v-if="data.item.visible == $i18n.t('main.not visible')" title="Göster" 
             class="fas fa-broadcast-tower" @click="makeVisible(data)"></span>
-        <span v-if="data.item.visible == 'Gösteriliyor'" title="Gösterme"
+        <span v-if="data.item.visible == $i18n.t('main.visible')" title="Gösterme"
             class="fab fa-firstdraft mr-2 text-primary" @click="makeInvisible(data)"></span>
-          <span v-if="data.item.status == 'Onaylandi'" title="Red" 
+          <span v-if="data.item.status == $i18n.t('main.confirmed')" title="Red" 
               class="fa fa-ban" @click="unconfirmActivity(data)"></span>
-          <span v-if="data.item.status == 'Onay Bekliyor'" title="Onay"
+          <span v-if="data.item.status == $i18n.t('main.unconfirmed')" title="Onay"
               class="fa fa-check mr-2 text-primary" @click="confirmActivity(data)"></span>
           <span title="Edit Post" class="far fa-edit mr-2 text-primary" @click="goToActivity(data)"></span>
           <span title="Delete Post" class="fas fa-times text-danger" @click="deleteActivity(data)"></span>
@@ -188,10 +188,10 @@ export default {
                 id: activity._id.slice(-4),
                 startDate: moment(activity.startDate).format('DD/MM/YYYY, h:mm:ss a'),
                 endDate: moment(activity.endDate).format('DD/MM/YYYY, h:mm:ss a'),
-                status: (activity.status == 'confirmed') ? vm.$i18n.t('confirmed') : vm.$i18n.t('unconfirmed'),
+                status: (activity.status == 'confirmed') ? vm.$i18n.t('main.confirmed') : vm.$i18n.t('main.unconfirmed'),
                 owner: activity.owner,
                 position: activity.activityPosition,
-                visible: activity.visible ? vm.$i18n.t('visible') : vm.$i18n.t('not visible'),
+                visible: activity.visible ? vm.$i18n.t('main.visible') : vm.$i18n.t('main.not visible'),
                 activityType: activity.activityType,
                 activityImage: process.env.VUE_APP_SERVER_URL + '/images/' + activity.activityImage,
                 Baslik: activity.activityTitle,

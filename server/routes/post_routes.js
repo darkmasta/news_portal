@@ -55,6 +55,7 @@ router.post('/create_post', jsonParser, (req, res) => {
         videoLink: postData.videoLink,
         videoName: postData.videoName,
         manset: postData.manset,
+        mobile: postData.mobile,
         views: 0,
         logs: [
           {
