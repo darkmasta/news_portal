@@ -13,6 +13,8 @@
 <style src="./style.scss" lang="scss"></style>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'app',
   metaInfo: {
@@ -22,6 +24,28 @@ export default {
   updated () {
     // Remove loading state
     setTimeout(() => document.body.classList.remove('app-loading'), 1)
+  },
+  created() {
+    var vm = this
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/get_english")
+      .then((response) => {
+        // console.log(response)
+        const messages = response.data
+        messages.forEach(message => {
+          let category = message.category
+          let text = message.text.toLowerCase()
+          let translation = message.translation
+          let outer_tmp_obj = {}
+          let inner_tmp_obj = {}
+          inner_tmp_obj[text] = translation
+          outer_tmp_obj[category] = inner_tmp_obj
+          // console.log(outer_tmp_obj)
+          console.log(String(message.language), outer_tmp_obj);
+
+          vm.$i18n.mergeLocaleMessage(message.language, outer_tmp_obj)
+        });
+      })
   }
 }
 </script>

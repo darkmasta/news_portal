@@ -64,6 +64,19 @@
         </ul>
       </li>
 
+      <li class="sidenav-item" style="">
+        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+          <i style="font-size: 22px;" class="sidenav-icon fas fa-language mr-1"></i>
+          <div>{{ $t('main.language management') }}</div>
+        </a>
+        <ul class="sidenav-menu">
+          <li class="sidenav-item" style="display: block;">
+            <a href="javascript:void(0)" class="sidenav-link">
+              <div><router-link to="/language/edit">{{ $t('main.language settings')}}</router-link></div>
+            </a>
+          </li>
+        </ul>
+      </li>
 
     </div>
   </sidenav>

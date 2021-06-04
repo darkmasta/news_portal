@@ -28,6 +28,7 @@ const AdRoutes = require('./routes/ad_routes')
 const IdentityRoutes = require('./routes/identity_routes')
 const TagRoutes = require('./routes/tag_routes')
 const SeoRoutes = require('./routes/seo_routes')
+const TranslationRoutes = require('./routes/language_routes')
 
 const app = express()
 
@@ -70,6 +71,7 @@ app.use('/', AdRoutes)
 app.use('/', IdentityRoutes)
 app.use('/', TagRoutes)
 app.use('/', SeoRoutes)
+app.use('/', TranslationRoutes)
 
 const cons = require('consolidate')
 app.engine('html', cons.swig)

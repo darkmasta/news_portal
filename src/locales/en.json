@@ -1,6 +1,5 @@
 {
   "main": {
-    "welcome" : "Hello from {company}!",
     "post management": "Post Management",
     "activity management": "Activity Management",
     "ad management": "Ad Management",
@@ -22,7 +21,9 @@
     "not visible": "Not Visible",
     "languages": "Languages",
     "header": "Header",
-    "links": "Links"
+    "links": "Links",
+    "language management": "Language Management",
+    "language settings": "Language Settings"
   },
   "posts": {
     "post order": "Post Order",
@@ -209,5 +210,9 @@
     "update favicon": "Update Favicon",
     "save settings": "Save Settings",
     "add logo": "Add Logo"
+  },
+  "language": {
+    "save language settings": "Save Language Settings",
+    "language": "Language"
   }
 }

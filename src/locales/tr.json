@@ -1,6 +1,5 @@
 {
   "main": {
-    "welcome" : "Hello from {company}!",
     "post management": "Haber Yönetimi",
     "activity management": "Etkinlik Yönetimi",
     "ad management": "Reklam Yönetimi",
@@ -22,7 +21,9 @@
     "not visible": "Gösterilmiyor",
     "languages": "Diller",
     "header": "Başlık",
-    "links": "Linkler"
+    "links": "Linkler",
+    "language management": "Dil Seçenekleri",
+    "language settings": "Dil Ayarları"
   },
   "posts": {
     "post order": "Haber Sirasi",
@@ -209,5 +210,9 @@
     "update favicon": "Favicon Güncelle",
     "save settings": "Ayarları Kaydet",
     "add logo": "Logo Yukle"
+  },
+  "language": {
+    "save language settings": "Dil Ayarlarını Kaydet",
+    "language": "Dil"
   }
 }

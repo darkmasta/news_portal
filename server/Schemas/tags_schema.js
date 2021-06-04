@@ -1,13 +1,13 @@
-var mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
-var tagSchema = new Schema({
+const tagSchema = new Schema({
   tagText: String,
   tagName: String,
   order: Number,
   uses: Number,
-  date: { type: Date, default: Date.now },
-});
+  date: { type: Date, default: Date.now }
+})
 
-module.exports.tagSchema = tagSchema;
+module.exports.tagSchema = tagSchema
