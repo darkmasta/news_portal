@@ -43,7 +43,7 @@ export default {
           // console.log(outer_tmp_obj)
           console.log(String(message.language), outer_tmp_obj);
 
-          vm.$i18n.mergeLocaleMessage(message.language, outer_tmp_obj)
+          vm.$i18n.mergeLocaleMessage(String(message.language), outer_tmp_obj)
         });
       })
   }

@@ -12,8 +12,6 @@ const postSchema = new Schema({
   postCustomUrl: String,
   postSeoWords: String,
   postSeoUrl: String,
-  postSeoWords: String,
-  postSeoUrl: String,
   postLanguage: String,
   publishDate: Date,
   publishHour: String,
@@ -38,6 +36,14 @@ const postSchema = new Schema({
       editor: String,
       editDate: Date,
       editText: String
+    }
+  ],
+  comments: [
+    {
+      comment: String,
+      email: String,
+      isConfirmed: Boolean,
+      commentDate: Date
     }
   ],
   postLanguages: [String],

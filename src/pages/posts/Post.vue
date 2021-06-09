@@ -88,6 +88,27 @@
         </div>
     </div>
 
+  <b-row>
+    <b-col class="col-md-9 offset-3">
+      <span>Yorumlar: </span>
+      <div class="comment mb-2" v-for="comment in comments">
+        {{comment.comment}}
+
+      <span title="Delete Post" class="fas fa-times text-danger ml-5" @click="deleteComment(comment)"></span>
+      <span title="Yorumu Onayla" class="fas fa-check text-info ml-5" 
+                    @click="confirmComment(comment)"></span>
+      </div>
+      <hr />
+    </b-col>
+  </b-row>
+
+  <b-row>
+    <b-col class="col-md-9 offset-3">
+      <span>Habere Yorum Yap</span>
+      <input type="text" class="comment-input" v-model="comment_text" />
+      <b-btn @click="postComment()" class="mt-3">Yorum Yap</b-btn>
+    </b-col>
+  </b-row>
 
 
 </div>
@@ -108,6 +129,8 @@ export default {
       language: 'Turkce 🇹🇷',
       activities: [],
       post: {},
+      comments: [],
+      comment_text: '',
       customUrl: '',
       image: '',
       id: ''
@@ -164,6 +187,7 @@ export default {
                 setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
                 vm.image = process.env.VUE_APP_SERVER_URL + /images/ + response.data.postImage
                 vm.post = response.data;
+                vm.comments = vm.post.comments
                 vm.post.postImage = process.env.VUE_APP_SERVER_URL + /images/ + vm.post.postImage
                 console.log(vm.post);
             },
@@ -183,6 +207,61 @@ export default {
           var vm = this
           let id = vm.post._id
           this.$router.push({ name: 'Posts Edit', params: { id: id}})
+      },
+      postComment() {
+        const vm = this
+        const comment = vm.comment_text
+        let data = {
+          id: vm.post._id,
+          comment: comment,
+          commentDate: Date.now(),
+          email: 'test'
+        }
+        console.log(data);
+
+        axios.post(process.env.VUE_APP_SERVER_URL + "/add_comment", {data})
+            .then(
+            (response) => {
+                console.log(response.data)
+                vm.comments.push(data)
+                // setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
+            },
+            (err) => {
+                console.error(err)
+            }
+            )
+      },
+      confirmComment(comment) {
+        let data = comment
+
+        console.log(data)
+
+        axios.post(process.env.VUE_APP_SERVER_URL + "/confirm_comment", {data})
+            .then(
+            (response) => {
+                console.log(response.data)
+                // setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
+            },
+            (err) => {
+                console.error(err)
+            }
+            )
+      },
+      deleteComment(comment) {
+        let data = comment
+
+        console.log(comment); 
+
+        axios.post(process.env.VUE_APP_SERVER_URL + "/delete_comment", {data})
+            .then(
+            (response) => {
+                console.log(response.data)
+                // setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
+            },
+            (err) => {
+                console.error(err)
+            }
+            )
       }
   }
 };
@@ -393,6 +472,12 @@ header {
     position: relative;
     top: 10px;
     right: 270px;
+}
+
+.comment-input {
+  display: block;
+  width: 60%;
+  height: 100px;
 }
 
 </style>

@@ -114,17 +114,7 @@ export default {
     vm.enMessages = enMessages;
     vm.trMessages = trMessages;
 
-    console.log(Object.keys(enMessages['main']))
-    /*
-    var serverMessages = {
-      "main": {
-        "post management": "test"
-      }
-    }
-    vm.$i18n.mergeLocaleMessage("en", serverMessages)
-    */
-
-
+    // console.log(Object.keys(enMessages['main']))
 
 
   },
@@ -154,24 +144,25 @@ export default {
         language = 'fr'
         var data = {language: language, 
                       category:messageCategory.title,
-                      text: message,
+                      text: index,
                       translation: editedMessage
                       }
       } else if (this.selectedLanguage[0] == "A") {          
         language = 'ar'
         var data = {language: language, 
                       category:messageCategory.title,
-                      text: message,
+                      text: index,
                       translation: editedMessage
                       }
       } else if (this.selectedLanguage[0] == 'U') {
         language = 'uk'
         var data = {language: language, 
                       category:messageCategory.title,
-                      text: message,
+                      text: index,
                       translation: editedMessage
                       }
       }
+
       axios
         .post(process.env.VUE_APP_SERVER_URL + "/create_translation", {data})
         .then((response) => {

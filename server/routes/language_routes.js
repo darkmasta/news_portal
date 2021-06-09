@@ -21,14 +21,20 @@ router.post('/create_translation', jsonParser, (req, res) => {
     res.json('Authentication Error')
   }
 
-  const Translation = new Translations.Translation({
-    language: languageData.language,
-    category: languageData.category,
-    text: languageData.text,
-    translation: languageData.translation
-  })
-
-  Translation.save()
+  Translation.updateOne(
+    {
+      language: languageData.language,
+      category: languageData.category,
+      text: languageData.text
+    },
+    {
+      language: languageData.language,
+      category: languageData.category,
+      text: languageData.text,
+      translation: languageData.translation
+    },
+    { upsert: true }
+  )
     .then(translation => res.json('success'))
     .catch(err => res.json(err))
 })

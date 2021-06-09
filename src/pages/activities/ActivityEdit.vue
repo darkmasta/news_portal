@@ -165,7 +165,16 @@
 
             <b-row>
               <b-col class="offset-10">
-                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">Etkinlik Ekle</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
+                    v-if="isConfirmed == false" @click="isConfirmed = true">Onayla</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" 
+                    v-if="isConfirmed == true" @click="isConfirmed = false">Red</b-btn>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col class="offset-10">
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitActivity">Etkinlik Guncelle</b-btn>
               </b-col>
             </b-row>
           </b-card-body>
@@ -206,6 +215,7 @@ data: () => ({
   activityTypeList: ['Konferans', 'Panel', 'Söyleşi'],
   activityType: '',
   status: '',
+  isConfirmed: false,
   toggleEditImage: false,
   imageName: '',
   image: null,

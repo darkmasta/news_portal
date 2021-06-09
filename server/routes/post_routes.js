@@ -171,6 +171,67 @@ router.post('/update_post', jsonParser, (req, res) => {
   })
 })
 
+router.post('/add_comment', jsonParser, (req, res) => {
+  const postData = req.body.data
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin' && !isAdmin === 'editor' && !isAdmin === 'writer') {
+    res.json('Authentication Error')
+  }
+
+  Post.updateOne(
+    { _id: postData.id },
+    {
+      $addToSet: {
+        comments: {
+          email: postData.email,
+          comment: postData.comment,
+          commentDate: postData.commentDate,
+          isConfirmed: false
+        }
+      }
+    }
+  ).then(doc => res.json('success'))
+})
+
+router.post('/confirm_comment', jsonParser, (req, res) => {
+  const commentData = req.body.data
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin') {
+    res.json('Authentication Error')
+  }
+
+  Post.updateOne(
+    { 'comments._id': commentData._id },
+    {
+      $set: {
+        'comments.$.isConfirmed': true
+      }
+    }
+  ).then(doc => res.json('success'))
+})
+
+router.post('/delete_comment', jsonParser, (req, res) => {
+  const commentData = req.body.data
+  const { isAdmin } = decodeCookie(req.cookies.defensehere)
+
+  if (!isAdmin === 'admin') {
+    res.json('Authentication Error')
+  }
+
+  Post.updateOne(
+    { 'comments._id': commentData._id },
+    {
+      $pull: {
+        comments: {
+          _id: commentData._id
+        }
+      }
+    }
+  ).then(doc => res.json('success'))
+})
+
 router.post('/carousel_image', jsonParser, (req, res) => {
   const postData = req.body
   const { isAdmin } = decodeCookie(req.cookies.defensehere)
