@@ -59,7 +59,7 @@
                 <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
                     class="categories__single-category"
                     :class="{expand_category: clickedCategory == index,
-                            collapse_category: clickedCategory != index }">
+                            expand_category: clickedCategory != index }">
                   <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
                   <ul class="category__list">
                     <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"

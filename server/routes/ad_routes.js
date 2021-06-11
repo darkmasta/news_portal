@@ -4,10 +4,12 @@ const router = express.Router()
 const Ads = require('../Models/ads')
 const Ad = Ads.Ad
 const ba64 = require('ba64')
+const fs = require('fs')
 
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const { decodeCookie } = require('../helpers/decode-cookie')
+const { uploadFile } = require('../helpers/s3')
 
 router.post('/get_ads', jsonParser, (req, res) => {
   const promise = Ad.find({})
@@ -64,6 +66,16 @@ router.post('/create_ad', jsonParser, (req, res) => {
     if (err) throw err
 
     console.log('Ad Image saved successfully')
+    uploadFile(postData.fileName)
+      .then(data => console.log(data))
+      .catch(err => console.log('ERROR ------------ \n', err))
+
+    fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+      if (err) console.log(err)
+      else {
+        console.log('\nDeleted file: ', postData.fileName)
+      }
+    })
 
     Ad.save()
       .then(ad => res.json('success'))
@@ -92,7 +104,17 @@ router.post('/update_ad', jsonParser, (req, res) => {
     ba64.writeImage('./images/' + adData.fileName, adData.file, err => {
       if (err) res.json(err)
 
+      uploadFile(postData.fileName)
+        .then(data => console.log(data))
+        .catch(err => console.log('ERROR ------------ \n', err))
       console.log('Ad Image saved successfully')
+
+      fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+        if (err) console.log(err)
+        else {
+          console.log('\nDeleted file: ', postData.fileName)
+        }
+      })
 
       res.json('success')
     })

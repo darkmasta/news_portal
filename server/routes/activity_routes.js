@@ -4,10 +4,12 @@ const router = express.Router()
 const Activities = require('../Models/activities')
 const Activity = Activities.Activity
 const ba64 = require('ba64')
+const fs = require('fs')
 
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const { decodeCookie } = require('../helpers/decode-cookie')
+const { uploadFile } = require('../helpers/s3')
 
 router.post('/get_activities', jsonParser, (req, res) => {
   const promise = Activity.find({})
@@ -47,8 +49,18 @@ router.post('/create_activity', jsonParser, (req, res) => {
 
   ba64.writeImage('./images/' + data.fileName, data.file, err => {
     if (err) throw err
+    uploadFile(postData.fileName)
+      .then(data => console.log(data))
+      .catch(err => console.log('ERROR ------------ \n', err))
 
     console.log('Activity Image saved successfully')
+
+    fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+      if (err) console.log(err)
+      else {
+        console.log('\nDeleted file: ', postData.fileName)
+      }
+    })
 
     Activity.save()
       .then(activity => res.json('success'))
@@ -84,6 +96,16 @@ router.post('/update_activity', jsonParser, (req, res) => {
         if (err) res.json(err)
 
         console.log('Activity Image saved successfully')
+        uploadFile(postData.fileName)
+          .then(data => console.log(data))
+          .catch(err => console.log('ERROR ------------ \n', err))
+
+        fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+          if (err) console.log(err)
+          else {
+            console.log('\nDeleted file: ', postData.fileName)
+          }
+        })
 
         res.json('success')
       }

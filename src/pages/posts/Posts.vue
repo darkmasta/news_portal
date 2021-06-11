@@ -51,6 +51,8 @@
   </b-row>
 
 
+
+
 <div v-show="previewToggle" class="preview-container" @click="previewToggle = false;">
   <span class="close">&times;</span>
 

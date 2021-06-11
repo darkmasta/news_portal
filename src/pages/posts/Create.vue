@@ -122,11 +122,13 @@
 
             </b-row>
         </div>
-        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}">
+        <div id="navs-left-home" class="tab-pane fade video-tab" :class="{active: expandTab == 'video', show: expandTab == 'video'}">
             <b-row  class="edit_log">
               <b-col cols="6" class="offset-3 mt-2">
                 <h3>{{ $t('posts.video') }}</h3> 
               </b-col>
+
+            <span v-if="videoLoading"><i class="fas fa-spinner spinner" :class="{refresh: videoLoading == true}"></i></span>
 
               <b-col cols="6" offset="3">
                 <label>{{ $t('posts.video link') }}</label>
@@ -152,6 +154,7 @@
                 </video>
               </b-col>
             </b-row>
+
 
 
         </div>
@@ -182,7 +185,7 @@
               <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
                   class="categories__single-category"
                   :class="{expand_category: clickedCategory == index,
-                          collapse_category: clickedCategory != index }">
+                          expand_category: clickedCategory != index }">
                 <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
                 <ul class="category__list">
                   <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
@@ -533,7 +536,7 @@ export default {
       selectedCategories: [],
       postTitle: '',
       editor: DecoupledEditor,
-      editorData: '<p>Content of the editor.</p>',
+      editorData:    '',
       editorConfig: {
          // The configuration of the editor.
       },
@@ -577,7 +580,8 @@ export default {
       videoLink: '',
       videoName: '',
       videoSrc: '',
-      showInMobile: false
+      showInMobile: false,
+      videoLoading: false,
     }
   },
   beforeCreate() {
@@ -924,19 +928,22 @@ export default {
     uploadVideo(event) {
       var input = event.target
       var vm = this
+      vm.videoLoading = true
+      
 
       if (input.files && input.files[0]) {
         console.log(input.files[0])
         const formData = new FormData();
         formData.append('file', input.files[0])
 
-        axios
+        const request = axios
           .post(process.env.VUE_APP_SERVER_URL + "/upload_video", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           })
-          .then(
+
+        request.then(
             (response) => {
               console.log(response.data)
               if (response.data == "success") {
@@ -952,6 +959,10 @@ export default {
               console.log(response);
             }
           );
+
+        Promise.allSettled([request]).then( results => {
+          vm.videoLoading = false
+        })
       }
     },
     blobToBase64 (blob)  {
@@ -1305,6 +1316,28 @@ input:checked + .slider:before {
 
 .photo-name-label {
   margin-top: 6px;
+}
+
+.video-tab {
+  position: relative;
+}
+
+.spinner {
+  color: #000;
+  position: absolute;
+  z-index: 10;
+  top: 90%;
+  left: 48%;
+  font-size: 35px;
+}
+
+.refresh {
+  animation: spinIt 1.5s infinite linear;
+}
+
+@keyframes spinIt {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(359deg); } 
 }
 
 </style>

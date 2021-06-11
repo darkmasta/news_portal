@@ -9,10 +9,56 @@ const Post = Posts.Post
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const { decodeCookie } = require('../helpers/decode-cookie')
+const { uploadFile } = require('../helpers/s3')
+
+const S3 = require('aws-sdk/clients/s3')
+
+const bucketName = process.env.AWS_BUCKET_NAME
+const region = process.env.AWS_REGION
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
+
+const s3 = new S3({
+  region,
+  accessKeyId,
+  secretAccessKey
+})
 
 router.post('/get_posts', jsonParser, (req, res) => {
   Post.find({})
     .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+router.post('/create_post_interface', jsonParser, (req, res) => {
+  const postData = req.body.data
+
+  postData.postTitle = String(postData.postTitle)
+    .split('-')
+    .join(' ')
+
+  const Post = new Posts.Post({
+    owner: postData.owner,
+    ownerEmail: postData.ownerEmail,
+    content: postData.content,
+    categories: postData.categories,
+    postTitle: postData.postTitle.toLowerCase(),
+    postImage: postData.postImage,
+    postKeywords: postData.postKeywords,
+    postCustomUrl: postData.postCustomUrl,
+    postSeoUrl: postData.postSeoUrl,
+    publishDate: postData.publishDate,
+    tags: postData.tags,
+    state: postData.state,
+    postOrder: postData.postOrder,
+    manset: postData.manset,
+    views: postData.views || 0,
+    isDraft: false,
+    isLocked: false
+  })
+
+  Post.save()
+    .then(post => res.json('success'))
     .catch(err => res.json(err))
 })
 
@@ -72,6 +118,17 @@ router.post('/create_post', jsonParser, (req, res) => {
         if (err) res.json(err)
 
         console.log('Post Image saved successfully')
+
+        uploadFile(postData.fileName)
+          .then(data => console.log(data))
+          .catch(err => console.log('ERROR ------------ \n', err))
+
+        fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+          if (err) console.log(err)
+          else {
+            console.log('\nDeleted file: ', postData.fileName)
+          }
+        })
 
         Post.save()
           .then(post => res.json('success'))
@@ -164,7 +221,17 @@ router.post('/update_post', jsonParser, (req, res) => {
     ba64.writeImage('./images/' + postData.fileName, postData.file, err => {
       if (err) res.json(err)
 
+      uploadFile(postData.fileName)
+        .then(data => console.log(data))
+        .catch(err => console.log('ERROR ------------ \n', err))
       console.log('Post Image saved successfully')
+
+      fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+        if (err) console.log(err)
+        else {
+          console.log('\nDeleted file: ', postData.fileName)
+        }
+      })
 
       res.json(doc)
     })
@@ -241,7 +308,17 @@ router.post('/carousel_image', jsonParser, (req, res) => {
   ba64.writeImage('./images/' + postData.fileName, postData.file, err => {
     if (err) res.json(err)
 
+    uploadFile(postData.fileName)
+      .then(data => console.log(data))
+      .catch(err => console.log('ERROR ------------ \n', err))
     console.log('Carousel Image saved successfully')
+
+    fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+      if (err) console.log(err)
+      else {
+        console.log('\nDeleted file: ', postData.fileName)
+      }
+    })
 
     res.json('success')
   })
@@ -341,7 +418,29 @@ router.post('/upload_video', jsonParser, (req, res) => {
     fs.writeFile('./videos/' + fileName, file.data, function (err, result) {
       if (err) res.json(err)
       else {
-        res.json('success')
+        const fileContent = fs.readFileSync('./videos/' + fileName)
+
+        const params = {
+          Bucket: bucketName,
+          Key: fileName,
+          Body: fileContent
+        }
+
+        s3.upload(params, (err, data) => {
+          if (err) {
+            throw err
+          }
+
+          fs.unlink('./videos/' + fileName, err => {
+            if (err) console.log(err)
+            else {
+              console.log('\nDeleted file: ', fileName)
+            }
+          })
+
+          console.log(`File uploaded successfully. ${data.location}`)
+          res.json('success')
+        })
       }
     })
   }
@@ -355,7 +454,18 @@ router.get('/video/:id', jsonParser, (req, res) => {
 
   const videoPath = req.params.id
 
-  res.sendFile(videoPath, { root: './videos' })
+  const params = {
+    Bucket: bucketName,
+    Key: videoPath
+  }
+
+  s3.getObject(params)
+    .on('httpHeaders', function (statusCode, headers) {
+      res.set('Content-Length', headers['content-length'])
+      res.set('Content-Type', headers['content-type'])
+      this.response.httpResponse.createUnbufferedStream().pipe(res)
+    })
+    .send()
 })
 
 module.exports = router

@@ -11,13 +11,26 @@ const moment = require('moment')
 const https = require('https')
 moment.locale('en')
 const path = require('path')
-
+const { getFileStream } = require('./helpers/s3')
 const PORT = process.env.PORT || 5000
 
 // lets require/import the mongodb native drivers.
 const mongoose = require('mongoose')
 
 mongoose.Promise = require('bluebird')
+
+const S3 = require('aws-sdk/clients/s3')
+
+const bucketName = process.env.AWS_BUCKET_NAME
+const region = process.env.AWS_REGION
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
+
+const s3 = new S3({
+  region,
+  accessKeyId,
+  secretAccessKey
+})
 
 const UserRoutes = require('./routes/user_routes')
 const CategoryRoutes = require('./routes/category_routes')
@@ -92,11 +105,39 @@ app.post(
 )
 
 app.get('/images/:id', jsonParser, (req, res) => {
+  let id = req.params.id
+
+  id = id.split('.')[0]
+
+  const downloadParams = {
+    Key: id,
+    Bucket: bucketName
+  }
+
+  s3.getObject(downloadParams)
+    .createReadStream()
+    .on('error', e => {
+      // handle aws s3 error from createReadStream
+      console.log(e)
+      res.json(e)
+    })
+    .pipe(res)
+    .on('data', data => {
+      // retrieve data
+    })
+    .on('end', () => {
+      // stream has ended
+    })
+})
+
+/*
+app.get('/images/:id', jsonParser, (req, res) => {
   const id = req.params.id
 
-  path.resolve('temp/index.html')
+  // path.resolve('temp/index.html')
   res.sendFile(id, { root: './images' })
 })
+*/
 
 app.listen(PORT, () =>
   console.log(`Defensehere web listening on port ${PORT}!`)

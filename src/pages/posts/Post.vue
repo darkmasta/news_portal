@@ -179,7 +179,7 @@ export default {
         let data2 = {}
         console.log(vm.$route.params.id)
         data2.postTitle = vm.post.postTitle || vm.$route.params.id.split('-').join(' ') 
-
+	console.log(data2);
         axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_title", {data2})
             .then(
             (response) => {
