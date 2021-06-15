@@ -464,7 +464,7 @@
 
     <div class="divider mt-4 mb-4"></div>
 
-     <b-row class="editor-container mt-3">
+     <b-row class="editor-container mt-3 mobile-editor">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
           <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @ready="onReady"></ckeditor>
@@ -1232,6 +1232,13 @@ input:checked + .slider:before {
 
 .get-image-button:hover {
   background: #2fb37f;
+}
+
+@media only screen and (max-width: 699px) {
+  .mobile-editor {
+    overflow: scroll; 
+    margin-left: 100px;
+  }
 }
 
 .editor_center {

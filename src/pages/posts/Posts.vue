@@ -46,10 +46,19 @@
       </div>
       <div class="col-sm">
         <b-pagination v-if="totalItems" v-model="currentPage" class="justify-content-center justify-content-sm-end" :total-rows="totalItems" :per-page="perPage" size="sm" />
+        <nav class="second-pagination">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" @click="currentBigPage = currentBigPage - 100" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" @click="currentBigPage = currentBigPage - 100" href="#">{{currentBigPage - 100}}</a></li>
+            <li class="page-item"><a class="page-link active" href="#">{{currentBigPage}}</a></li>
+            <li class="page-item"><a class="page-link" @click="currentBigPage = currentBigPage + 100" href="#">{{currentBigPage + 100}}</a></li>
+            <li class="page-item"><a class="page-link" @click="currentBigPage = currentBigPage + 200" href="#">{{currentBigPage + 200}}</a></li>
+            <li class="page-item"><a class="page-link" @click="currentBigPage = currentBigPage + 100" href="#">Next</a></li>
+          </ul>
+        </nav>
       </div>
     </b-col>
   </b-row>
-
 
 
 
@@ -91,6 +100,7 @@ export default {
     // pagination
     perPage: 10,
     currentPage: 1,
+    currentBigPage: 100,
     }
   },
   computed: {
@@ -169,11 +179,46 @@ export default {
       return Math.floor(this.totalItems / this.perPage) || (this.totalItems ? 1 : 0)
     },
   },
+  watch: {
+    currentBigPage: function(newPageNumber, oldPageNumber) {
+      const vm = this
+      if (newPageNumber <= 100) {
+        vm.currentBigPage = 100
+      } else if (newPageNumber > 100) {
+        let page = Math.floor(vm.currentBigPage / 100)
+        let data = { page }
+        console.log(page);
+        axios
+          .post(process.env.VUE_APP_SERVER_URL + "/get_posts/", {data})
+          .then((response) => {
+            console.log(response.data);
+            vm.posts = response.data
+                vm.posts.forEach(post => {
+                  var tmp_post = {
+                    id: post._id.slice(-4),
+                    date: moment(post.date).format('DD/MM/YYYY, h:mm:ss a'),
+                    status: post.isDraft ? 'Taslak' : 'Aktif',
+                    postImage: process.env.VUE_APP_SERVER_URL + '/images/' + post.postImage,
+                    Baslik: post.postTitle,
+                    details: post._id,
+                    order: post.postOrder || '---',
+                    owner: post.owner || '---',
+                    views: '' + post.views || '---',
+                    language:  String(post?.postLanguage).slice(-4) || '---'
+                  }
+                  vm.postsTableData.push(tmp_post)
+                })
+                vm.originalPostsTableData = vm.postsTableData
+          });
+      }
+    } 
+  },
   created() {
     var vm = this
+    let data = { page: 0 }
     
     axios
-      .post(process.env.VUE_APP_SERVER_URL + "/get_posts/", {})
+      .post(process.env.VUE_APP_SERVER_URL + "/get_posts/", {data})
       .then((response) => {
         console.log(response.data);
         vm.posts = response.data
@@ -334,6 +379,15 @@ export default {
 .preview-image {
   max-width: 90vw;
   height: auto;
+}
+
+.second-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.second-pagination .active {
+  background: #282F65;
 }
 
 </style>

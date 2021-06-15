@@ -25,7 +25,13 @@ const s3 = new S3({
 })
 
 router.post('/get_posts', jsonParser, (req, res) => {
+  // const data = req.body.data
+  // const page = req.body.page || 0
+  // const perPage = req.body.perPage || 100
+
   Post.find({})
+    // .skip(perPage * page)
+    // .limit(perPage)
     .then(posts => res.json(posts))
     .catch(err => res.json(err))
 })
@@ -36,6 +42,10 @@ router.post('/create_post_interface', jsonParser, (req, res) => {
   postData.postTitle = String(postData.postTitle)
     .split('-')
     .join(' ')
+
+  postData.postImage = String(postData.postImage)
+    .split('/')
+    .pop()
 
   const Post = new Posts.Post({
     owner: postData.owner,

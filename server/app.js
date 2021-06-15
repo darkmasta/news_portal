@@ -107,7 +107,7 @@ app.post(
 app.get('/images/:id', jsonParser, (req, res) => {
   let id = req.params.id
 
-  id = id.split('.')[0]
+  // id = id.split('.')[0]
 
   const downloadParams = {
     Key: id,
@@ -119,7 +119,7 @@ app.get('/images/:id', jsonParser, (req, res) => {
     .on('error', e => {
       // handle aws s3 error from createReadStream
       console.log(e)
-      res.sendFile(id, { root: './images' })
+      res.json(e)
     })
     .pipe(res)
     .on('data', data => {
