@@ -239,6 +239,15 @@ export default {
             })
             vm.originalPostsTableData = vm.postsTableData
       });
+
+      /*
+      // data = {"category": "ASELSAN", limit: 2}
+      axios.post(process.env.VUE_APP_SERVER_URL + "/get_posts_manset/", {data})
+           .then((response) => {
+             console.log("===========")
+             console.log(response.data);
+           })
+           */
     
 
   },

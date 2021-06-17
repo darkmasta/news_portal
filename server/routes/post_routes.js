@@ -36,6 +36,27 @@ router.post('/get_posts', jsonParser, (req, res) => {
     .catch(err => res.json(err))
 })
 
+router.post('/get_posts_manset', jsonParser, (req, res) => {
+  Post.find({ manset: true })
+    .limit(20)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+router.post('/post_by_category', jsonParser, (req, res) => {
+  const postData = req.body.data
+  const limit = postData.limit || null
+
+  Post.find({ categories: postData.category })
+    .limit(limit)
+    .then(posts => {
+      res.json(posts)
+    })
+    .catch(err => {
+      if (err) res.json(err)
+    })
+})
+
 router.post('/create_post_interface', jsonParser, (req, res) => {
   const postData = req.body.data
 
