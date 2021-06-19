@@ -201,7 +201,7 @@ export default {
             vm.ads.forEach(ad=> {
               console.log(ad)
               var tmp_ad= {
-                position: ad.adPosition || '---',
+                position: ad.adLocation || '---',
                 status: (ad.status == 'unconfirmed') ? vm.$i18n.t('unconfirmed') : vm.$i18n.t('confirmed'),
                 owner: ad.owner,
                 adType: ad.adType,

@@ -17,6 +17,30 @@ router.post('/get_ads', jsonParser, (req, res) => {
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
+router.post('/get_ads_top_most', jsonParser, (req, res) => {
+  const promise = Ad.find({ adLocation: 'Ana Sayfa En Üst' }).limit(3)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
+router.post('/get_ads_top', jsonParser, (req, res) => {
+  const promise = Ad.find({ adLocation: 'Ana Sayfa Üst' }).limit(3)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
+router.post('/get_ads_middle', jsonParser, (req, res) => {
+  const promise = Ad.find({ adLocation: 'Ana Sayfa Orta' }).limit(3)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
+router.post('/get_ads_bottom', jsonParser, (req, res) => {
+  const promise = Ad.find({ adLocation: 'Ana Sayfa Alt' }).limit(3)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
 router.post('/get_ad', jsonParser, (req, res) => {
   const adData = req.body.data
 
@@ -57,6 +81,7 @@ router.post('/create_ad', jsonParser, (req, res) => {
     adType: data.adType,
     adName: data.adName,
     adLanguage: data.adLanguage,
+    adLocation: data.adLocation,
     link: data.link,
     status: 'unconfirmed',
     adImage: data.fileName
@@ -98,6 +123,7 @@ router.post('/update_ad', jsonParser, (req, res) => {
       status: adData.status,
       adLanguage: adData.adLanguage,
       adImage: adData.fileName,
+      adLocation: adData.adLocation,
       link: adData.link
     }
   ).then(doc => {

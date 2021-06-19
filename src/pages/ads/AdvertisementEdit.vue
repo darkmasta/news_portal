@@ -262,6 +262,7 @@ methods: {
           formData.append("owner", vm.owner)
           formData.append("adTitle", vm.ad.adTitle)
           formData.append("adType", vm.adType)
+          formData.append("adLocation", vm.adLocation)
           formData.append("status", '')
           formData.append("id", vm.id)
 

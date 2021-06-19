@@ -158,7 +158,7 @@ export default {
     adImage: '',
     adTypeList: ['Ana Sayfa', 'Haber Detay', 'Diger'],
     adType: '',
-    adLocationList: ['Ana Sayfa Ust Sag', 'Ana Sayfa Ust Sol', 'Haber Detay 1', 'Haber Detay  2'],
+    adLocationList: ['Ana Sayfa En Üst', 'Ana Sayfa Üst', 'Ana Sayfa Orta', 'Ana Sayfa Alt'],
     adLocation: '',
     adStatusList: ['Aktif', 'Pasif' ],
     adStatus: '',
@@ -178,6 +178,7 @@ export default {
 
       vm.owner = this.$store.getters.getUser
       console.log(vm.owner)
+
   },
   methods: {
     submitAd: function () {
@@ -196,6 +197,7 @@ export default {
             formData.append("owner", vm.owner)
             formData.append("link", vm.adLink)
             formData.append("adLanguage", vm.adLanguage)
+            formData.append("adLocation", vm.adLocation)
 
             console.log(formData)
 
