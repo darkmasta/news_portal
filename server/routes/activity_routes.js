@@ -38,7 +38,7 @@ router.post('/create_activity', jsonParser, (req, res) => {
     activityTitle: data.activityTitle,
     activityType: data.activityType,
     status: 'unconfirmed',
-    activityImage: data.fileName + '.jpeg',
+    activityImage: data.fileName,
     startDate: data.startDate,
     endDate: data.endDate,
     activityText: data.activityText,
@@ -49,16 +49,16 @@ router.post('/create_activity', jsonParser, (req, res) => {
 
   ba64.writeImage('./images/' + data.fileName, data.file, err => {
     if (err) throw err
-    uploadFile(postData.fileName)
+    uploadFile(data.fileName)
       .then(data => console.log(data))
       .catch(err => console.log('ERROR ------------ \n', err))
 
     console.log('Activity Image saved successfully')
 
-    fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+    fs.unlink('./images/' + data.fileName + '.jpeg', err => {
       if (err) console.log(err)
       else {
-        console.log('\nDeleted file: ', postData.fileName)
+        console.log('\nDeleted file: ', data.fileName)
       }
     })
 
@@ -96,14 +96,14 @@ router.post('/update_activity', jsonParser, (req, res) => {
         if (err) res.json(err)
 
         console.log('Activity Image saved successfully')
-        uploadFile(postData.fileName)
+        uploadFile(activityData.fileName)
           .then(data => console.log(data))
           .catch(err => console.log('ERROR ------------ \n', err))
 
-        fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+        fs.unlink('./images/' + activityData.fileName + '.jpeg', err => {
           if (err) console.log(err)
           else {
-            console.log('\nDeleted file: ', postData.fileName)
+            console.log('\nDeleted file: ', activityData.fileName)
           }
         })
 

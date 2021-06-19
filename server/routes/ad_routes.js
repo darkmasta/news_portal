@@ -136,15 +136,15 @@ router.post('/update_ad', jsonParser, (req, res) => {
     ba64.writeImage('./images/' + adData.fileName, adData.file, err => {
       if (err) res.json(err)
 
-      uploadFile(postData.fileName)
+      uploadFile(adData.fileName)
         .then(data => console.log(data))
         .catch(err => console.log('ERROR ------------ \n', err))
       console.log('Ad Image saved successfully')
 
-      fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+      fs.unlink('./images/' + adData.fileName + '.jpeg', err => {
         if (err) console.log(err)
         else {
-          console.log('\nDeleted file: ', postData.fileName)
+          console.log('\nDeleted file: ', adData.fileName)
         }
       })
 
