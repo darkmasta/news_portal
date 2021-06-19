@@ -53,27 +53,27 @@ router.post('/create_ad', jsonParser, (req, res) => {
   const Ad = new Ads.Ad({
     owner: data.owner,
     ownerEmail: email,
-    adTitle: data.adTitle,
+    adTitle: data.adName,
     adType: data.adType,
     adName: data.adName,
     adLanguage: data.adLanguage,
     link: data.link,
     status: 'unconfirmed',
-    adImage: data.fileName + '.jpeg'
+    adImage: data.fileName
   })
 
   ba64.writeImage('./images/' + data.fileName, data.file, err => {
     if (err) throw err
 
     console.log('Ad Image saved successfully')
-    uploadFile(postData.fileName)
+    uploadFile(data.fileName)
       .then(data => console.log(data))
       .catch(err => console.log('ERROR ------------ \n', err))
 
-    fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+    fs.unlink('./images/' + data.fileName + '.jpeg', err => {
       if (err) console.log(err)
       else {
-        console.log('\nDeleted file: ', postData.fileName)
+        console.log('\nDeleted file: ', data.fileName)
       }
     })
 

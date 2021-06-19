@@ -6,8 +6,8 @@ const ObjectId = Schema.Types.ObjectId
 const adSchema = new Schema({
   owner: String,
   ownerEmail: String,
-  adName: { type: String, unique: true },
-  adTitle: { type: String, unique: true },
+  adName: String,
+  adTitle: String,
   adType: String,
   adLanguage: String,
   adImage: { type: String, required: true },
