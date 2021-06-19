@@ -57,6 +57,40 @@ router.post('/post_by_category', jsonParser, (req, res) => {
     })
 })
 
+router.post('/get_posts_most_read_yesterday', jsonParser, (req, res) => {
+  Post.find({
+    publishDate: { $lt: new Date(Date.now() - 60 * 60 * 24 * 1000) }
+  })
+    .sort({ views: 'desc' })
+    .limit(5)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+router.post('/get_posts_most_read_last_week', jsonParser, (req, res) => {
+  Post.find({
+    publishDate: {
+      $lt: new Date(new Date() - 7 * 60 * 60 * 24 * 1000)
+    }
+  })
+    .sort({ views: 'desc' })
+    .limit(5)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+router.post('/get_posts_most_read_last_month', jsonParser, (req, res) => {
+  Post.find({
+    publishDate: {
+      $lt: new Date(new Date() - 30 * 60 * 60 * 24 * 1000)
+    }
+  })
+    .sort({ views: 'desc' })
+    .limit(5)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
 router.post('/create_post_interface', jsonParser, (req, res) => {
   const postData = req.body.data
 

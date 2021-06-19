@@ -156,7 +156,7 @@ export default {
     adName: '',
     adTitle: '',
     adImage: '',
-    adTypeList: ['Ana Sayfa', 'Haber Detay', 'Diger'],
+    adTypeList: ['Ana Sayfa', 'Haber Detay', 'Diger', 'Röportaj'],
     adType: '',
     adLocationList: ['Ana Sayfa En Üst', 'Ana Sayfa Üst', 'Ana Sayfa Orta', 'Ana Sayfa Alt'],
     adLocation: '',
@@ -179,6 +179,15 @@ export default {
       vm.owner = this.$store.getters.getUser
       console.log(vm.owner)
 
+          /*
+            axios
+              .post(process.env.VUE_APP_SERVER_URL + "/get_posts_most_read_yesterday", {
+              })
+              .then(
+                (response) => {
+                  console.log("MOST READ", response.data);
+                })
+                */
   },
   methods: {
     submitAd: function () {

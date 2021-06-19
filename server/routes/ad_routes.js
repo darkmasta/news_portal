@@ -41,6 +41,12 @@ router.post('/get_ads_bottom', jsonParser, (req, res) => {
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
+router.post('/get_ads_roportaj', jsonParser, (req, res) => {
+  const promise = Ad.find({ adType: 'Röportaj' }).limit(5)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
 router.post('/get_ad', jsonParser, (req, res) => {
   const adData = req.body.data
 
