@@ -119,7 +119,7 @@ app.get('/images/:id', jsonParser, (req, res) => {
     .on('error', e => {
       // handle aws s3 error from createReadStream
       console.log(e)
-      res.json(e)
+      // res.json(e)
     })
     .pipe(res)
     .on('data', data => {

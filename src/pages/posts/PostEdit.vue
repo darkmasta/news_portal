@@ -26,7 +26,7 @@
         <li class="nav-item">
           <a class="nav-link" 
            data-toggle="tab" href="#" :class="{active: expandTab == 'postImage'}"
-                  @click="expandTab = 'postImage'">Haber Resmi</a>
+                  @click="expandTab = 'postImage'; getImage()">Haber Resmi</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" 
@@ -497,6 +497,7 @@ export default {
     videoLink: '',
     videoName: '',
     videoSrc: '',
+    image_url: ''
   }),
   created() {
     var vm = this;
@@ -551,7 +552,10 @@ export default {
           vm.postArabicLink = vm.post.postArabicLink
           vm.postRussianLink = vm.post.postRussianLink
           vm.postUkranianLink = vm.post.postUkranianLink
-          vm.sliderImages = vm.post.sliderImages[0].split(',')
+          vm.image_url = process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage
+          if (vm.sliderImages != undefined) {
+            // vm.sliderImages = vm.post.sliderImages[0].split(',')
+          }
           let videoName = vm.post.videoName
           vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + videoName
           vm.videoName = videoName
@@ -616,6 +620,7 @@ export default {
       });
 
     vm.owner = this.$store.getters.getUser
+
 
   },
   beforeDestroy() {
@@ -687,7 +692,7 @@ export default {
                     if (response.data == "success") {
                     vm.$notify({
                         type: 'success',
-                        text: 'Haber Resmi Yuklendi!'
+                        text: 'Haber Güncellendi'
                     });
                     }
                 });
@@ -761,7 +766,7 @@ export default {
                           this.secondTryForBugFix = false
                           vm.$notify({
                               type: 'success',
-                              text: 'Haber Resmi Yuklendi!'
+                              text: 'Haber Güncellendi'
                           });
                       }
                       });

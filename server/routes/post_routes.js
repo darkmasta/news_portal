@@ -145,7 +145,7 @@ router.post('/create_post', jsonParser, (req, res) => {
         categories: postData.categories,
         postTitle: postData.postTitle.toLowerCase(),
         topic: postData.topic,
-        postImage: postData.fileName + '.jpeg',
+        postImage: postData.fileName,
         postKeywords: postData.postKeywords,
         postCustomUrl: postData.postCustomUrl,
         postSeoWords: postData.postSeoWords,
@@ -264,7 +264,7 @@ router.post('/update_post', jsonParser, (req, res) => {
       categories: postData.categories,
       postTitle: postData.postTitle.toLowerCase(),
       topic: postData.topic,
-      postImage: postData.fileName + '.jpeg',
+      postImage: postData.fileName,
       postKeywords: postData.postKeywords,
       postCustomUrl: postData.postCustomUrl,
       postSeoWords: postData.postSeoWords,
@@ -298,7 +298,7 @@ router.post('/update_post', jsonParser, (req, res) => {
         }
       })
 
-      res.json(doc)
+      res.json('success')
     })
   })
 })
