@@ -28,17 +28,17 @@
               </b-col>
               <b-col>
                 <b-form-group label="Reklam Sayfası">
-                  <b-select v-model="ad.adType" class="mb-4">
+                  <b-select v-model="adType" class="mb-4">
                     <option v-for="(adType, index) in adTypeList" 
                       :key="index" :value="adType"> 
-                      {{ad.adType}}
+                      {{adType}}
                     </option>
                   </b-select>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="Reklam Dili">
-                  <b-select v-model="ad.adLanguage" class="">
+                  <b-select v-model="adLanguage" class="">
                     <option v-for="(adLanguage, index) in languages" 
                         :key="index" :value="adLanguage"> 
                         {{adLanguage}}
@@ -51,7 +51,7 @@
             <b-row>
               <b-col>
                 <b-form-group label="Reklam Linki">
-                  <b-input v-model="ad.link" 
+                  <b-input v-model="adLink" 
                               label="Reklam Linki"
                               placeholder="Link">
                   </b-input>
@@ -69,10 +69,10 @@
               </b-col>
               <b-col>
                 <b-form-group label="Reklam Durumu">
-                  <b-select v-model="ad.status" class="mb-4">
+                  <b-select v-model="adStatus" class="mb-4">
                     <option v-for="(adStatus, index) in adStatusList" 
                       :key="index" :value="adStatus"> 
-                      {{ad.status}}
+                      {{adStatus}}
                     </option>
                   </b-select>
                 </b-form-group>
@@ -125,7 +125,7 @@
 
             <b-row>
               <b-col class="offset-10">
-                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">Reklam Ekle</b-btn>
+                <b-btn variant="primary" class="font-weight-bold save-order mt-4" @click="submitAd">Reklam Güncelle</b-btn>
               </b-col>
             </b-row>
           </b-card-body>
@@ -163,14 +163,7 @@ data: () => ({
   publishDate: '',
   publishHour: '',
   statusList: ['Onay Bekliyor', 'Onaylı', 'Red'],
-  activityTypeList: ['Konferans', 'Panel', 'Söyleşi'],
-  activityType: '',
   status: '',
-  toggleEditImage: false,
-  imageName: '',
-  image: null,
-  startDate: null,
-  endDate: null,
   coordinates: {
     width: 0,
     height: 0,
@@ -184,9 +177,9 @@ data: () => ({
   adName: '',
   adTitle: '',
   adImage: '',
-  adTypeList: ['Ana Sayfa', 'Haber Detay', 'Diger'],
+  adTypeList: ['Ana Sayfa', 'Haber Detay', 'Diger', 'Röportaj'],
   adType: '',
-  adLocationList: ['Ana Sayfa Ust Sag', 'Ana Sayfa Ust Sol', 'Haber Detay 1', 'Haber Detay  2'],
+  adLocationList: ['Ana Sayfa En Üst', 'Ana Sayfa Üst', 'Ana Sayfa Orta', 'Ana Sayfa Alt'],
   adLocation: '',
   adStatusList: ['Aktif', 'Pasif', 'Beklemede', 'Vakti Gecti'],
   adStatus: '',
@@ -213,10 +206,13 @@ created() {
         // setTimeout(() => { if(!vm.image) location.reload(); }, 2000);
         vm.imageName = response.data.adImage
         vm.adType = response.data.adType
-        vm.ad.adTitle = response.data.adName
+        vm.adTitle = response.data.adName
         vm.views = response.data.views
+        vm.adLanguage = vm.ad.adLanguage
+        vm.adLink = response.data.link
         vm.ad.adImage = process.env.VUE_APP_SERVER_URL + /images/ + response.data.adImage
-        vm.status = response.data.status == 'unconfirmed' ? 'Onay Bekliyor' :  'Onaylı'
+        vm.adStatus = response.data.status
+        vm.adLocation = response.data.adLocation
     },
     (err) => {
         console.error(err)
@@ -228,14 +224,6 @@ methods: {
   submitAd() {
     var vm = this
     const { coordinates, canvas } = this.$refs.cropper.getResult();
-    if (!canvas) {
-      vm.$notify({
-          type: 'warn',
-          text: 'Lutfen Reklam Resmini Kontrol Ediniz!',
-          duration: 3000,
-      });
-      return
-    }
     if (!vm.imageName) {
       vm.$notify({
           type: 'warn',
@@ -252,7 +240,40 @@ methods: {
       });
       return
     }
-    if (canvas) {
+    if (!canvas) {
+      const formData = new FormData();
+      formData.append('file', "null");
+      formData.append('fileName', vm.imageName);
+      formData.append("owner", vm.owner)
+      formData.append("adTitle", vm.ad.adTitle)
+      formData.append("adType", vm.adType)
+      formData.append("adLocation", vm.adLocation)
+      formData.append("adLanguage", vm.adLanguage)
+      formData.append("adLink", vm.adLink)
+      formData.append("status", vm.adStatus)
+      formData.append("id", vm.id)
+
+      console.log(formData)
+
+      axios
+        .post(process.env.VUE_APP_SERVER_URL + "/update_ad/", formData, {
+            headers: {
+            "Content-Type": "multipart/form-data",
+            }, 
+        })
+        .then((response) => {
+          var data = response.data;
+          console.log(data);
+          if (response.data == "success") {
+            vm.$notify({
+                type: 'success',
+                text: 'Reklam Guncellendi!'
+            });
+              location.reload()
+          }
+        });
+    }
+    else if (canvas) {
       const formData = new FormData();
       canvas.toBlob(blob => {
         vm.blobToBase64(blob).then(res => {
@@ -263,7 +284,9 @@ methods: {
           formData.append("adTitle", vm.ad.adTitle)
           formData.append("adType", vm.adType)
           formData.append("adLocation", vm.adLocation)
-          formData.append("status", '')
+          formData.append("adLanguage", vm.adLanguage)
+          formData.append("adLink", vm.adLink)
+          formData.append("status", vm.adStatus)
           formData.append("id", vm.id)
 
           console.log(formData)
@@ -280,8 +303,9 @@ methods: {
               if (response.data == "success") {
                 vm.$notify({
                     type: 'success',
-                    text: 'Etkinlik Guncellendi!'
+                    text: 'Reklam Guncellendi!'
                 });
+              location.reload()
               }
             });
         });

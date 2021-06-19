@@ -124,33 +124,40 @@ router.post('/update_ad', jsonParser, (req, res) => {
     { _id: adData.id },
     {
       adTitle: adData.adTitle,
-      adName: adData.adName,
+      adName: adData.adName || adData.adTitle,
       adType: adData.adType,
       status: adData.status,
       adLanguage: adData.adLanguage,
       adImage: adData.fileName,
       adLocation: adData.adLocation,
-      link: adData.link
+      link: adData.adLink
     }
-  ).then(doc => {
-    ba64.writeImage('./images/' + adData.fileName, adData.file, err => {
-      if (err) res.json(err)
+  )
+    .then(doc => {
+      if (adData.file !== null && adData.file !== 'null') {
+        ba64.writeImage('./images/' + adData.fileName, adData.file, err => {
+          if (err) res.json(err)
 
-      uploadFile(adData.fileName)
-        .then(data => console.log(data))
-        .catch(err => console.log('ERROR ------------ \n', err))
-      console.log('Ad Image saved successfully')
+          uploadFile(adData.fileName)
+            .then(data => console.log(data))
+            .catch(err => console.log('ERROR ------------ \n', err))
+          console.log('Ad Image saved successfully')
 
-      fs.unlink('./images/' + adData.fileName + '.jpeg', err => {
-        if (err) console.log(err)
-        else {
-          console.log('\nDeleted file: ', adData.fileName)
-        }
-      })
-
-      res.json('success')
+          fs.unlink('./images/' + adData.fileName + '.jpeg', err => {
+            if (err) console.log(err)
+            else {
+              console.log('\nDeleted file: ', adData.fileName)
+            }
+          })
+          res.json('success')
+        })
+      } else if (adData.file === 'null') {
+        res.json('success')
+      }
     })
-  })
+    .catch(err => {
+      if (err) res.json(err)
+    })
 })
 
 router.post('/confirm_ad', jsonParser, (req, res) => {
