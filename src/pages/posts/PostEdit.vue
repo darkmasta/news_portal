@@ -5,6 +5,8 @@
           <h2 style="text-decoration: underline;">Edit Post</h2>
           <span class="info_message">{{info_message}}</span>
       </div>
+
+      <span v-if="posting"><i class="fas fa-spinner spinner2" :class="{refresh: videoLoading == true}"></i></span>
     </div>
     <div class="nav-tabs-left">
       <ul class="nav nav-tabs">
@@ -497,7 +499,8 @@ export default {
     videoLink: '',
     videoName: '',
     videoSrc: '',
-    image_url: ''
+    image_url: '',
+    posting: false,
   }),
   created() {
     var vm = this;
@@ -651,6 +654,7 @@ export default {
         canvas.toBlob(blob => {
           vm.blobToBase64(blob).then(res => {
             const formData = new FormData();
+            vm.posting = true
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
             formData.append('toggleEditImage', vm.toggleEditImage);
@@ -694,6 +698,8 @@ export default {
                         type: 'success',
                         text: 'Haber Güncellendi'
                     });
+                    vm.posting = false
+                    vm.$router.push({name: 'Posts'})
                     }
                 });
           });
@@ -725,6 +731,7 @@ export default {
                 canvas.toBlob(blob => {
                   vm.blobToBase64(blob).then(res => {
                       const formData = new FormData();
+                      vm.posting = true
                       formData.append('file', res);
                       formData.append('fileName', vm.imageName);
                       formData.append('toggleEditImage', vm.toggleEditImage);
@@ -768,6 +775,8 @@ export default {
                               type: 'success',
                               text: 'Haber Güncellendi'
                           });
+                          vm.posting = false
+                          vm.$router.push({name: 'Posts'})
                       }
                       });
                   });
@@ -1201,6 +1210,15 @@ input:checked + .slider:before {
 .editor_center {
   display: block;
   width: 1200px;
+}
+
+.spinner2 {
+  color: #000;
+  position: absolute;
+  z-index: 10;
+  top: 90%;
+  left: 48%;
+  font-size: 35px;
 }
 
 .ck-toolbar {

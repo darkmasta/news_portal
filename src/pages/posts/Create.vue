@@ -5,6 +5,8 @@
           <h2 style="text-decoration: underline;">{{ $t('posts.create post')}}</h2>
           <span class="info_message">{{info_message}}</span>
       </div>
+
+      <span v-if="posting"><i class="fas fa-spinner spinner2" :class="{refresh: videoLoading == true}"></i></span>
     </div>
     <div class="nav-tabs-left">
       <ul class="nav nav-tabs">
@@ -582,6 +584,7 @@ export default {
       videoSrc: '',
       showInMobile: false,
       videoLoading: false,
+      posting: false,
     }
   },
   beforeCreate() {
@@ -700,6 +703,7 @@ export default {
               })
               return;
             }
+            vm.posting = true
             formData.append('file', res);
             formData.append('fileName', vm.imageName);
             formData.append('toggleEditImage', vm.toggleEditImage);
@@ -742,6 +746,7 @@ export default {
                       type: 'success',
                       text: 'Haber Resmi Yuklendi!'
                   });
+                  
                   vm.selectedTagIds.forEach(tagId => {
                     let data = {id: tagId}
 
@@ -753,6 +758,8 @@ export default {
 
                   })
                   localStorage.removeItem('images')
+                  vm.posting = false
+                  vm.$router.push({name: 'Posts'})
                 }
               });
             })
@@ -820,6 +827,7 @@ export default {
                 })
                 return;
               }
+              vm.posting = true
               formData.append('fileName', vm.imageName);
               formData.append('toggleEditImage', vm.toggleEditImage);
               formData.append("editorData", vm.editorData)
@@ -862,6 +870,8 @@ export default {
                         text: 'Haber Resmi Yuklendi!'
                     });
                     localStorage.removeItem('images')
+                    vm.posting = false
+                    vm.$router.push({name: 'Posts'})
                   }
                 });
             });
@@ -1330,6 +1340,15 @@ input:checked + .slider:before {
 }
 
 .spinner {
+  color: #000;
+  position: absolute;
+  z-index: 10;
+  top: 90%;
+  left: 48%;
+  font-size: 35px;
+}
+
+.spinner2 {
   color: #000;
   position: absolute;
   z-index: 10;
