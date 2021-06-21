@@ -242,6 +242,23 @@ router.post('/post_by_title', jsonParser, (req, res) => {
     .catch(err => res.json(err))
 })
 
+router.post('/post_by_seo_url', jsonParser, (req, res) => {
+  const postData = req.body.data
+
+  const promise = Post.findOneAndUpdate(
+    { postSeoUrl: postData.postSeoUrl },
+    { $inc: { views: 1 } }
+  )
+
+  promise
+    .then(doc => {
+      Post.find({ postSeoUrl: postData.postSeoUrl }).then(doc2 =>
+        res.json(doc2.pop())
+      )
+    })
+    .catch(err => res.json(err))
+})
+
 router.post('/update_post', jsonParser, (req, res) => {
   const postData = req.body
   const { email, isAdmin } = decodeCookie(req.cookies.defensehere)

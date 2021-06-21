@@ -511,6 +511,8 @@ export default {
     vm.expandTab = 'edit',
 
 
+
+
     axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
         .then((response) => {
           vm.post = response.data;
@@ -559,6 +561,8 @@ export default {
           if (vm.sliderImages != undefined) {
             // vm.sliderImages = vm.post.sliderImages[0].split(',')
           }
+
+
           let videoName = vm.post.videoName
           vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + videoName
           vm.videoName = videoName
