@@ -89,19 +89,7 @@
             </b-row>
 
             <b-row>
-              <b-col cols="4">
-                <b-form-group label="Password">
-                  <span v-if="!edit">{{ userData.password}}</span>
-                  <b-input
-                    v-if="edit"
-                    v-model="userData.password"
-                    label="Password"
-                    placeholder="Password"
-                  >
-                  </b-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
+              <b-col cols="6">
                 <b-form-group label="Kullanici Rolu">
                 <span v-if="!edit">{{ userData.userRole }}</span>
                 <b-select v-if="edit" v-model="userRole" class="">
@@ -181,7 +169,6 @@ export default {
           vm.userData.email = userData.email;
           vm.userData.firstName = userData.firstName;
           vm.userData.lastName = userData.lastName;
-          vm.userData.password = userData.password;
           vm.userData.userRole = userData.userRole;
           vm.userRole = userData.userRole
 
@@ -201,7 +188,6 @@ export default {
           vm.userData.email = userData.email;
           vm.userData.firstName = userData.firstName;
           vm.userData.lastName = userData.lastName;
-          vm.userData.password = userData.password;
           vm.userData.userRole = userData.userRole;
           vm.userRole = userData.userRole
 

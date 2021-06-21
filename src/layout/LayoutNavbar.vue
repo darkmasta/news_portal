@@ -102,8 +102,7 @@ export default {
           'type': 'warn',
           'text': 'Giris Yapmalısınız!'
         })
-        setTimeout(() => { vm.$router.push({ name: 'Login'})}, 1000);
-
+        vm.$router.push({ name: 'Login'})
       }
     }
     )
