@@ -57,6 +57,22 @@ router.post('/post_by_category', jsonParser, (req, res) => {
     })
 })
 
+router.post('/posts_other_languages', jsonParser, (req, res) => {
+  const postData = req.body.data
+  const language = postData.language[0]
+  const limit = postData.limit || 7
+  const regexText = `/^${language}/`
+
+  Post.find({ postLanguage: { $not: { $regex: regexText } } })
+    .limit(limit)
+    .then(posts => {
+      res.json(posts)
+    })
+    .catch(err => {
+      if (err) res.json(err)
+    })
+})
+
 router.post('/get_posts_most_read_yesterday', jsonParser, (req, res) => {
   Post.find({
     publishDate: { $lt: new Date(Date.now() - 60 * 60 * 24 * 1000) }

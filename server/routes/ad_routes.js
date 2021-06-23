@@ -18,31 +18,43 @@ router.post('/get_ads', jsonParser, (req, res) => {
 })
 
 router.post('/get_ads_top_most', jsonParser, (req, res) => {
-  const promise = Ad.find({ adLocation: 'Ana Sayfa En Üst' }).limit(3)
+  const promise = Ad.find({
+    adLocation: 'Ana Sayfa En Üst',
+    status: 'Aktif'
+  }).limit(3)
 
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
 router.post('/get_ads_top', jsonParser, (req, res) => {
-  const promise = Ad.find({ adLocation: 'Ana Sayfa Üst' }).limit(3)
+  const promise = Ad.find({
+    adLocation: 'Ana Sayfa Üst',
+    status: 'Aktif'
+  }).limit(3)
 
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
 router.post('/get_ads_middle', jsonParser, (req, res) => {
-  const promise = Ad.find({ adLocation: 'Ana Sayfa Orta' }).limit(3)
+  const promise = Ad.find({
+    adLocation: 'Ana Sayfa Orta',
+    status: 'Aktif'
+  }).limit(3)
 
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
 router.post('/get_ads_bottom', jsonParser, (req, res) => {
-  const promise = Ad.find({ adLocation: 'Ana Sayfa Alt' }).limit(3)
+  const promise = Ad.find({
+    adLocation: 'Ana Sayfa Alt',
+    status: 'Aktif'
+  }).limit(3)
 
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })
 
 router.post('/get_ads_roportaj', jsonParser, (req, res) => {
-  const promise = Ad.find({ adType: 'Röportaj' }).limit(5)
+  const promise = Ad.find({ adType: 'Röportaj', status: 'Aktif' }).limit(5)
 
   promise.then(doc => res.json(doc)).catch(err => res.json(err))
 })

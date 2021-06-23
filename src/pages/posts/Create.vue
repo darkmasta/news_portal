@@ -619,11 +619,11 @@ export default {
 
     /*
     axios
-      .get(process.env.VUE_APP_SERVER_URL + "/video/" + 'test.mp4')
+      .post(process.env.VUE_APP_SERVER_URL + "/get_ads_bottom/" )
       .then((response) => {
         console.log(response.data);
       })
-    */
+      */
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})

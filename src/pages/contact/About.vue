@@ -404,12 +404,12 @@ export default {
     vm.owner = this.$store.getters.getUser
 
 
-
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_identity/")
       .then((response) => {
         console.log(response.data);
-         vm.editorData = response.data.pop().aboutContent
+        const aboutContent = response.data.pop().aboutContent
+        vm.editorData = aboutContent 
       })
 
   },
@@ -419,15 +419,19 @@ export default {
     //   console.log(vm.editorData)
 
       let data = {
-        contactContent: vm.editorData
+        aboutContent: vm.editorData
       }
+
+      console.log(vm.editorData);
+
 
       axios
         .post(process.env.VUE_APP_SERVER_URL + "/update_about/", {data})
         .then((response) => {
+          console.log(response.data);
           vm.$notify({
               type: 'success',
-              text: 'İletişim Başarıyla Güncellendi!'
+              text: 'Hakkimizda Başarıyla Güncellendi!'
           });
         })
     },
@@ -504,7 +508,7 @@ export default {
 
 
             axios
-              .post(process.env.VUE_APP_SERVER_URL + "/create_post/", formData, {
+              .post(process.env.VUE_APP_SERVER_URL + "/update_about/", formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 }, 
@@ -515,18 +519,8 @@ export default {
                 if (response.data == "success") {
                   vm.$notify({
                       type: 'success',
-                      text: 'Haber Resmi Yuklendi!'
+                      text: 'Hakkimizda Guncellendi!'
                   });
-                  vm.selectedTagIds.forEach(tagId => {
-                    let data = {id: tagId}
-
-                    axios
-                      .post(process.env.VUE_APP_SERVER_URL + "/use_tag/", {data})
-                      .then((response) => {
-                        // console.log("tag used")
-                      })
-
-                  })
                 }
               });
             })
