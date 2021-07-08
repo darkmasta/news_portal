@@ -566,4 +566,33 @@ router.get('/video/:id', jsonParser, (req, res) => {
     .send()
 })
 
+
+router.post('/posts_slider_1', jsonParser, async (req, res) => {
+  const postData = req.body.data
+  const categories = ["ABD", "TÜRKİYE", "UKRAYNA", "ALMANYA", "İSRAİL", "ÇİN"];
+  const totalRows = [];
+  categories.forEach(async C => {
+    const rowsByCategory = await Posts.find({ categories: { $in: [C] } }).limit(7);
+    const reMap = rowsByCategory.map(R => {
+      R.categories = C;
+      return R
+    })
+    totalRows = [...totalRows, ...rowsByCategory];
+  })
+
+  const mappedPosts = [];
+  totalRows.forEach(T => {
+    const isMapped = mappedPosts.find(M => M.category == T.categories);
+    if (!isMapped) {
+      mappedPosts.push({ category: T.categories, posts: [T] })
+      return;
+    }
+    isMapped.posts.push(T);
+  })
+
+
+  res.json(totalRows)
+
+})
+
 module.exports = router
