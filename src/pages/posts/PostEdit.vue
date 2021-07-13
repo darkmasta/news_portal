@@ -1,299 +1,434 @@
 <template>
-  <div style="overflow: hidden;">
+  <div style="overflow: hidden">
     <div class="row">
       <div class="col-md-12">
-          <h2 style="text-decoration: underline;">Edit Post</h2>
-          <span class="info_message">{{info_message}}</span>
+        <h2 style="text-decoration: underline">Edit Post</h2>
+        <span class="info_message">{{ info_message }}</span>
       </div>
 
-      <span v-if="posting"><i class="fas fa-spinner spinner2" :class="{refresh: videoLoading == true}"></i></span>
+      <span v-if="posting"
+        ><i
+          class="fas fa-spinner spinner2"
+          :class="{ refresh: videoLoading == true }"
+        ></i
+      ></span>
     </div>
     <div class="nav-tabs-left">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'edit'}"
-                      @click="expandTab = 'edit'">Edit Tarihi</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'edit' }"
+            @click="expandTab = 'edit'"
+            >Edit Tarihi</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'categories'}"
-                      @click="expandTab = 'categories'">Kategoriler</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'categories' }"
+            @click="expandTab = 'categories'"
+            >Kategoriler</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'tags'}"
-                      @click="expandTab = 'tags'">Etiketler</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'tags' }"
+            @click="expandTab = 'tags'"
+            >Etiketler</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'postImage'}"
-                  @click="expandTab = 'postImage'; getImage()">Haber Resmi</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'postImage' }"
+            @click="
+              expandTab = 'postImage';
+              getImage();
+            "
+            >Haber Resmi</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'postLinks'}"
-                  @click="expandTab = 'postLinks'">Haber Linkleri</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'postLinks' }"
+            @click="expandTab = 'postLinks'"
+            >Haber Linkleri</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'languages'}"
-                  @click="expandTab = 'languages'">Haber Dilleri</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'languages' }"
+            @click="expandTab = 'languages'"
+            >Haber Dilleri</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'carousel'}"
-                  @click="expandTab = 'carousel'">Albüm</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'carousel' }"
+            @click="expandTab = 'carousel'"
+            >Albüm</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-           data-toggle="tab" href="#" :class="{active: expandTab == 'video'}"
-                  @click="expandTab = 'video'">Video</a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#"
+            :class="{ active: expandTab == 'video' }"
+            @click="expandTab = 'video'"
+            >Video</a
+          >
         </li>
       </ul>
-      <div class="tab-content" style="overflow-y: scroll;">
-          <div id="navs-left-home" class="tab-pane fade carousel-tab" :class="{active: expandTab == 'carousel', show: expandTab == 'carousel'}">
-            <b-row  class="edit_log">
-              <b-col cols="6" class="offset-3 mt-2">
-                <h3>Albüm</h3> 
-              </b-col>
+      <div class="tab-content" style="overflow-y: scroll">
+        <div
+          id="navs-left-home"
+          class="tab-pane fade carousel-tab"
+          :class="{
+            active: expandTab == 'carousel',
+            show: expandTab == 'carousel',
+          }"
+        >
+          <b-row class="edit_log">
+            <b-col cols="6" class="offset-3 mt-2">
+              <h3>Albüm</h3>
+            </b-col>
 
-              <b-col cols="12">
+            <b-col cols="12">
               <div class="upload-example">
                 <div>
-                    <cropper
-                      ref="cropper2"
-                      :src="image"
-                      :transitions="true"
-                    />
+                  <cropper ref="cropper2" :src="image" :transitions="true" />
                 </div>
 
-                <div  class="reset-button" title="Reset Image" @click="reset()">
+                <div class="reset-button" title="Reset Image" @click="reset()">
                   <i class="fa fa-times"></i>
                 </div>
                 <div class="get-image-button" title="Get Image">
                   <i class="fas fa-download"></i>
                 </div>
                 <div class="img-name-text" title="Image Name">
-                  {{imageName}}
+                  {{ imageName }}
                 </div>
                 <b-col cols="6" offset="3">
                   <div class="img-name">
-                      <b-form-group label="Foto Ismi">
-                        <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
-                      </b-form-group>
+                    <b-form-group label="Foto Ismi">
+                      <b-form-input
+                        v-model="imageName"
+                        placeholder="Foto Ismi"
+                      ></b-form-input>
+                    </b-form-group>
                   </div>
                 </b-col>
                 <div class="button-wrapper">
                   <span class="button" @click="$refs.file2.click()">
-                    <input ref="file2" type="file" accept="image/*" @change="loadImage($event)">
+                    <input
+                      ref="file2"
+                      type="file"
+                      accept="image/*"
+                      @change="loadImage($event)"
+                    />
                     Görsel Ekle
                   </span>
 
-                  <span class="button ml-5" @click="crop">
-                    Kırp
-                  </span>
+                  <span class="button ml-5" @click="crop"> Kırp </span>
 
                   <label class="switch">
-                    <input v-model="toggleEditImage" type="checkbox">
+                    <input v-model="toggleEditImage" type="checkbox" />
                     <span class="slider round"></span>
-                    <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Düzenle</span>
+                    <span
+                      :class="{ switch_closed: toggleEditImage }"
+                      class="switch_text"
+                      >Resmi Düzenle</span
+                    >
                   </label>
                 </div>
                 <div class="button-wrapper">
                   <span class="button ml-5" @click="uploadImage">
-                    Albüm Resmi Yükle 
+                    Albüm Resmi Yükle
                   </span>
                 </div>
               </div>
+            </b-col>
 
-              </b-col>
-
-              <b-col cols="12 mt-5">
-                <carousel>
-                  <slide v-for="(image, index) in sliderImages" :key="index" class="slide-item">
-                    <img :src="image" />
-                  </slide>
-                </carousel>
-
-              </b-col>
-
-            </b-row>
+            <b-col cols="12 mt-5">
+              <carousel>
+                <slide
+                  v-for="(image, index) in sliderImages"
+                  :key="index"
+                  class="slide-item"
+                >
+                  <img :src="image" />
+                </slide>
+              </carousel>
+            </b-col>
+          </b-row>
         </div>
-        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'video', show: expandTab == 'video'}">
-            <b-row  class="edit_log">
-              <b-col cols="6" class="offset-3 mt-2">
-                <h3>Video Linki</h3> 
-              </b-col>
+        <div
+          id="navs-left-home"
+          class="tab-pane fade"
+          :class="{ active: expandTab == 'video', show: expandTab == 'video' }"
+        >
+          <b-row class="edit_log">
+            <b-col cols="6" class="offset-3 mt-2">
+              <h3>Video Linki</h3>
+            </b-col>
 
-              <b-col cols="6" offset="3">
-                    <b-form-group label="Video Linki">
-                      <b-form-input v-model="videoLink" placeholder="Video Linki"></b-form-input>  
-                    </b-form-group>
-              </b-col>
-            </b-row>
+            <b-col cols="6" offset="3">
+              <b-form-group label="Video Linki">
+                <b-form-input
+                  v-model="videoLink"
+                  placeholder="Video Linki"
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
 
-            <b-row>
-              <b-col cols="6" class="offset-3">
-                <span class="button" @click="$refs.video.click()">
-                  <input ref="video" type="file" @change="uploadVideo($event)" />
-                  Video Ekle
-                </span>
-              </b-col>
-            </b-row>
+          <b-row>
+            <b-col cols="6" class="offset-3">
+              <span class="button" @click="$refs.video.click()">
+                <input ref="video" type="file" @change="uploadVideo($event)" />
+                Video Ekle
+              </span>
+            </b-col>
+          </b-row>
 
-            <b-row v-if="videoName" class="mt-5">
-              <b-col cols="6" class="offset-3">
-                <video width="650" controls muted="muted" autoplay>
-                  <source :src="videoSrc" type="video/mp4">
-                </video>
-              </b-col>
-            </b-row>
-
-
+          <b-row v-if="videoName" class="mt-5">
+            <b-col cols="6" class="offset-3">
+              <video width="650" controls muted="muted" autoplay>
+                <source :src="videoSrc" type="video/mp4" />
+              </video>
+            </b-col>
+          </b-row>
         </div>
-        <div id="navs-left-home" class="tab-pane fade" :class="{active: expandTab == 'edit', show: expandTab == 'edit'}">
-            <b-row  class="edit_log">
-              <b-col cols="6" class="offset-3 mt-2">
-                <h3>Edit Tarihi</h3> 
-              </b-col>
+        <div
+          id="navs-left-home"
+          class="tab-pane fade"
+          :class="{ active: expandTab == 'edit', show: expandTab == 'edit' }"
+        >
+          <b-row class="edit_log">
+            <b-col cols="6" class="offset-3 mt-2">
+              <h3>Edit Tarihi</h3>
+            </b-col>
 
-              <b-col v-for="(log, index) in editLogs" :key="index" cols="10" class="ml-2">
-                <b-input-group prepend="Edit Log" class="mt-2">
-                  <b-form-input v-model="log.editText">
-                  </b-form-input>
-                  <b-form-input :value="log.editor" disabled></b-form-input>
-                  <div class="edit_buttons">
-                    <span class="fas fa-times" @click="removeLog(index)"></span>
-                    <span class="far fa-edit" @click="editLog(index)"></span>
-                  </div>
-                </b-input-group>
-              </b-col>
+            <b-col
+              v-for="(log, index) in editLogs"
+              :key="index"
+              cols="10"
+              class="ml-2"
+            >
+              <b-input-group prepend="Edit Log" class="mt-2">
+                <b-form-input v-model="log.editText"> </b-form-input>
+                <b-form-input :value="log.editor" disabled></b-form-input>
+                <div class="edit_buttons">
+                  <span class="fas fa-times" @click="removeLog(index)"></span>
+                  <span class="far fa-edit" @click="editLog(index)"></span>
+                </div>
+              </b-input-group>
+            </b-col>
 
-              <b-col cols="6" class="offset-3 mt-2">
-                  <h3>Son Edit Sebebi</h3> 
-              </b-col>
-              <b-col cols="10" class="ml-2">
-                  <b-input-group prepend="Son Edit Sebebi" class="mt-2">
-                      <b-form-input v-model="latestLogText"></b-form-input>
-                  </b-input-group>
-              </b-col>
-
-            </b-row>
+            <b-col cols="6" class="offset-3 mt-2">
+              <h3>Son Edit Sebebi</h3>
+            </b-col>
+            <b-col cols="10" class="ml-2">
+              <b-input-group prepend="Son Edit Sebebi" class="mt-2">
+                <b-form-input v-model="latestLogText"></b-form-input>
+              </b-input-group>
+            </b-col>
+          </b-row>
         </div>
-        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'categories', show: expandTab == 'categories'}">
-          <b-row class="edit_log"> 
+        <div
+          id="navs-left-profile"
+          class="tab-pane fade"
+          :class="{
+            active: expandTab == 'categories',
+            show: expandTab == 'categories',
+          }"
+        >
+          <b-row class="edit_log">
             <b-col class="categories__container">
-              <div v-for="(categoryTitle, index) in categoryTitles" :key="index" 
-                  class="categories__single-category"
-                  :class="{expand_category: clickedCategory == index,
-                          collapse_category: clickedCategory != index }">
-                <h3 class="category__title" @click="clickCategory(index)">{{categoryTitle}}</h3>
+              <div
+                v-for="(categoryTitle, index) in categoryTitles"
+                :key="index"
+                class="categories__single-category"
+                :class="{
+                  expand_category: clickedCategory == index,
+                  collapse_category: clickedCategory != index,
+                }"
+              >
+                <h3 class="category__title" @click="clickCategory(index)">
+                  {{ categoryTitle }}
+                </h3>
                 <ul class="category__list">
-                  <li v-for="(category, index2) in categoriesData[categoryTitle]" :key="index2"
-                    class="category__list-item">
-                    <input v-model="selectedCategories" type="checkbox" :value="category"> 
-                    {{category}}
+                  <li
+                    v-for="(category, index2) in categoriesData[categoryTitle]"
+                    :key="index2"
+                    class="category__list-item"
+                  >
+                    <input
+                      v-model="selectedCategories"
+                      type="checkbox"
+                      :value="category"
+                    />
+                    {{ category }}
                   </li>
                 </ul>
               </div>
             </b-col>
           </b-row>
           <b-row>
-              <b-col cols="12" class="mt-2 mb-2">
-                  <span>Selected Categories: </span>{{selectedCategories}}
-              </b-col>
-          </b-row>
-        </div>
-        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'tags', show: expandTab == 'tags'}">
-
-        <vue-typeahead-bootstrap
-          v-model="tag"
-          :data="tags"
-          :min-matching-chars="1"
-          @hit="addToSelectedTags"
-        />
-
-
-        <div class="selected-tags mt-5">
-          <span v-for="(selectedTag, index) in selectedTags" :key="index" class="selected-tag">{{selectedTag}}
-          <i style="color: red;" class="fas fa-times ml-2" @click="removeFromSelectedTags(index)"></i></span>
-        </div>
-
-
-        </div>
-        <div id="navs-left-messages" class="tab-pane fade images_tab" :class="{active: expandTab == 'postImage', show: expandTab == 'postImage'}">
-          <b-row >
-          <b-col cols="12">
-            <b-col cols="6" class="offset-5 mt-3 kategoriler">
-              <h3>Haber Resmi</h3> 
+            <b-col cols="12" class="mt-2 mb-2">
+              <span>Selected Categories: </span>{{ selectedCategories }}
             </b-col>
-            <div class="upload-example">
-              <div>
-                  <cropper
-                    ref="cropper"
-                    :src="image"
-                    :transitions="true"
-                  />
-              </div>
-              <div  class="reset-button" title="Reset Image" @click="reset()">
-                <i class="fa fa-times"></i>
-              </div>
-              <div class="get-image-button" title="Get Image" @click="getImage()">
-                <i class="fas fa-download"></i>
-              </div>
-              <div class="img-name-text" title="Image Name">
-                {{imageName}}
-              </div>
-              <b-col cols="6" offset="3">
-                <div class="img-name">
-                    <b-form-group label="Foto Ismi">
-                      <b-form-input v-model="imageName" placeholder="Foto Ismi"></b-form-input>  
-                    </b-form-group>
-                </div>
-              </b-col>
-              <div class="button-wrapper">
-            
-              <span class="button" @click="$refs.file.click()">
-                <input ref="file" type="file" accept="image/*" @change="loadImage($event)">
-                Görsel Ekle
-              </span>
-
-              <span class="button ml-5" @click="crop">
-                Crop 
-              </span>
-
-              <label class="switch">
-                <input v-model="toggleEditImage" type="checkbox">
-                <span class="slider round"></span>
-                <span :class="{switch_closed: toggleEditImage}" class="switch_text">Resmi Duzenle</span>
-              </label>
-
-              </div>
-            </div>
-          </b-col>
           </b-row>
         </div>
-        <div id="navs-left-messages" class="tab-pane fade" :class="{active: expandTab == 'postLinks', show: expandTab == 'postLinks'}">
+        <div
+          id="navs-left-profile"
+          class="tab-pane fade"
+          :class="{ active: expandTab == 'tags', show: expandTab == 'tags' }"
+        >
+          <vue-typeahead-bootstrap
+            v-model="tag"
+            :data="tags"
+            :min-matching-chars="1"
+            @hit="addToSelectedTags"
+          />
+
+          <div class="selected-tags mt-5">
+            <span
+              v-for="(selectedTag, index) in selectedTags"
+              :key="index"
+              class="selected-tag"
+              >{{ selectedTag }}
+              <i
+                style="color: red"
+                class="fas fa-times ml-2"
+                @click="removeFromSelectedTags(index)"
+              ></i
+            ></span>
+          </div>
+        </div>
+        <div
+          id="navs-left-messages"
+          class="tab-pane fade images_tab"
+          :class="{
+            active: expandTab == 'postImage',
+            show: expandTab == 'postImage',
+          }"
+        >
+          <b-row>
+            <b-col cols="12">
+              <b-col cols="6" class="offset-5 mt-3 kategoriler">
+                <h3>Haber Resmi</h3>
+              </b-col>
+              <div class="upload-example">
+                <div>
+                  <cropper ref="cropper" :src="image" :transitions="true" />
+                </div>
+                <div class="reset-button" title="Reset Image" @click="reset()">
+                  <i class="fa fa-times"></i>
+                </div>
+                <div
+                  class="get-image-button"
+                  title="Get Image"
+                  @click="getImage()"
+                >
+                  <i class="fas fa-download"></i>
+                </div>
+                <div class="img-name-text" title="Image Name">
+                  {{ imageName }}
+                </div>
+                <b-col cols="6" offset="3">
+                  <div class="img-name">
+                    <b-form-group label="Foto Ismi">
+                      <b-form-input
+                        v-model="imageName"
+                        placeholder="Foto Ismi"
+                      ></b-form-input>
+                    </b-form-group>
+                  </div>
+                </b-col>
+                <div class="button-wrapper">
+                  <span class="button" @click="$refs.file.click()">
+                    <input
+                      ref="file"
+                      type="file"
+                      accept="image/*"
+                      @change="loadImage($event)"
+                    />
+                    Görsel Ekle
+                  </span>
+
+                  <span class="button ml-5" @click="crop"> Crop </span>
+
+                  <label class="switch">
+                    <input v-model="toggleEditImage" type="checkbox" />
+                    <span class="slider round"></span>
+                    <span
+                      :class="{ switch_closed: toggleEditImage }"
+                      class="switch_text"
+                      >Resmi Duzenle</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </b-col>
+          </b-row>
+        </div>
+        <div
+          id="navs-left-messages"
+          class="tab-pane fade"
+          :class="{
+            active: expandTab == 'postLinks',
+            show: expandTab == 'postLinks',
+          }"
+        >
           <b-row>
             <b-row>
-            <b-col cols="12" class="publish_date_box mt-4 ml-3">
-              <b-col cols="11" class="offset-8">
+              <b-col cols="12" class="publish_date_box mt-4 ml-3">
+                <b-col cols="11" class="offset-8">
                   <b-input-group prepend="Haber Basligi" class="mt-2">
                     <b-form-input v-model="postTitle"></b-form-input>
                   </b-input-group>
+                </b-col>
+                <b-col cols="3">
+                  <b-form-group label="Yayinlanma Tarihi">
+                    <datepicker
+                      v-model="publishDate"
+                      :bootstrap-styling="true"
+                      :monday-first="true"
+                      :full-month-name="true"
+                      placeholder="Yayin Tarihi"
+                    />
+                  </b-form-group>
+                </b-col>
+                <b-col cols="3">
+                  <b-form-group label="Yayinlanma Saati">
+                    <vue-timepicker
+                      v-model="publishHour"
+                      close-on-complete
+                    ></vue-timepicker>
+                  </b-form-group>
+                </b-col>
               </b-col>
-              <b-col cols="3">
-                <b-form-group label="Yayinlanma Tarihi">
-                  <datepicker v-model="publishDate" :bootstrap-styling="true" :monday-first="true" :full-month-name="true" placeholder="Yayin Tarihi" />
-                </b-form-group>
-              </b-col>
-              <b-col cols="3">
-                <b-form-group label="Yayinlanma Saati">
-                  <vue-timepicker v-model="publishHour" close-on-complete></vue-timepicker>
-                </b-form-group>
-              </b-col>
-            </b-col>
             </b-row>
           </b-row>
 
@@ -301,9 +436,12 @@
             <b-col cols="10" class="offset-1">
               <b-form-group label="Haber Dili">
                 <b-select v-model="postLanguage" class="">
-                  <option v-for="(postLanguage, index) in languages" 
-                      :key="index" :value="postLanguage"> 
-                      {{postLanguage}}
+                  <option
+                    v-for="(postLanguage, index) in languages"
+                    :key="index"
+                    :value="postLanguage"
+                  >
+                    {{ postLanguage }}
                   </option>
                 </b-select>
               </b-form-group>
@@ -346,10 +484,20 @@
             </b-col>
           </b-row>
         </div>
-        <div id="navs-left-profile" class="tab-pane fade " :class="{active: expandTab == 'languages', show: expandTab == 'languages'}">
+        <div
+          id="navs-left-profile"
+          class="tab-pane fade"
+          :class="{
+            active: expandTab == 'languages',
+            show: expandTab == 'languages',
+          }"
+        >
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Baglantili Ingilizce Haber 🇬🇧" class="mt-2">
+              <b-input-group
+                prepend="Baglantili Ingilizce Haber 🇬🇧"
+                class="mt-2"
+              >
                 <b-form-input v-model="postEnglishLink"></b-form-input>
               </b-input-group>
             </b-col>
@@ -370,14 +518,20 @@
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Baglantili Ukraynaca Haber 🇺🇦" class="mt-2">
+              <b-input-group
+                prepend="Baglantili Ukraynaca Haber 🇺🇦"
+                class="mt-2"
+              >
                 <b-form-input v-model="postUkranianLink"></b-form-input>
               </b-input-group>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="10" class="offset-1">
-              <b-input-group prepend="Baglantili Fransizca Haber 🇫🇷" class="mt-2">
+              <b-input-group
+                prepend="Baglantili Fransizca Haber 🇫🇷"
+                class="mt-2"
+              >
                 <b-form-input v-model="postFrenchLink"></b-form-input>
               </b-input-group>
             </b-col>
@@ -388,19 +542,28 @@
 
     <div class="divider mt-4 mb-4"></div>
 
-     <b-row class="editor-container mt-3">
+    <b-row class="editor-container mt-3">
       <b-col cols="6" class="offset-7">
         <div class="editor-center mt-2">
-          <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @ready="onReady"></ckeditor>
+          <ckeditor
+            v-model="editorData"
+            :editor="editor"
+            :config="editorConfig"
+            @ready="onReady"
+          ></ckeditor>
         </div>
       </b-col>
     </b-row>
 
     <b-row class="mt-4">
       <b-col offset="9">
-         <b-btn variant="primary rounded-pill" class="new-post-btn mt-5" @click="submitPost">
+        <b-btn
+          variant="primary rounded-pill"
+          class="new-post-btn mt-5"
+          @click="submitPost"
+        >
           <span class="fas fa-plus-circle"></span> Haberi Kaydet
-         </b-btn>
+        </b-btn>
       </b-col>
     </b-row>
   </div>
@@ -409,23 +572,23 @@
 import Vue from "vue";
 import axios from "axios";
 import _ from "underscore";
-import { Cropper } from 'vue-advanced-cropper'
-import 'vue-advanced-cropper/dist/style.css';
+import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 import Datepicker from "vuejs-datepicker";
-import VueTimepicker from 'vue2-timepicker'
-import 'vue2-timepicker/dist/VueTimepicker.css'
+import VueTimepicker from "vue2-timepicker";
+import "vue2-timepicker/dist/VueTimepicker.css";
 
-import { Carousel, Slide } from 'vue-carousel';
+import { Carousel, Slide } from "vue-carousel";
 
-import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
+import VueTypeaheadBootstrap from "vue-typeahead-bootstrap";
 
-import categoryData from "../category/categories_data"
+import categoryData from "../category/categories_data";
 
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 
-import CKEditor from '@ckeditor/ckeditor5-vue2';
+import CKEditor from "@ckeditor/ckeditor5-vue2";
 
-Vue.use(CKEditor)
+Vue.use(CKEditor);
 
 export default {
   name: "posts-create",
@@ -435,29 +598,35 @@ export default {
     Slide,
     Datepicker,
     VueTypeaheadBootstrap,
-    VueTimepicker
+    VueTimepicker,
   },
   data: () => ({
-    info_message: '',
-    expandTab: 'edit',
+    info_message: "",
+    expandTab: "edit",
     expandLog: false,
     expandCategory: true,
     expandImage: true,
-    languages: ['Turkce 🇹🇷', 'Ingilizce 🇬🇧', 'Fransizca 🇫🇷', 'Arapca 🇸🇦', 'Ukraynaca 🇺🇦'],
-    postLanguage: '',
+    languages: [
+      "Turkce 🇹🇷",
+      "Ingilizce 🇬🇧",
+      "Fransizca 🇫🇷",
+      "Arapca 🇸🇦",
+      "Ukraynaca 🇺🇦",
+    ],
+    postLanguage: "",
     categoriesData: {},
     clickedCategory: undefined,
     toggleEditImage: false,
     secondTryForBugFix: false,
     saveAsDraft: false,
-    editLogDynamicText: '',
+    editLogDynamicText: "",
     categoryTitles: [],
     selectedCategories: [],
-    postTitle: '',
+    postTitle: "",
     editor: DecoupledEditor,
-    editorData: '<p>Content of the editor.</p>',
+    editorData: "<p>Content of the editor.</p>",
     editorConfig: {
-        // The configuration of the editor.
+      // The configuration of the editor.
     },
     coordinates: {
       width: 0,
@@ -467,365 +636,371 @@ export default {
     },
     result: {
       coordinates: null,
-      image: null
+      image: null,
     },
-    editLogs: [''],
-    latestLogText: '',
-    base64: '',
+    editLogs: [""],
+    latestLogText: "",
+    base64: "",
     message: "",
     file: null,
     image: null,
     imageWidth: 0,
     imageHeight: 0,
     imageName: "",
-    postCustomUrl: '',
-    publishDate: '',
-    publishHour: '',
-    postKeywords: '',
-    postSeoWords: '',
-    postSeoUrl: '',
-    postSeoHeader: '',
-    postEnglishLink: '',
-    owner: '',
-    postArabicLink: '',
-    postRussianLink: '',
-    postUkranianLink: '',
-    postFrenchLink: '',
+    postCustomUrl: "",
+    publishDate: "",
+    publishHour: "",
+    postKeywords: "",
+    postSeoWords: "",
+    postSeoUrl: "",
+    postSeoHeader: "",
+    postEnglishLink: "",
+    owner: "",
+    postArabicLink: "",
+    postRussianLink: "",
+    postUkranianLink: "",
+    postFrenchLink: "",
     user: {},
     tags: [],
-    tag: '',
+    tag: "",
     selectedTags: [],
     sliderImages: [],
-    videoLink: '',
-    videoName: '',
-    videoSrc: '',
-    image_url: '',
+    videoLink: "",
+    videoName: "",
+    videoSrc: "",
+    image_url: "",
     posting: false,
   }),
   created() {
     var vm = this;
-    let data = {}
-    data.id = vm.$route.params.id
-    vm.id = data.id
+    let data = {};
+    data.id = vm.$route.params.id;
+    vm.id = data.id;
 
-    vm.expandTab = 'edit',
-
-
-
-
-    axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", {data})
-        .then((response) => {
+    (vm.expandTab = "edit"),
+      axios.post(process.env.VUE_APP_SERVER_URL + "/post_by_id", { data }).then(
+        (response) => {
           vm.post = response.data;
           console.log(vm.post);
-          vm.editorData = vm.post.content
-          vm.publishDate = vm.post.date
-          vm.publishHour = vm.post.publishHour
-          vm.postTitle = vm.post.postTitle
-          var categoryArray = vm.post.categories[0]
-          categoryArray = categoryArray.split(',')
-          vm.selectedCategories = categoryArray
-          var tagArray = vm.post.tags[0]
-          tagArray = tagArray.split(',')
-          vm.selectedTags = tagArray
+          vm.editorData = vm.post.content;
+          vm.publishDate = vm.post.date;
+          vm.publishHour = vm.post.publishHour;
+          vm.postTitle = vm.post.postTitle;
+          var categoryArray = vm.post.categories[0];
+          categoryArray = categoryArray.split(",");
+          vm.selectedCategories = categoryArray;
+          var tagArray = vm.post.tags[0];
+          tagArray = tagArray.split(",");
+          vm.selectedTags = tagArray;
 
-          axios.get(process.env.VUE_APP_SERVER_URL + "/user")
-                .then((response) => {
-                  vm.user = response.data
-                  console.log(vm.user)
-                  if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor ) {
-                    vm.info_message = "Bu haber su anda baska birisi tarafindan gunceleniyor." +
-                                        "\n Haber guncellemeye kapalidir." + 
-                                        "Editor: " + vm.post.lockerEditor
-                  } else if (vm.post.isLocked == false) {
-                    axios.post(process.env.VUE_APP_SERVER_URL + "/lock_post", {data})
-                      .then((response) => {
-                        console.log(response.data)
-                      })
-                  }
-                })
+          axios
+            .get(process.env.VUE_APP_SERVER_URL + "/user")
+            .then((response) => {
+              vm.user = response.data;
+              console.log(vm.user);
+              if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+                vm.info_message =
+                  "Bu haber su anda baska birisi tarafindan gunceleniyor." +
+                  "\n Haber guncellemeye kapalidir." +
+                  "Editor: " +
+                  vm.post.lockerEditor;
+              } else if (vm.post.isLocked == false) {
+                axios
+                  .post(process.env.VUE_APP_SERVER_URL + "/lock_post", { data })
+                  .then((response) => {
+                    console.log(response.data);
+                  });
+              }
+            });
 
-          vm.editLogs = vm.post.logs
-          console.log("IS LOCKED",vm.post.isLocked)
+          vm.editLogs = vm.post.logs;
+          console.log("IS LOCKED", vm.post.isLocked);
 
-          vm.imageName = vm.post.postImage.split('.').shift()
-          vm.postCustomUrl = vm.post.postCustomUrl
-          vm.postKeywords = vm.post.postKeywords
-          vm.postSeoWords = vm.post.postSeoWords
-          vm.postSeoUrl = vm.post.postSeoUrl
-          vm.postSeoHeader = vm.post.postSeoHeader
-          vm.postEnglishLink = vm.post.postEnglishLink
-          vm.postArabicLink = vm.post.postArabicLink
-          vm.postRussianLink = vm.post.postRussianLink
-          vm.postUkranianLink = vm.post.postUkranianLink
-          vm.image_url = process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage
+          vm.imageName = vm.post.postImage.split(".").shift();
+          vm.postCustomUrl = vm.post.postCustomUrl;
+          vm.postKeywords = vm.post.postKeywords;
+          vm.postSeoWords = vm.post.postSeoWords;
+          vm.postSeoUrl = vm.post.postSeoUrl;
+          vm.postSeoHeader = vm.post.postSeoHeader;
+          vm.postEnglishLink = vm.post.postEnglishLink;
+          vm.postArabicLink = vm.post.postArabicLink;
+          vm.postRussianLink = vm.post.postRussianLink;
+          vm.postUkranianLink = vm.post.postUkranianLink;
+          vm.image_url =
+            process.env.VUE_APP_SERVER_URL + "/images/" + vm.post.postImage;
           if (vm.sliderImages != undefined) {
             // vm.sliderImages = vm.post.sliderImages[0].split(',')
           }
 
+          let videoName = vm.post.videoName;
+          vm.videoSrc = process.env.VUE_APP_SERVER_URL + "/video/" + videoName;
+          vm.videoName = videoName;
 
-          let videoName = vm.post.videoName
-          vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + videoName
-          vm.videoName = videoName
+          fetch(process.env.VUE_APP_SERVER_URL + "/images/" + vm.post.postImage)
+            .then((res) => res.blob())
+            .then((blob) => {
+              let objectURL = URL.createObjectURL(blob);
+              let myImage = new Image();
+              myImage.src = objectURL;
+              vm.image = myImage.src;
+            });
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
 
-          fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
-                  .then(res => res.blob())
-                  .then(blob => {
-                      let objectURL = URL.createObjectURL(blob);
-                      let myImage = new Image();
-                      myImage.src = objectURL;
-                      vm.image = myImage.src
-                  })
-
-
-            },
-            (err) => {
-                console.error(err);
-            })
-
-
-     axios
+    axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_tags/")
       .then((response) => {
-        let tags = response.data
-        console.log(tags)
-        tags.forEach( tag => {
-          vm.tags.push(tag.tagName)
-        })
+        let tags = response.data;
+        console.log(tags);
+        tags.forEach((tag) => {
+          vm.tags.push(tag.tagName);
+        });
 
-        console.log(vm.tags)
+        console.log(vm.tags);
+      });
 
-      })
-
-
-    vm.categoryTitles = Object.keys(categoryData)
+    vm.categoryTitles = Object.keys(categoryData);
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
       .then((response) => {
-          //console.log(response.data);
-          vm.categoriesData = response.data[0];
-          //console.log(vm.categoriesData.updatedCategories)
-          vm.categoriesData.updatedCategories.forEach(element => {
-              vm.categoryTitles.push(element.topCategory)
-          });
+        //console.log(response.data);
+        vm.categoriesData = response.data[0];
+        //console.log(vm.categoriesData.updatedCategories)
+        vm.categoriesData.updatedCategories.forEach((element) => {
+          vm.categoryTitles.push(element.topCategory);
+        });
 
-          // remove duplicates
-          // it is expected from top categories
-          var uniqueCategoryTitles = [...new Set(vm.categoryTitles)]
-          vm.categoryTitles = uniqueCategoryTitles;
+        // remove duplicates
+        // it is expected from top categories
+        var uniqueCategoryTitles = [...new Set(vm.categoryTitles)];
+        vm.categoryTitles = uniqueCategoryTitles;
 
-          vm.categoriesData.updatedCategories.forEach(element => {
-              if( vm.categoriesData[element.topCategory] ) {
-                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
-              } else {
-                  vm.categoriesData[element.topCategory] =  new Array();
-                  if (!element.bottomCategory == "")
-                  vm.categoriesData[element.topCategory].push(element.bottomCategory)
-              }
-          })
-
+        vm.categoriesData.updatedCategories.forEach((element) => {
+          if (vm.categoriesData[element.topCategory]) {
+            vm.categoriesData[element.topCategory].push(element.bottomCategory);
+          } else {
+            vm.categoriesData[element.topCategory] = new Array();
+            if (!element.bottomCategory == "")
+              vm.categoriesData[element.topCategory].push(
+                element.bottomCategory
+              );
+          }
+        });
       });
 
-    vm.owner = this.$store.getters.getUser
-
-
+    vm.owner = this.$store.getters.getUser;
   },
   beforeDestroy() {
-    var vm = this
-    let data = {}
-    data.id = vm.id
-    data.lockerEditor = ""
+    var vm = this;
+    let data = {};
+    data.id = vm.id;
+    data.lockerEditor = "";
 
-    axios.post(process.env.VUE_APP_SERVER_URL + "/unlock_post", {data})
+    axios
+      .post(process.env.VUE_APP_SERVER_URL + "/unlock_post", { data })
       .then((response) => {
-        console.log(response.data)
-      })
-
+        console.log(response.data);
+      });
   },
   methods: {
     submitPost: function () {
-      var vm = this
-			const { coordinates, canvas } = this.$refs.cropper.getResult();
-			if (vm.toggleEditImage && canvas) {
+      var vm = this;
+      const { coordinates, canvas } = this.$refs.cropper.getResult();
+      if (vm.toggleEditImage && canvas) {
         if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
           vm.$notify({
-            type: 'error',
-            text: 'Haber Kilitli!'
-          })
+            type: "error",
+            text: "Haber Kilitli!",
+          });
           return;
         }
-		    const formData = new FormData();
-        canvas.toBlob(blob => {
-          vm.blobToBase64(blob).then(res => {
+        const formData = new FormData();
+        canvas.toBlob((blob) => {
+          vm.blobToBase64(blob).then((res) => {
             const formData = new FormData();
-            vm.posting = true
-            formData.append('file', res);
-            formData.append('fileName', vm.imageName);
-            formData.append('toggleEditImage', vm.toggleEditImage);
-            formData.append("editorData", vm.editorData)
-            formData.append("postTitle", vm.postTitle)
-            formData.append("categories", vm.selectedCategories)
-            formData.append("publishDate", vm.publishDate)
-            formData.append("publishHour", vm.publishHour)
-            formData.append("postKeywords", vm.postKeywords)
-            formData.append("postCustomUrl", vm.postCustomUrl)
-            formData.append("postSeoWords", vm.postSeoWords)
-            formData.append("postSeoUrl", vm.postSeoUrl)
-            formData.append("postLanguage", vm.postLanguage)
-            formData.append("postSeoHeader", vm.postSeoHeader)
-            formData.append("postEnglishLink", vm.postEnglishLink)
-            formData.append("postArabicLink", vm.postArabicLink)
-            formData.append("postRussianLink", vm.postRussianLink)
-            formData.append("postUkranianLink", vm.postUkranianLink)
-            formData.append("postFrenchLink", vm.postFrenchLink)
-            formData.append("latestLogText", vm.latestLogText)
-            formData.append("owner", vm.owner)
-            formData.append("selectedTags", vm.selectedTags)
-            formData.append("id", vm.id)
-            vm.editLogs.push(vm.latestLogText)
-            console.log(vm.editLogs)
-            console.log(vm.latestLogText)
-            formData.append("logs", vm.editLogs)
-
+            vm.posting = true;
+            formData.append("file", res);
+            formData.append("fileName", vm.imageName);
+            formData.append("toggleEditImage", vm.toggleEditImage);
+            formData.append("editorData", vm.editorData);
+            formData.append("postTitle", vm.postTitle);
+            formData.append("categories", vm.selectedCategories);
+            formData.append("publishDate", vm.publishDate);
+            formData.append("publishHour", vm.publishHour);
+            formData.append("postKeywords", vm.postKeywords);
+            formData.append("postCustomUrl", vm.postCustomUrl);
+            formData.append("postSeoWords", vm.postSeoWords);
+            formData.append("postSeoUrl", vm.postSeoUrl);
+            formData.append("postLanguage", vm.postLanguage);
+            formData.append("postSeoHeader", vm.postSeoHeader);
+            formData.append("postEnglishLink", vm.postEnglishLink);
+            formData.append("postArabicLink", vm.postArabicLink);
+            formData.append("postRussianLink", vm.postRussianLink);
+            formData.append("postUkranianLink", vm.postUkranianLink);
+            formData.append("postFrenchLink", vm.postFrenchLink);
+            formData.append("latestLogText", vm.latestLogText);
+            formData.append("owner", vm.owner);
+            formData.append("selectedTags", vm.selectedTags);
+            formData.append("id", vm.id);
+            vm.editLogs.push(vm.latestLogText);
+            console.log(vm.editLogs);
+            console.log(vm.latestLogText);
+            formData.append("logs", vm.editLogs);
 
             axios
-                .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
-                    headers: {
+              .post(
+                process.env.VUE_APP_SERVER_URL + "/update_post/",
+                formData,
+                {
+                  headers: {
                     "Content-Type": "multipart/form-data",
-                    }, 
-                })
-                .then((response) => {
-                    var data = response.data;
-                    console.log(data);
-                    if (response.data == "success") {
-                    vm.$notify({
-                        type: 'success',
-                        text: 'Haber Güncellendi'
-                    });
-                    vm.posting = false
-                    vm.$router.push({name: 'Posts'})
-                    }
-                });
-          });
-			}, 'image/jpeg');
-			} else if (this.toggleEditImage == false && this.secondTryForBugFix == false) {
-
-                this.$refs.cropper.setCoordinates(({ coordinates, imageSize }) => ({
-                width: imageSize.width,
-                height: imageSize.height
-                }))
-
-                vm.secondTryForBugFix = true
-
-                vm.$notify({
-                type: 'warn',
-                text: 'Resim hazirlaniyor, lutfen tekrar deneyin'
-                })
-
-            } else if (this.toggleEditImage == false && this.secondTryForBugFix == true) {
-                if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
-                  console.log("asd")
-                  vm.$notify({
-                    type: 'error',
-                    text: 'Haber Kilitli!'
-                  })
-                  return;
+                  },
                 }
-
-                canvas.toBlob(blob => {
-                  vm.blobToBase64(blob).then(res => {
-                      const formData = new FormData();
-                      vm.posting = true
-                      formData.append('file', res);
-                      formData.append('fileName', vm.imageName);
-                      formData.append('toggleEditImage', vm.toggleEditImage);
-                      formData.append("editorData", vm.editorData)
-                      formData.append("postTitle", vm.postTitle)
-                      formData.append("categories", vm.selectedCategories)
-                      formData.append("publishDate", vm.publishDate)
-                      formData.append("publishHour", vm.publishHour)
-                      formData.append("postKeywords", vm.postKeywords)
-                      formData.append("postCustomUrl", vm.postCustomUrl)
-                      formData.append("postSeoWords", vm.postSeoWords)
-                      formData.append("postSeoUrl", vm.postSeoUrl)
-                      formData.append("postSeoHeader", vm.postSeoHeader)
-                      formData.append("postLanguage", vm.postLanguage)
-                      formData.append("postEnglishLink", vm.postEnglishLink)
-                      formData.append("postArabicLink", vm.postArabicLink)
-                      formData.append("postRussianLink", vm.postRussianLink)
-                      formData.append("postUkranianLink", vm.postUkranianLink)
-                      formData.append("postFrenchLink", vm.postFrenchLink)
-                      formData.append("latestLogText", vm.latestLogText)
-                      formData.append("owner", vm.owner)
-                      formData.append("selectedTags", vm.selectedTags)
-                      formData.append("id", vm.id)
-
-                      console.log(vm.editLogs)
-                      formData.append("logs", vm.editLogs)
-
-
-                  axios
-                      .post(process.env.VUE_APP_SERVER_URL + "/update_post/", formData, {
-                      headers: {
-                          "Content-Type": "multipart/form-data",
-                      }, 
-                      })
-                      .then((response) => {
-                      var data = response.data;
-                      console.log(data);
-                      if (response.data == "success") {
-                          this.secondTryForBugFix = false
-                          vm.$notify({
-                              type: 'success',
-                              text: 'Haber Güncellendi'
-                          });
-                          vm.posting = false
-                          vm.$router.push({name: 'Posts'})
-                      }
-                      });
+              )
+              .then((response) => {
+                var data = response.data;
+                console.log(data);
+                if (response.data == "success") {
+                  vm.$notify({
+                    type: "success",
+                    text: "Haber Güncellendi",
                   });
-                }, 'image/jpeg')}
+                  vm.posting = false;
+                  vm.$router.push({ name: "Posts" });
+                }
+              });
+          });
+        }, "image/jpeg");
+      } else if (
+        this.toggleEditImage == false &&
+        this.secondTryForBugFix == false
+      ) {
+        this.$refs.cropper.setCoordinates(({ coordinates, imageSize }) => ({
+          width: imageSize.width,
+          height: imageSize.height,
+        }));
+
+        vm.secondTryForBugFix = true;
+
+        vm.$notify({
+          type: "warn",
+          text: "Resim hazirlaniyor, lutfen tekrar deneyin",
+        });
+      } else if (
+        this.toggleEditImage == false &&
+        this.secondTryForBugFix == true
+      ) {
+        if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
+          console.log("asd");
+          vm.$notify({
+            type: "error",
+            text: "Haber Kilitli!",
+          });
+          return;
+        }
+
+        canvas.toBlob((blob) => {
+          vm.blobToBase64(blob).then((res) => {
+            const formData = new FormData();
+            vm.posting = true;
+            formData.append("file", res);
+            formData.append("fileName", vm.imageName);
+            formData.append("toggleEditImage", vm.toggleEditImage);
+            formData.append("editorData", vm.editorData);
+            formData.append("postTitle", vm.postTitle);
+            formData.append("categories", vm.selectedCategories);
+            formData.append("publishDate", vm.publishDate);
+            formData.append("publishHour", vm.publishHour);
+            formData.append("postKeywords", vm.postKeywords);
+            formData.append("postCustomUrl", vm.postCustomUrl);
+            formData.append("postSeoWords", vm.postSeoWords);
+            formData.append("postSeoUrl", vm.postSeoUrl);
+            formData.append("postSeoHeader", vm.postSeoHeader);
+            formData.append("postLanguage", vm.postLanguage);
+            formData.append("postEnglishLink", vm.postEnglishLink);
+            formData.append("postArabicLink", vm.postArabicLink);
+            formData.append("postRussianLink", vm.postRussianLink);
+            formData.append("postUkranianLink", vm.postUkranianLink);
+            formData.append("postFrenchLink", vm.postFrenchLink);
+            formData.append("latestLogText", vm.latestLogText);
+            formData.append("owner", vm.owner);
+            formData.append("selectedTags", vm.selectedTags);
+            formData.append("id", vm.id);
+
+            console.log(vm.editLogs);
+            formData.append("logs", vm.editLogs);
+
+            axios
+              .post(
+                process.env.VUE_APP_SERVER_URL + "/update_post/",
+                formData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              )
+              .then((response) => {
+                var data = response.data;
+                console.log(data);
+                if (response.data == "success") {
+                  this.secondTryForBugFix = false;
+                  vm.$notify({
+                    type: "success",
+                    text: "Haber Güncellendi",
+                  });
+                  vm.posting = false;
+                  vm.$router.push({ name: "Posts" });
+                }
+              });
+          });
+        }, "image/jpeg");
+      }
     },
     crop() {
-      const { coordinates, canvas, } = this.$refs.cropper.getResult();
-			this.coordinates = coordinates;
-			this.image = canvas.toDataURL();
-	  },
-   	reset() {
-			this.image = null;
-	  },
+      const { coordinates, canvas } = this.$refs.cropper.getResult();
+      this.coordinates = coordinates;
+      this.image = canvas.toDataURL();
+    },
+    reset() {
+      this.image = null;
+    },
     getImage() {
-      var vm = this
-      fetch(process.env.VUE_APP_SERVER_URL + '/images/' + vm.post.postImage)
-        .then(res => res.blob())
-        .then(blob => {
-            let objectURL = URL.createObjectURL(blob);
-            let myImage = new Image();
-            myImage.src = objectURL;
-            vm.image = myImage.src
-        })
+      var vm = this;
+      fetch(process.env.VUE_APP_SERVER_URL + "/images/" + vm.post.postImage)
+        .then((res) => res.blob())
+        .then((blob) => {
+          let objectURL = URL.createObjectURL(blob);
+          let myImage = new Image();
+          myImage.src = objectURL;
+          vm.image = myImage.src;
+        });
     },
     loadImage(event) {
-        var input = event.target;
-        var vm = this
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = (e) => {
-                this.image = e.target.result;
-                this.base64 = this.image
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    },
-    uploadVideo(event) {
-      var input = event.target
-      var vm = this
+      var input = event.target;
+      var vm = this;
 
       if (input.files && input.files[0]) {
-        console.log(input.files[0])
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.image = e.target.result;
+          this.base64 = this.image;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
+    uploadVideo(event) {
+      var input = event.target;
+      var vm = this;
+
+      if (input.files && input.files[0]) {
+        console.log(input.files[0]);
         const formData = new FormData();
-        formData.append('file', input.files[0])
+        formData.append("file", input.files[0]);
 
         axios
           .post(process.env.VUE_APP_SERVER_URL + "/upload_video", formData, {
@@ -835,14 +1010,15 @@ export default {
           })
           .then(
             (response) => {
-              console.log(response.data)
+              console.log(response.data);
               if (response.data == "success") {
                 vm.$notify({
-                    type: 'success',
-                    text: 'Video Yuklendi!'
+                  type: "success",
+                  text: "Video Yuklendi!",
                 });
-                vm.videoName = input.files[0].name
-                vm.videoSrc = process.env.VUE_APP_SERVER_URL + '/video/' + vm.videoName
+                vm.videoName = input.files[0].name;
+                vm.videoSrc =
+                  process.env.VUE_APP_SERVER_URL + "/video/" + vm.videoName;
               }
             },
             (response) => {
@@ -851,49 +1027,53 @@ export default {
           );
       }
     },
-    blobToBase64 (blob)  {
+    blobToBase64(blob) {
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         reader.onloadend = () => {
           resolve(reader.result);
         };
       });
     },
     uploadImage() {
-      var vm = this
-			const { canvas } = this.$refs.cropper2.getResult();
-			if (canvas) {
+      var vm = this;
+      const { canvas } = this.$refs.cropper2.getResult();
+      if (canvas) {
         const file = this.$refs.file2.files[0];
-				const formData = new FormData();
-				canvas.toBlob(blob => {
-          this.blobToBase64(blob).then(res => {
-            formData.append('file', res);
-            console.log(file)
-            formData.append('fileName', vm.imageName);
+        const formData = new FormData();
+        canvas.toBlob((blob) => {
+          this.blobToBase64(blob).then((res) => {
+            formData.append("file", res);
+            console.log(file);
+            formData.append("fileName", vm.imageName);
 
             axios
-              .post(process.env.VUE_APP_SERVER_URL + "/carousel_image", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
+              .post(
+                process.env.VUE_APP_SERVER_URL + "/carousel_image",
+                formData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              )
               .then(
                 (response) => {
-                  console.log(response.data)
+                  console.log(response.data);
                   if (response.data == "success") {
                     vm.$notify({
-                        type: 'success',
-                        text: 'Album Resmi Yuklendi!'
+                      type: "success",
+                      text: "Album Resmi Yuklendi!",
                     });
-                    vm.sliderImages.push(vm.imageName)
-                    let images = localStorage.getItem('images')
+                    vm.sliderImages.push(vm.imageName);
+                    let images = localStorage.getItem("images");
                     if (images) {
-                      console.log(images)
-                      let string = images + vm.imageName + '~'
-                      localStorage.setItem('images', string)
+                      console.log(images);
+                      let string = images + vm.imageName + "~";
+                      localStorage.setItem("images", string);
                     } else {
-                      localStorage.setItem('images', vm.imageName + '~')
+                      localStorage.setItem("images", vm.imageName + "~");
                     }
                   }
                 },
@@ -902,116 +1082,118 @@ export default {
                 }
               );
           });
-				// Perhaps you should add the setting appropriate file format here
-				}, 'image/jpeg');
-			}
-		},
+          // Perhaps you should add the setting appropriate file format here
+        }, "image/jpeg");
+      }
+    },
     clickCategory(index) {
-      var vm = this
+      var vm = this;
       if (vm.clickedCategory == index) {
-        vm.clickedCategory = 100
+        vm.clickedCategory = 100;
       } else {
-        vm.clickedCategory = index
+        vm.clickedCategory = index;
       }
     },
     expandCategories() {
-      var vm = this
+      var vm = this;
       if (vm.expandCategory == true) {
-        vm.expandCategory = false
+        vm.expandCategory = false;
       } else {
-        vm.expandCategory = true
+        vm.expandCategory = true;
       }
-    }, 
+    },
     expandImageBox() {
-      var vm = this
+      var vm = this;
       if (vm.expandImage == true) {
-        vm.expandImage = false
+        vm.expandImage = false;
       } else {
-        vm.expandImage = true 
+        vm.expandImage = true;
       }
     },
     expandEditLog() {
-      var vm = this
+      var vm = this;
       if (vm.expandLog == true) {
-        vm.expandLog = false
+        vm.expandLog = false;
       } else {
-        vm.expandLog = true
+        vm.expandLog = true;
       }
     },
     removeLog(index) {
       if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
-        console.log("asd")
+        console.log("asd");
         vm.$notify({
-          type: 'error',
-          text: 'Haber Kilitli!'
-        })
+          type: "error",
+          text: "Haber Kilitli!",
+        });
         return;
       }
-      var vm = this
-      console.log(vm.editLogs[index])
-      var data = {}
-      data['id'] = vm.editLogs[index]._id
-      console.log(data)
+      var vm = this;
+      console.log(vm.editLogs[index]);
+      var data = {};
+      data["id"] = vm.editLogs[index]._id;
+      console.log(data);
       axios
-        .post(process.env.VUE_APP_SERVER_URL + "/delete_post_log/", {data})
+        .post(process.env.VUE_APP_SERVER_URL + "/delete_post_log/", { data })
         .then((response) => {
           console.log(response.data);
           if (response.data == "success") {
-              vm.$notify({
-                  type: 'success',
-                  text: 'Haber Log\'u Basariyle Silindi!'
-              });
-              vm.editLogs.splice(index, 1);
+            vm.$notify({
+              type: "success",
+              text: "Haber Log'u Basariyle Silindi!",
+            });
+            vm.editLogs.splice(index, 1);
           }
         });
     },
-    onReady( editor )  {
+    onReady(editor) {
       // Insert the toolbar before the editable area.
-      editor.ui.getEditableElement().parentElement.insertBefore(
+      editor.ui
+        .getEditableElement()
+        .parentElement.insertBefore(
           editor.ui.view.toolbar.element,
           editor.ui.getEditableElement()
-      );
+        );
     },
     editLog(index) {
-      var vm = this
+      var vm = this;
       if (vm.post.isLocked && vm.user.email != vm.post.lockerEditor) {
-        console.log("asd")
+        console.log("asd");
         vm.$notify({
-          type: 'error',
-          text: 'Haber Kilitli!'
-        })
+          type: "error",
+          text: "Haber Kilitli!",
+        });
         return;
       }
-      console.log(vm.editLogs[index])
-      var data =  vm.editLogs[index]
+      console.log(vm.editLogs[index]);
+      var data = vm.editLogs[index];
       axios
-        .post(process.env.VUE_APP_SERVER_URL + "/edit_post_log/", {data})
+        .post(process.env.VUE_APP_SERVER_URL + "/edit_post_log/", { data })
         .then((response) => {
           console.log(response.data);
           if (response.data == "success") {
-              vm.$notify({
-                  type: 'success',
-                  text: 'Haber Log\'u Basariyle Guncellendi!'
-              });
-              // vm.editLogs.splice(index, 1);
+            vm.$notify({
+              type: "success",
+              text: "Haber Log'u Basariyle Guncellendi!",
+            });
+            // vm.editLogs.splice(index, 1);
           }
         });
     },
     addTag(tag) {
-      var vm = this
-      vm.selectedTags.push(tag)
+      var vm = this;
+      vm.selectedTags.push(tag);
     },
     removeTag(index) {
-      var vm = this
-      vm.selectedTags.splice(index, 1)
+      var vm = this;
+      vm.selectedTags.splice(index, 1);
     },
     removeFromSelectedTags(index) {
-      var vm = this
-      vm.selectedTags.splice(index, 1)
+      var vm = this;
+      vm.selectedTags.splice(index, 1);
     },
     addToSelectedTags() {
       var vm = this;
-      vm.selectedTags.push(vm.tag)
+      vm.selectedTags.push(vm.tag);
     },
   },
 };
@@ -1037,19 +1219,24 @@ export default {
 .divider {
   height: 1rem;
   width: 4000px;
-  background: rgb(2,0,36);
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 7%, rgba(0,212,255,1) 100%);
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 7%,
+    rgba(0, 212, 255, 1) 100%
+  );
 }
 
 .ck-editor__editable {
   min-width: 1200px;
 }
 
-.input-group>.input-group-prepend {
-    flex: 0 0 20%;
+.input-group > .input-group-prepend {
+  flex: 0 0 20%;
 }
 .input-group .input-group-text {
-    width: 100%;
+  width: 100%;
 }
 
 /* The switch - the box around the slider */
@@ -1083,7 +1270,7 @@ export default {
   top: -25px;
   color: #666;
   text-decoration: line-through;
-} 
+}
 
 .switch_text2 {
   position: relative;
@@ -1092,7 +1279,7 @@ export default {
   top: -15px;
   color: #666;
   text-decoration: line-through;
-} 
+}
 
 .switch_closed {
   text-decoration: none;
@@ -1107,8 +1294,8 @@ export default {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -1119,8 +1306,8 @@ export default {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -1150,13 +1337,13 @@ input:checked + .slider:before {
 }
 
 .vue__time-picker input.display-time {
-    border: 1px solid #d2d2d2;
-    border-radius: 10px;
-    width: 10em;
-    height: 2.2em;
-    padding: 1.4em .5em;
-    font-size: 1em;
-    background-color: #f2f2f3;
+  border: 1px solid #d2d2d2;
+  border-radius: 10px;
+  width: 10em;
+  height: 2.2em;
+  padding: 1.4em 0.5em;
+  font-size: 1em;
+  background-color: #f2f2f3;
 }
 
 .edit_buttons {
@@ -1245,7 +1432,6 @@ input:checked + .slider:before {
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
-  
 }
 
 .tags-container li {
@@ -1259,7 +1445,7 @@ input:checked + .slider:before {
   border-bottom: 5px solid blue;
 }
 
-.selected-tag  {
+.selected-tag {
   background: rgb(153, 255, 187, 0.5);
   padding: 10px;
   border: 1px solid black;
@@ -1269,6 +1455,4 @@ input:checked + .slider:before {
 .vbt-autcomplete-list {
   background: rgb(235, 232, 225);
 }
-
-
 </style>

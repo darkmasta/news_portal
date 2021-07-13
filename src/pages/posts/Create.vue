@@ -22,26 +22,6 @@
             class="nav-link"
             data-toggle="tab"
             href="/#/posts/create"
-            :class="{ active: expandTab == 'edit' }"
-            @click="expandTab = 'edit'"
-            >{{ $t("posts.edit log") }}</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="/#/posts/create"
-            :class="{ active: expandTab == 'categories' }"
-            @click="expandTab = 'categories'"
-            >{{ $t("main.categories") }}</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="/#/posts/create"
             :class="{ active: expandTab == 'tags' }"
             @click="expandTab = 'tags'"
             >{{ $t("main.tags") }}</a
@@ -55,26 +35,6 @@
             :class="{ active: expandTab == 'postImage' }"
             @click="expandTab = 'postImage'"
             >{{ $t("posts.post image") }}</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="/#/posts/create"
-            :class="{ active: expandTab == 'postLinks' }"
-            @click="expandTab = 'postLinks'"
-            >{{ $t("posts.post links") }}</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="/#/posts/create"
-            :class="{ active: expandTab == 'languages' }"
-            @click="expandTab = 'languages'"
-            >{{ $t("posts.languages") }}</a
           >
         </li>
         <li class="nav-item">
@@ -240,79 +200,6 @@
         </div>
 
         <div
-          id="navs-left-home"
-          class="tab-pane fade"
-          :class="{ active: expandTab == 'edit', show: expandTab == 'edit' }"
-        >
-          <b-row class="edit_log">
-            <b-col cols="6" class="offset-3 mt-2">
-              <h3>{{ $t("posts.edit log") }}</h3>
-            </b-col>
-
-            <b-col
-              v-for="(log, index) in editLogs"
-              :key="index"
-              cols="10"
-              class="ml-2"
-            >
-              <b-input-group prepend="Edit Log" class="mt-2">
-                <b-form-input v-model="log.editText"> </b-form-input>
-                <b-form-input :value="log.editor" disabled></b-form-input>
-                <div class="edit_buttons">
-                  <span class="fas fa-times" @click="removeLog(index)"></span>
-                  <span class="far fa-edit" @click="editLog(index)"></span>
-                </div>
-              </b-input-group>
-            </b-col>
-          </b-row>
-        </div>
-        <div
-          id="navs-left-profile"
-          class="tab-pane fade"
-          :class="{
-            active: expandTab == 'categories',
-            show: expandTab == 'categories',
-          }"
-        >
-          <b-row class="edit_log">
-            <b-col class="categories__container">
-              <div
-                v-for="(categoryTitle, index) in categoryTitles"
-                :key="index"
-                class="categories__single-category"
-                :class="{
-                  expand_category: clickedCategory == index,
-                  expand_category: clickedCategory != index,
-                }"
-              >
-                <h3 class="category__title" @click="clickCategory(index)">
-                  {{ categoryTitle }}
-                </h3>
-                <ul class="category__list">
-                  <li
-                    v-for="(category, index2) in categoriesData[categoryTitle]"
-                    :key="index2"
-                    class="category__list-item"
-                  >
-                    <input
-                      v-model="selectedCategories"
-                      type="checkbox"
-                      :value="category"
-                    />
-                    {{ category }}
-                  </li>
-                </ul>
-              </div>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="12" class="mt-2 mb-2">
-              <span>{{ $t("posts.selected categories") }}</span
-              >{{ selectedCategories }}
-            </b-col>
-          </b-row>
-        </div>
-        <div
           id="navs-left-profile"
           class="tab-pane fade"
           :class="{ active: expandTab == 'tags', show: expandTab == 'tags' }"
@@ -401,249 +288,193 @@
             </b-col>
           </b-row>
         </div>
-        <div
-          id="navs-left-messages"
-          class="tab-pane fade"
-          :class="{
-            active: expandTab == 'postLinks',
-            show: expandTab == 'postLinks',
-          }"
-        >
-          <b-row>
-            <b-row>
-              <b-col cols="12" class="publish_date_box mt-4 ml-3">
-                <b-col cols="10" class="offset-6">
-                  <b-input-group class="mt-2">
-                    <template #prepend>
-                      <b-input-group-text>
-                        {{ $t("posts.post header") }}
-                      </b-input-group-text>
-                    </template>
-                    <b-form-input v-model="postTitle"></b-form-input>
-                  </b-input-group>
-                </b-col>
-                <b-col cols="3">
-                  <label>{{ $t("posts.publish date") }}</label>
-                  <b-form-group>
-                    <datepicker
-                      v-model="publishDate"
-                      :bootstrap-styling="true"
-                      :monday-first="true"
-                      :full-month-name="true"
-                      placeholder="Yayin Tarihi"
-                    />
-                  </b-form-group>
-                </b-col>
-                <b-col cols="3">
-                  <label>{{ $t("posts.publish hour") }}</label>
-                  <b-form-group>
-                    <vue-timepicker
-                      v-model="publishHour"
-                      close-on-complete
-                    ></vue-timepicker>
-                  </b-form-group>
-                </b-col>
-              </b-col>
-            </b-row>
-          </b-row>
-
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <label>{{ $t("posts.post language") }}</label>
-              <b-form-group>
-                <b-select v-model="postLanguage" class="">
-                  <option
-                    v-for="(postLanguage, index) in languages"
-                    :key="index"
-                    :value="postLanguage.langCode"
-                  >
-                    {{ postLanguage.langText }}
-                  </option>
-                </b-select>
-              </b-form-group>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.url") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postCustomUrl"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.post keywords") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postKeywords"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.seo keywords") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postSeoWords"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.seo url address") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postSeoUrl"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1 mb-3">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.seo header text") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postSeoHeader"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-        </div>
-        <div
-          id="navs-left-profile"
-          class="tab-pane fade"
-          :class="{
-            active: expandTab == 'languages',
-            show: expandTab == 'languages',
-          }"
-        >
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.linked english post") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postEnglishLink"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.linked arabic post") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postArabicLink"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.linked russian post") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postRussianLink"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.linked ukranian post") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postUkranianLink"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10" class="offset-1">
-              <b-input-group class="mt-2">
-                <template #prepend>
-                  <b-input-group-text>
-                    {{ $t("posts.linked french post") }}
-                  </b-input-group-text>
-                </template>
-                <b-form-input v-model="postFrenchLink"></b-form-input>
-              </b-input-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="4" class="mt-3 offset-9">
-              <b-btn
-                v-if="showInMobile"
-                variant="primary rounded-pill"
-                class="new-post-btn"
-                @click="showInMobile = false"
-              >
-                <span class="fa fa-mobile"></span>
-                {{ $t("posts.publish mobile") }}
-              </b-btn>
-              <b-btn
-                v-if="!showInMobile"
-                variant="primary rounded-pill"
-                class="new-post-btn"
-                @click="showInMobile = true"
-              >
-                <span class="fas fa-mobile"></span>
-                {{ $t("posts.publish big screen") }}
-              </b-btn>
-            </b-col>
-            <b-col cols="4" class="mt-2 offset-9">
-              <b-btn
-                v-if="manset"
-                variant="primary rounded-pill"
-                class="new-post-btn"
-                @click="manset = false"
-              >
-                <span class="fas fa-plus-circle"></span>
-                {{ $t("posts.publish headline") }}
-              </b-btn>
-              <b-btn
-                v-if="!manset"
-                variant="primary rounded-pill"
-                class="new-post-btn"
-                @click="manset = true"
-              >
-                <span class="fas fa-plus-circle"></span>
-                {{ $t("posts.publish normal") }}
-              </b-btn>
-            </b-col>
-          </b-row>
-        </div>
       </div>
     </div>
 
-    <div class="divider mt-4 mb-4"></div>
+    <hr />
 
-    <b-row class="editor-container mt-3 mobile-editor">
-      <b-col cols="6" class="offset-7">
-        <div class="editor-center mt-2">
+    <b-row class="editor-container mt-3 mobile-editor mb-5">
+      <div class="col-lg-4">
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-row>
+              <b-col cols="12">
+                <label>{{ $t("posts.post header") }}</label>
+                <b-input-group>
+                  <b-form-input
+                    v-model="postTitle"
+                    @input="autoSlug"
+                  ></b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col cols="12">
+                <b-input-group class="mt-2">
+                  <template #prepend>
+                    <b-input-group-text>
+                      {{ $t("posts.seo url address") }}
+                    </b-input-group-text>
+                  </template>
+                  <b-form-input v-model="postSeoUrl"></b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col cols="6">
+                <label>{{ $t("posts.publish date") }}</label>
+                <b-form-group>
+                  <datepicker
+                    v-model="publishDate"
+                    :bootstrap-styling="true"
+                    :monday-first="true"
+                    :full-month-name="true"
+                    placeholder="Yayin Tarihi"
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                <label>{{ $t("posts.publish hour") }}</label>
+                <b-form-group>
+                  <vue-timepicker
+                    v-model="publishHour"
+                    close-on-complete
+                  ></vue-timepicker>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <label>{{ $t("posts.post_lang") }}</label>
+            <b-form-group>
+              <b-select v-model="postLanguage" class="">
+                <option
+                  v-for="(postLanguage, index) in languages"
+                  :key="index"
+                  :value="postLanguage.langCode"
+                >
+                  {{ postLanguage.langText }}
+                </option>
+              </b-select>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <label>{{ $t("main.categories") }}</label>
+            <b-form-group>
+              <multiselect
+                v-model="ms_value"
+                :options="ms_options"
+                :close-on-select="false"
+                :multiple="true"
+                group-values="libs"
+                group-label="language"
+              ></multiselect>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.post keywords") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postKeywords"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.seo keywords") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postSeoWords"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="10" class="offset-1 mb-3">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.seo header text") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postSeoHeader"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.linked english post") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postEnglishLink"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.linked arabic post") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postArabicLink"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.linked russian post") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postRussianLink"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.linked ukranian post") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postUkranianLink"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="10" class="offset-1">
+            <b-input-group class="mt-2">
+              <template #prepend>
+                <b-input-group-text>
+                  {{ $t("posts.linked french post") }}
+                </b-input-group-text>
+              </template>
+              <b-form-input v-model="postFrenchLink"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+      </div>
+      <b-col cols="8">
+        <div class="col-lg-12 mb-2">
           <ckeditor
             v-model="editorData"
             :editor="editor"
@@ -651,22 +482,57 @@
             @ready="onReady"
           ></ckeditor>
         </div>
-      </b-col>
-    </b-row>
+        <b-col cols="12" class="mt-5 text-right">
+          <b-btn
+            v-if="showInMobile"
+            variant="primary rounded-pill"
+            class="new-post-btn"
+            @click="showInMobile = false"
+          >
+            <span class="fa fa-mobile"></span>
+            {{ $t("posts.publish mobile") }}
+          </b-btn>
+          <b-btn
+            v-if="!showInMobile"
+            variant="primary rounded-pill"
+            class="new-post-btn"
+            @click="showInMobile = true"
+          >
+            <span class="fas fa-mobile"></span>
+            {{ $t("posts.publish big screen") }}
+          </b-btn>
 
-    <b-row class="mt-4">
-      <b-col offset="9">
-        <b-btn
-          variant="primary rounded-pill"
-          class="new-post-btn"
-          @click="submitPost"
-        >
-          <span class="fas fa-plus-circle"></span> {{ $t("posts.save post") }}
-        </b-btn>
+          <b-btn
+            v-if="manset"
+            variant="primary rounded-pill"
+            class="new-post-btn"
+            @click="manset = false"
+          >
+            <span class="fas fa-plus-circle"></span>
+            {{ $t("posts.publish headline") }}
+          </b-btn>
+          <b-btn
+            v-if="!manset"
+            variant="primary rounded-pill"
+            class="new-post-btn"
+            @click="manset = true"
+          >
+            <span class="fas fa-plus-circle"></span>
+            {{ $t("posts.publish normal") }}
+          </b-btn>
+          <b-btn
+            variant="primary rounded-pill"
+            class="new-post-btn"
+            @click="submitPost"
+          >
+            <span class="fas fa-plus-circle"></span> {{ $t("posts.save post") }}
+          </b-btn>
+        </b-col>
       </b-col>
     </b-row>
   </div>
 </template>
+
 <script>
 import Vue from "vue";
 import axios from "axios";
@@ -686,7 +552,8 @@ import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 
 import VueTypeaheadBootstrap from "vue-typeahead-bootstrap";
-
+import Multiselect from "vue-multiselect";
+import * as slugify from "slugify";
 // Required dependency of bootstrap css/scss files
 
 Vue.use(CKEditor);
@@ -700,9 +567,13 @@ export default {
     Datepicker,
     VueTimepicker,
     VueTypeaheadBootstrap,
+    Multiselect,
   },
   data() {
     return {
+      ms_value: null,
+      ms_options: ["list", "of", "options"],
+
       languages: [
         { langText: "Turkce 🇹🇷", langCode: "tr" },
         { langText: "Ingilizce 🇬🇧", langCode: "en" },
@@ -711,8 +582,8 @@ export default {
         { langText: "Ukraynaca 🇺🇦", langCode: "uk" },
       ],
       categoriesData: {},
-      postLanguage: "",
-      expandTab: "categories",
+      postLanguage: "tr",
+      expandTab: "tags",
       info_message: "",
       editLogs: [""],
       clickedCategory: undefined,
@@ -794,28 +665,15 @@ export default {
       .then((response) => {
         let tags = response.data;
         vm.tagsWithIds = tags;
-        // console.log(tags)
         tags.forEach((tag) => {
           vm.tags.push(tag.tagName);
         });
-
-        // console.log(vm.tags)
       });
-
-    /*
-    axios
-      .post(process.env.VUE_APP_SERVER_URL + "/get_ads_bottom/" )
-      .then((response) => {
-        console.log(response.data);
-      })
-      */
 
     axios
       .post(process.env.VUE_APP_SERVER_URL + "/get_categories/", {})
       .then((response) => {
-        //console.log(response.data);
         vm.categoriesData = response.data[0];
-        // console.log(vm.categoriesData.updatedCategories)
         vm.categoriesData.updatedCategories.forEach((element) => {
           vm.categoryTitles.push(element.topCategory);
         });
@@ -824,7 +682,6 @@ export default {
         // it is expected from top categories
         var uniqueCategoryTitles = [...new Set(vm.categoryTitles)];
         vm.categoryTitles = uniqueCategoryTitles;
-
         vm.categoriesData.updatedCategories.forEach((element) => {
           if (vm.categoriesData[element.topCategory]) {
             vm.categoriesData[element.topCategory].push(element.bottomCategory);
@@ -836,6 +693,17 @@ export default {
               );
           }
         });
+
+        const Data = [];
+
+        vm.categoryTitles.forEach((C) => {
+          Data.push({
+            language: C,
+            libs: vm.categoriesData[C],
+          });
+        });
+
+        this.ms_options = Data;
       });
   },
   computed: {
@@ -844,6 +712,9 @@ export default {
     },
   },
   methods: {
+    autoSlug() {
+      this.postSeoUrl = slugify(this.postTitle);
+    },
     translateCol(colName) {
       return this.$i18n.t("posts." + colName);
     },
@@ -895,7 +766,7 @@ export default {
             formData.append("toggleEditImage", vm.toggleEditImage);
             formData.append("editorData", vm.editorData);
             formData.append("postTitle", vm.postTitle);
-            formData.append("categories", vm.selectedCategories);
+            formData.append("categories", this.ms_value);
             formData.append("publishDate", vm.publishDate);
             formData.append("publishHour", vm.publishHour);
             formData.append("postKeywords", vm.postKeywords);
@@ -929,7 +800,6 @@ export default {
               )
               .then((response) => {
                 var data = response.data;
-                console.log(data);
                 if (response.data == "success") {
                   vm.$notify({
                     type: "success",
@@ -943,9 +813,7 @@ export default {
                       .post(process.env.VUE_APP_SERVER_URL + "/use_tag/", {
                         data,
                       })
-                      .then((response) => {
-                        console.log("tag used");
-                      });
+                      .then((response) => {});
                   });
                   localStorage.removeItem("images");
                   vm.posting = false;
@@ -990,7 +858,6 @@ export default {
         }
         canvas.toBlob((blob) => {
           vm.blobToBase64(blob).then((res) => {
-            console.log(coordinates);
             const formData = new FormData();
             formData.append("file", res);
             if (!res || res == undefined) {
@@ -1060,7 +927,6 @@ export default {
               )
               .then((response) => {
                 var data = response.data;
-                console.log(data);
                 if (response.data == "success") {
                   this.secondTryForBugFix = false;
                   vm.$notify({
@@ -1079,8 +945,6 @@ export default {
     },
     addToSelectedTags() {
       var vm = this;
-      // console.log(vm.tag)
-      // console.log(vm.tagsWithIds[vm.tags.indexOf(vm.tag)])
       vm.selectedTagIds.push(vm.tagsWithIds[vm.tags.indexOf(vm.tag)]._id);
       vm.selectedTags.push(vm.tag);
     },
@@ -1110,7 +974,6 @@ export default {
       var vm = this;
 
       if (input.files && input.files[0]) {
-        console.log(input.files[0]);
         var reader = new FileReader();
         var fr = new FileReader();
 
@@ -1140,7 +1003,6 @@ export default {
       vm.videoLoading = true;
 
       if (input.files && input.files[0]) {
-        console.log(input.files[0]);
         const formData = new FormData();
         formData.append("file", input.files[0]);
 
@@ -1156,7 +1018,6 @@ export default {
 
         request.then(
           (response) => {
-            console.log(response.data);
             if (response.data == "success") {
               vm.$notify({
                 type: "success",
@@ -1167,9 +1028,7 @@ export default {
                 process.env.VUE_APP_SERVER_URL + "/video/" + vm.videoName;
             }
           },
-          (response) => {
-            console.log(response);
-          }
+          (response) => {}
         );
 
         Promise.allSettled([request]).then((results) => {
@@ -1195,7 +1054,6 @@ export default {
         canvas.toBlob((blob) => {
           this.blobToBase64(blob).then((res) => {
             formData.append("file", res);
-            console.log(file);
             formData.append("fileName", vm.imageName);
 
             axios
@@ -1210,7 +1068,6 @@ export default {
               )
               .then(
                 (response) => {
-                  console.log(response.data);
                   if (response.data == "success") {
                     vm.$notify({
                       type: "success",
@@ -1219,7 +1076,6 @@ export default {
                     vm.sliderImages.push(vm.imageName);
                     let images = localStorage.getItem("images");
                     if (images) {
-                      console.log(images);
                       let string = images + vm.imageName + "~";
                       localStorage.setItem("images", string);
                     } else {
@@ -1230,9 +1086,7 @@ export default {
                     }, 1000);
                   }
                 },
-                (response) => {
-                  console.log(response);
-                }
+                (response) => {}
               );
           });
           // Perhaps you should add the setting appropriate file format here
@@ -1249,7 +1103,6 @@ export default {
     },
     addTag(tag) {
       var vm = this;
-      console.log(tag);
       vm.selectedTags.push(tag);
     },
     removeTag(index) {
@@ -1265,7 +1118,6 @@ export default {
       let images = localStorage.getItem("images") || "";
       if (images) {
         var imagesArr = images.split("~").filter((el) => el != "");
-        console.log(imagesArr);
         vm.sliderImages.splice(index, 1);
         imagesArr.splice(index, 1);
         let string = "";
@@ -1277,7 +1129,7 @@ export default {
 };
 </script>
 
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 .publish_date {
   display: flex;
@@ -1477,10 +1329,9 @@ input:checked + .slider:before {
 .ck-editor__editable {
   position: relative;
   top: 45px;
-  left: -996px;
-  min-width: 1000px;
-  height: 400px;
-  outline: #ccc auto 1px;
+  height: 700px;
+  width: 100%;
+  border: 1px solid #ccc !important;
 }
 
 .tags-container {

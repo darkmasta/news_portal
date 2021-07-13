@@ -5,7 +5,7 @@
     "ad management": "Reklam Yönetimi",
     "identity management": "Künye Düzenle",
     "contact management": "İletişim Düzenle",
-    "about management":  "Hakkımızda",
+    "about management": "Hakkımızda",
     "users management": "Kullanıcı İşlemleri",
     "category management": "Kategori İşlemleri",
     "tags management": "Etiket İşlemleri",
@@ -26,6 +26,7 @@
     "language settings": "Dil Ayarları"
   },
   "posts": {
+    "post_lang": "Haber Dili",
     "post order": "Haber Sirasi",
     "post image": "Haber Resmi",
     "post header": "Başlık",
@@ -49,9 +50,9 @@
     "publish hour": "Yayınlanma Saati",
     "url": "Haber URL'si",
     "post keywords": "Haber Anahtar Kelimeler",
-    "seo keywords": "Seo Anahtar Kelimeler",
-    "seo url address": "Seo URL Adresi",
-    "seo header text": "Seo Baslik Aciklamasi",
+    "seo keywords": "SEO Anahtar Kelimeler",
+    "seo url address": "SEO URL Adresi",
+    "seo header text": "SEO Açıklaması",
     "linked english post": "Bağlantılı İngilizce Haber",
     "linked arabic post": "Bağlantılı Arapça Haber",
     "linked russian post": "Bağlantılı Rusça Haber",
@@ -190,7 +191,7 @@
     "tag name": "Etiket Adı",
     "creation date": "Eklenme Tarihi",
     "total usage": "Toplam Kullanım",
-    "details" : "İşlemler",
+    "details": "İşlemler",
     "new tag form": "Yeni Etiket Formu",
     "create tag": "Etiket Oluştur",
     "add tag": "Etiket Ekle"

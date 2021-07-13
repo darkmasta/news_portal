@@ -94,15 +94,10 @@ export default {
   }),
   methods: {
     loginUser: function (data) {
-      console.log(process.env);
-      console.log("asdasd");
-
       const requestBody = {
         username: data.email,
         password: data.password,
       };
-
-      console.log(requestBody);
 
       const config = {
         headers: {

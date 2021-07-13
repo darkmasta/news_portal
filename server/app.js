@@ -12,7 +12,7 @@ const https = require('https')
 moment.locale('en')
 const path = require('path')
 const { getFileStream } = require('./helpers/s3')
-const PORT = process.env.PORT || 5000
+const PORT = 80
 
 // lets require/import the mongodb native drivers.
 const mongoose = require('mongoose')
@@ -44,17 +44,13 @@ const SeoRoutes = require('./routes/seo_routes')
 const TranslationRoutes = require('./routes/language_routes')
 
 const app = express()
-
+app.use(
+  cors({ credentials: true, origin: "http://161.35.213.4:8080" })
+)
 const fileupload = require('express-fileupload')
 app.use(fileupload())
 
-app.use(
-  cors({
-    credentials: true,
-    origin: 'http://161.35.213.4:8080' // dev to prod
-    //origin: 'https://defensehere.herokuapp.com' // dev to prod
-  })
-)
+
 
 app.use(require('morgan')('combined'))
 app.use(require('cookie-parser')())
