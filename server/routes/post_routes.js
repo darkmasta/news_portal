@@ -59,7 +59,7 @@ router.post('/post_by_category', jsonParser, (req, res) => {
 
 router.post('/posts_other_languages', jsonParser, (req, res) => {
   const postData = req.body.data
-  const language = postData.language[0]
+  const language = postData.language
   const limit = postData.limit || 7
   const regexText = `/^${language}/`
 
@@ -570,9 +570,47 @@ router.get('/video/:id', jsonParser, (req, res) => {
 router.post('/posts_slider_1', jsonParser, async (req, res) => {
   const postData = req.body.data
   if (!postData || !postData.category) return res.json([])
-  const Posts = await Post.find({ categories: { $in: [postData.category] } }).limit(7);
+  const Posts = await Post.find({ categories: { $in: [postData.category] } }, { postTitle: 1, postImage: 1, postSeoUrl: 1 }).limit(7);
   res.json(Posts);
 })
+
+router.get('/latest_posts', jsonParser, async (req, res) => {
+  const postData = req.body.data
+
+  const Posts = await Post.find({}).sort({ "_id": -1 }).limit(7);
+  res.json(Posts);
+})
+
+
+router.get('/most_readed_posts', jsonParser, (req, res) => {
+  Post.find({
+
+  })
+    .sort({ views: 'desc' })
+    .limit(7)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+
+router.get('/video_posts', jsonParser, (req, res) => {
+  Post.find({ "videoLink": { "$exists": true }, "$expr": { "$gte": [{ "$strLenCP": "$videoLink" }, 1] } })
+    .limit(7)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
+
+
+router.get('/album_posts', jsonParser, (req, res) => {
+  Post.find({
+    sliderImages: { $size: 1 }
+  })
+    .limit(7)
+    .then(posts => res.json(posts))
+    .catch(err => res.json(err))
+})
+
 
 
 module.exports = router

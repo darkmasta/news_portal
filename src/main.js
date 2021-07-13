@@ -15,7 +15,8 @@ import Popper from 'popper.js'
 
 import axios from 'axios'
 import i18n from './i18n'
-
+const dotenv = require('dotenv');
+dotenv.config();
 // Required to enable animations on dropdowns/tooltips/popovers
 Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false
 
@@ -24,6 +25,7 @@ Vue.config.theme = 'soft'
 Vue.use(BootstrapVue)
 Vue.use(require('vue-moment'))
 Vue.use(Notifications)
+
 
 Vue.prototype.$axios = axios
 // Global RTL flag
@@ -35,7 +37,7 @@ new Vue({
   router,
   store,
 
-  created () {
+  created() {
     const userInfo = localStorage.getItem('user')
     if (userInfo) {
       const userData = JSON.parse(userInfo)

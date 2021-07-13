@@ -51,7 +51,7 @@ app.use(fileupload())
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:8080' // dev to prod
+    origin: 'http://161.35.213.4:8080' // dev to prod
     //origin: 'https://defensehere.herokuapp.com' // dev to prod
   })
 )

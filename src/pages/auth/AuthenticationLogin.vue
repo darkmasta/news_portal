@@ -66,7 +66,6 @@ import Vue from "vue";
 import AxiosPlugin from "vue-axios-cors";
 import qs from "querystring";
 
-
 Vue.use(axios);
 Vue.use(AxiosPlugin);
 axios.defaults.withCredentials = true;
@@ -95,6 +94,9 @@ export default {
   }),
   methods: {
     loginUser: function (data) {
+      console.log(process.env);
+      console.log("asdasd");
+
       const requestBody = {
         username: data.email,
         password: data.password,
@@ -122,16 +124,18 @@ export default {
               console.log(response);
               vm.errors = true;
               vm.$notify({
-                  type: 'error',
-                  text: 'Hata!'
-              })
+                type: "error",
+                text: "Hata!",
+              });
               vm.errorMessage = "Error logging in";
             } else if (response.data == "success") {
               vm.$notify({
-                  type: 'success',
-                  text: 'Giris Basarili!'
-              })
-              setTimeout(() => {this.$router.push({ name: "Dashboard" })}, 1000);
+                type: "success",
+                text: "Giris Basarili!",
+              });
+              setTimeout(() => {
+                this.$router.push({ name: "Dashboard" });
+              }, 1000);
             }
           },
           (response) => {
@@ -147,5 +151,4 @@ export default {
 #welcome-text {
   text-align: center;
 }
-
 </style>

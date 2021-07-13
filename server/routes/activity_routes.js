@@ -188,4 +188,11 @@ router.post('/delete_activity', jsonParser, (req, res) => {
   promise.then(doc => res.json('success'))
 })
 
+
+router.get('/upcoming_events', jsonParser, (req, res) => {
+  const promise = Activity.find({}).sort({ startDate: -1 }).limit(7)
+
+  promise.then(doc => res.json(doc)).catch(err => res.json(err))
+})
+
 module.exports = router
