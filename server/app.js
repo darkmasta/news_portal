@@ -106,10 +106,10 @@ app.get('/images/:id', jsonParser, (req, res) => {
   // id = id.split('.')[0]
 
   const downloadParams = {
-    Key: id,
+    Key: "images/" + id,
     Bucket: bucketName
   }
-
+  console.log(id);
   s3.getObject(downloadParams)
     .createReadStream()
     .on('error', e => {

@@ -201,15 +201,21 @@ router.post('/create_post', jsonParser, (req, res) => {
         console.log('Post Image saved successfully')
 
         uploadFile(postData.fileName)
-          .then(data => console.log(data))
+          .then(data => {
+            fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
+              if (err) console.log(err)
+              else {
+                console.log('\nDeleted file: ', postData.fileName)
+              }
+            })
+            console.log(data)
+
+          }
+
+          )
           .catch(err => console.log('ERROR ------------ \n', err))
 
-        fs.unlink('./images/' + postData.fileName + '.jpeg', err => {
-          if (err) console.log(err)
-          else {
-            console.log('\nDeleted file: ', postData.fileName)
-          }
-        })
+
 
         Post.save()
           .then(post => res.json('success'))
@@ -345,13 +351,14 @@ router.post('/add_comment', jsonParser, (req, res) => {
   }
 
   Post.updateOne(
-    { _id: postData.id },
+    { postSeoUrl: postData.post },
     {
       $addToSet: {
         comments: {
-          email: postData.email,
+          fullName: postData.fullName,
+          email: postData.email ?? "",
           comment: postData.comment,
-          commentDate: postData.commentDate,
+          commentDate: Date.now(),
           isConfirmed: false
         }
       }
