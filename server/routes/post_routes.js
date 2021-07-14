@@ -123,7 +123,7 @@ router.post('/create_post_interface', jsonParser, (req, res) => {
     ownerEmail: postData.ownerEmail,
     content: postData.content,
     categories: postData.categories,
-    postTitle: postData.postTitle.toLowerCase(),
+    postTitle: postData.postTitle,
     postImage: postData.postImage,
     postKeywords: postData.postKeywords,
     postCustomUrl: postData.postCustomUrl,
@@ -356,7 +356,7 @@ router.post('/add_comment', jsonParser, (req, res) => {
       $addToSet: {
         comments: {
           fullName: postData.fullName,
-          email: postData.email ?? "",
+          email: "",
           comment: postData.comment,
           commentDate: Date.now(),
           isConfirmed: false

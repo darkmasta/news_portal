@@ -20,6 +20,7 @@ const postSchema = new Schema({
   postRussianLink: String,
   postUkranianLink: String,
   postFrenchLink: String,
+  postTurkishLink: String,
   postTitle: String,
   categories: [String],
   sliderImages: [String],
